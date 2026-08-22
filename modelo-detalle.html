@@ -61,6 +61,10 @@
   }
   .video-box.has-video svg{width:44px; height:44px; opacity:1; color:#fff;}
   .video-box.has-video span{color:#fff; font-weight:700; font-size:13.5px;}
+  .video-embed-wrap{border-radius:10px; overflow:hidden; aspect-ratio:16/9; margin-bottom:10px;}
+  .video-embed-wrap iframe{width:100%; height:100%; border:none; display:block;}
+  .video-fallback-link{font-size:11.5px; color:var(--warm-gray-500); text-decoration:none; display:inline-block; margin-bottom:14px;}
+  .video-fallback-link:hover{color:var(--oems-teal);}
 
   .resource-list{display:flex; flex-direction:column; gap:8px;}
   .resource{
@@ -197,6 +201,7 @@ const PRACTICAS = {
     nombre: 'Alineación Estratégica', pilar: 'objetivo',
     definicion: 'Proceso para conectar los objetivos del equipo con la estrategia general del sitio, asegurando que cada área entienda cómo su trabajo diario contribuye a las metas de Lomas Bayas.',
     video: 'https://glencore.sharepoint.com/:v:/r/sites/CLModeloEOCapacitaciones/Shared%20Documents/General/01%20-%20Alineacion%20Estrategica/GLENCORE_LEM_PRACTICA_1.mp4?d=we548cdf235604cfb9a5f7abb730c1cce&csf=1&web=1',
+    embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=e548cdf2-3560-4cfb-9a5f-7abb730c1cce&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Mapa de objetivos estratégicos del sitio', t:'PDF · 1.4 MB'}, {n:'Video: cómo alinear metas de equipo', t:'Video · 8 min'}],
     plantilla: 'Plantilla de despliegue de objetivos (Excel)',
     historial: [
@@ -286,7 +291,11 @@ document.title = practica.nombre + ' · Modelo de Excelencia Operacional';
 
 const matEl = document.getElementById('materialesList');
 const videoBox = document.getElementById('videoBox');
-if (practica.video) {
+if (practica.embedUrl) {
+  let html = `<div class="video-embed-wrap"><iframe src="${practica.embedUrl}" allowfullscreen title="${practica.nombre}"></iframe></div>`;
+  html += `<a class="video-fallback-link" href="${practica.video || practica.embedUrl}" target="_blank" rel="noopener">¿No carga el video? Ábrelo directo en SharePoint ↗</a>`;
+  videoBox.outerHTML = html;
+} else if (practica.video) {
   videoBox.outerHTML = `<a id="videoBox" class="video-box has-video" href="${practica.video}" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>
     <span>Ver video de capacitación ↗</span>

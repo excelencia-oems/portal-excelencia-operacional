@@ -55,6 +55,12 @@
     color:rgba(255,255,255,0.6); font-size:12.5px; margin-bottom:14px;
   }
   .video-box svg{width:36px; height:36px; opacity:0.7;}
+  .video-box.has-video{
+    background:linear-gradient(135deg, var(--oems-teal), var(--oems-teal-dark)); flex-direction:column; gap:10px; cursor:pointer;
+    text-decoration:none; aspect-ratio:auto; padding:32px 20px;
+  }
+  .video-box.has-video svg{width:44px; height:44px; opacity:1; color:#fff;}
+  .video-box.has-video span{color:#fff; font-weight:700; font-size:13.5px;}
 
   .resource-list{display:flex; flex-direction:column; gap:8px;}
   .resource{
@@ -124,7 +130,7 @@
 
   <div class="panel">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>Material de capacitación</h2>
-    <div class="video-box">
+    <div id="videoBox" class="video-box">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>
     </div>
     <div class="resource-list" id="materialesList"></div>
@@ -190,6 +196,7 @@ const PRACTICAS = {
   'alineacion-estrategica': {
     nombre: 'Alineación Estratégica', pilar: 'objetivo',
     definicion: 'Proceso para conectar los objetivos del equipo con la estrategia general del sitio, asegurando que cada área entienda cómo su trabajo diario contribuye a las metas de Lomas Bayas.',
+    video: 'https://glencore.sharepoint.com/:v:/r/sites/CLModeloEOCapacitaciones/Shared%20Documents/General/01%20-%20Alineacion%20Estrategica/GLENCORE_LEM_PRACTICA_1.mp4?d=we548cdf235604cfb9a5f7abb730c1cce&csf=1&web=1',
     materiales: [{n:'Mapa de objetivos estratégicos del sitio', t:'PDF · 1.4 MB'}, {n:'Video: cómo alinear metas de equipo', t:'Video · 8 min'}],
     plantilla: 'Plantilla de despliegue de objetivos (Excel)',
     historial: [
@@ -278,6 +285,13 @@ document.getElementById('modalSub').textContent = practica.nombre;
 document.title = practica.nombre + ' · Modelo de Excelencia Operacional';
 
 const matEl = document.getElementById('materialesList');
+const videoBox = document.getElementById('videoBox');
+if (practica.video) {
+  videoBox.outerHTML = `<a id="videoBox" class="video-box has-video" href="${practica.video}" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>
+    <span>Ver video de capacitación ↗</span>
+  </a>`;
+}
 practica.materiales.forEach(m => {
   matEl.innerHTML += `<a class="resource" href="#" onclick="return false;">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>

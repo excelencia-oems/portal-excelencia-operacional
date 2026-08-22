@@ -66,6 +66,14 @@
   .video-fallback-link{font-size:11.5px; color:var(--warm-gray-500); text-decoration:none; display:inline-block; margin-bottom:14px;}
   .video-fallback-link:hover{color:var(--oems-teal);}
 
+  .interactive-placeholder{
+    border:1.5px dashed var(--warm-gray-300); border-radius:12px; padding:28px 20px;
+    display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px; color:var(--warm-gray-500);
+  }
+  .interactive-placeholder svg{width:26px; height:26px; margin-bottom:4px; opacity:0.7;}
+  .interactive-placeholder span{font-weight:700; font-size:12.5px; color:var(--gray-700);}
+  .interactive-placeholder p{font-size:11.5px; max-width:360px;}
+
   .resource-list{display:flex; flex-direction:column; gap:8px;}
   .resource{
     display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--warm-gray-100); border-radius:9px;
@@ -140,6 +148,15 @@
     <div class="resource-list" id="materialesList"></div>
   </div>
 
+  <div class="panel" id="interactivePanel">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V6l7 6-7 6z"/><rect x="2" y="3" width="20" height="18" rx="2"/></svg>Refuerza lo aprendido</h2>
+    <div class="interactive-placeholder">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg>
+      <span>Contenido interactivo — en desarrollo</span>
+      <p>Aquí irá un ejercicio o resumen interactivo para reforzar esta práctica.</p>
+    </div>
+  </div>
+
   <div class="panel">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15v6M9 21h6"/><rect x="4" y="3" width="16" height="12" rx="2"/></svg>Formato descargable</h2>
     <div class="resource-list" id="plantillaList"></div>
@@ -181,6 +198,7 @@ const PRACTICAS = {
   'feedback-coaching': {
     nombre: 'Feedback & Coaching', pilar: 'personas',
     definicion: 'Conversaciones estructuradas de retroalimentación entre líder y colaborador, orientadas a reconocer avances y acordar planes de acción concretos para el desarrollo individual.',
+    embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=59c61043-eaa1-4992-ac08-fdcd72a1e87e&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Guía de conversación de Feedback & Coaching', t:'PDF · 0.9 MB'}, {n:'Video de capacitación: cómo dar feedback efectivo', t:'Video · 6 min'}],
     plantilla: 'Plantilla de registro de sesión de Coaching (Excel)',
     historial: [
@@ -191,6 +209,7 @@ const PRACTICAS = {
   'confirmacion-rol': {
     nombre: 'Confirmación de Rol/Procesos', pilar: 'personas',
     definicion: 'Verificación periódica de que cada persona del equipo comprende su rol, sus responsabilidades y los procesos operativos que le aplican, evitando desviaciones por desconocimiento.',
+    embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=1eb4f639-0a3f-4821-8763-c3b8af675521&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Checklist de confirmación de rol', t:'PDF · 0.6 MB'}, {n:'Presentación de inducción de procesos', t:'PPTX · 3.1 MB'}],
     plantilla: 'Plantilla de confirmación de rol y procesos (Word)',
     historial: [
@@ -212,6 +231,7 @@ const PRACTICAS = {
   'full-potential': {
     nombre: 'Full Potential', pilar: 'objetivo',
     definicion: 'Definición y seguimiento del máximo potencial esperado por área o proceso, estableciendo una brecha visible entre el desempeño actual y el óptimo alcanzable.',
+    embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=72dee881-718b-43d2-b586-9795dc94f57b&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Guía de cálculo de Full Potential', t:'PDF · 1.1 MB'}],
     plantilla: 'Plantilla de análisis de brecha (Excel)',
     historial: []
@@ -219,6 +239,7 @@ const PRACTICAS = {
   'visualizar-progreso': {
     nombre: 'Visualizar y Gestionar el Progreso', pilar: 'objetivo',
     definicion: 'Uso de tableros visuales en terreno para hacer seguimiento diario o semanal del avance del equipo frente a sus metas, facilitando la toma de decisiones oportuna.',
+    embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=dc35286f-253d-4332-b2b8-414da4c4d9dc&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Guía de gestión visual en terreno', t:'PDF · 1.7 MB'}, {n:'Video: montaje de un tablero de gestión visual', t:'Video · 5 min'}],
     plantilla: 'Plantilla de tablero de gestión visual (PDF imprimible)',
     historial: [
@@ -228,6 +249,7 @@ const PRACTICAS = {
   'identificacion-mejoras': {
     nombre: 'Identificación de Mejoras', pilar: 'mejora',
     definicion: 'Detección temprana de oportunidades de mejora en terreno, a partir de la observación directa, datos operativos o retroalimentación del equipo.',
+    embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=72e4b265-b430-4a93-bea3-50a2462b1ed5&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Guía de identificación de oportunidades de mejora', t:'PDF · 0.8 MB'}],
     plantilla: 'Plantilla de registro de oportunidad de mejora (Excel)',
     historial: [
@@ -237,6 +259,7 @@ const PRACTICAS = {
   'resolucion-problemas': {
     nombre: 'Resolución de Problemas', pilar: 'mejora',
     definicion: 'Metodología estructurada para identificar la causa raíz de un problema recurrente y aplicar una solución sostenible, en vez de corregir únicamente el síntoma. Su propósito es evitar que un mismo problema vuelva a ocurrir, fortaleciendo la capacidad del equipo de resolver desviaciones de forma autónoma y basada en datos.',
+    embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=788403a9-ff3d-4e9b-abc7-326bbafb4723&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Guía metodológica: 5 Porqués y Espina de Pescado', t:'PDF · 1.2 MB'}, {n:'Presentación de capacitación completa', t:'PPTX · 4.8 MB'}],
     plantilla: 'Plantilla de Resolución de Problemas (Excel)',
     historial: [
@@ -248,6 +271,7 @@ const PRACTICAS = {
   'gestion-iniciativas': {
     nombre: 'Gestión de Iniciativas', pilar: 'mejora',
     definicion: 'Seguimiento de iniciativas de mejora desde su origen hasta su cierre, asegurando responsables, plazos y verificación de resultados.',
+    embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=b7a6b206-ca9b-4399-9772-d79804c14fe5&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Guía de gestión de iniciativas', t:'PDF · 1.0 MB'}],
     plantilla: 'Plantilla de seguimiento de iniciativas (Excel)',
     historial: [
@@ -257,6 +281,7 @@ const PRACTICAS = {
   'agenda': {
     nombre: 'Agenda', pilar: 'procesos',
     definicion: 'Organización y priorización del tiempo del equipo de liderazgo, asegurando espacio dedicado a las prácticas del modelo y no solo a la contingencia diaria.',
+    embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=1182275f-6c31-4c3c-98f4-45ea62202b45&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Guía de construcción de agenda de liderazgo', t:'PDF · 0.7 MB'}],
     plantilla: 'Plantilla de agenda semanal (Excel)',
     historial: [
@@ -267,6 +292,7 @@ const PRACTICAS = {
   'procedimientos-operativos': {
     nombre: 'Procedimientos Operativos y Trabajo Estandarizado', pilar: 'procesos',
     definicion: 'Documentación y verificación del cumplimiento de procedimientos operativos estándar, asegurando consistencia en la forma en que se ejecutan las tareas críticas del sitio.',
+    embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=e55e7828-7f96-4b5a-b890-88be86a69e8c&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Guía de trabajo estandarizado', t:'PDF · 1.3 MB'}, {n:'Video: cómo documentar un procedimiento', t:'Video · 7 min'}],
     plantilla: 'Plantilla de procedimiento operativo estándar (Word)',
     historial: [
@@ -293,7 +319,8 @@ const matEl = document.getElementById('materialesList');
 const videoBox = document.getElementById('videoBox');
 if (practica.embedUrl) {
   let html = `<div class="video-embed-wrap"><iframe src="${practica.embedUrl}" allowfullscreen title="${practica.nombre}"></iframe></div>`;
-  html += `<a class="video-fallback-link" href="${practica.video || practica.embedUrl}" target="_blank" rel="noopener">¿No carga el video? Ábrelo directo en SharePoint ↗</a>`;
+  const fallback = practica.video || practica.embedUrl;
+  html += `<a class="video-fallback-link" href="${fallback}" target="_blank" rel="noopener">¿No carga el video? Ábrelo directo en SharePoint ↗</a>`;
   videoBox.outerHTML = html;
 } else if (practica.video) {
   videoBox.outerHTML = `<a id="videoBox" class="video-box has-video" href="${practica.video}" target="_blank" rel="noopener">

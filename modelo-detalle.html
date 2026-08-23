@@ -75,7 +75,7 @@
   .interactive-placeholder p{font-size:11.5px; max-width:360px;}
 
   /* ---- Interactive learning module: carousel v2 (marketing style) ---- */
-  .icarousel-viewport{position:relative; border-radius:16px; overflow:hidden; height:420px; box-shadow:0 14px 34px rgba(4,52,44,0.18);}
+  .icarousel-viewport{position:relative; border-radius:16px; overflow:hidden; height:460px; box-shadow:0 14px 34px rgba(4,52,44,0.18);}
   .icarousel-track{display:flex; height:100%; transition:transform .45s cubic-bezier(.4,0,.2,1);}
   .icarousel-slide{
     flex:0 0 100%; max-width:100%; box-sizing:border-box; height:100%; overflow-y:auto;
@@ -83,7 +83,59 @@
   }
   .icarousel-slide::-webkit-scrollbar{width:6px;}
   .icarousel-slide::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.25); border-radius:10px;}
-  .icarousel-slide h3{font-family:var(--font-display); font-size:15px; font-weight:700; margin-bottom:16px; opacity:0; transform:translateY(10px); animation:none;}
+  .icarousel-slide h3{display:none;}
+  .islide-eyebrow{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; opacity:0.7; margin-bottom:8px;}
+  .islide-headline{font-family:var(--font-display); font-size:23px; font-weight:700; line-height:1.18; margin-bottom:18px; max-width:480px; position:relative; z-index:2;}
+  .islide-watermark{
+    position:absolute; right:6px; top:-18px; font-family:var(--font-display); font-size:150px; font-weight:700;
+    opacity:0.09; line-height:1; pointer-events:none; user-select:none; z-index:1;
+  }
+  .islide-body{position:relative; z-index:2;}
+
+  .iquote-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(210px,1fr)); gap:12px; margin-bottom:18px;}
+  .iquote{background:rgba(255,255,255,0.13); border-left:3px solid rgba(255,255,255,0.6); border-radius:0 10px 10px 0; padding:12px 16px;}
+  .iquote-label{font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; opacity:0.7; margin-bottom:5px;}
+  .iquote-text{font-size:14px; font-weight:600; line-height:1.35;}
+
+  .ichecklist{display:flex; flex-direction:column; gap:10px;}
+  .icheck-row{display:flex; align-items:center; gap:12px;}
+  .icheck-badge{width:34px; height:34px; border-radius:10px; background:rgba(255,255,255,0.16); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; flex-shrink:0;}
+  .icheck-title{font-size:14px; font-weight:700; line-height:1.2;}
+  .icheck-sub{font-size:10.5px; opacity:0.75; margin-top:1px;}
+
+  .idef-rows{display:flex; flex-direction:column;}
+  .idef-row{display:flex; gap:16px; align-items:flex-start; padding:13px 0; border-bottom:1px solid rgba(255,255,255,0.16);}
+  .idef-row:last-child{border-bottom:none;}
+  .idef-word{font-family:var(--font-display); font-size:26px; font-weight:700; min-width:118px; line-height:1.05; opacity:0.95;}
+  .idef-desc{font-size:12px; line-height:1.55; opacity:0.9; padding-top:5px;}
+
+  .iprogress-line{position:relative; margin:34px 10px 10px; height:3px; background:rgba(255,255,255,0.25); border-radius:4px;}
+  .iprogress-stop{position:absolute; top:50%; transform:translate(-50%,-50%); width:13px; height:13px; border-radius:100px; background:#fff; box-shadow:0 0 0 4px rgba(255,255,255,0.18);}
+  .iprogress-label{position:absolute; top:-30px; transform:translateX(-50%); font-size:10px; font-weight:700; text-align:center; width:90px; line-height:1.3;}
+  .iprogress-sub{position:absolute; top:16px; transform:translateX(-50%); font-size:9.5px; opacity:0.75; text-align:center; width:100px;}
+
+  .iexample-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px; margin-top:44px;}
+  .iexample-card{background:rgba(255,255,255,0.13); border-radius:10px; padding:12px 14px;}
+  .iexample-card .inum{font-family:var(--font-display); font-size:11px; font-weight:700; opacity:0.6; margin-bottom:4px;}
+  .iexample-card .ititle{font-size:11.5px; font-weight:700; margin-bottom:6px;}
+  .iexample-card ul{padding-left:14px; font-size:10px; line-height:1.6; opacity:0.85;}
+
+  .ipyramid{display:flex; flex-direction:column; align-items:center; gap:2px; margin:8px 0 20px;}
+  .ipyr-tier{
+    display:flex; align-items:center; justify-content:center; text-align:center; color:#fff;
+    font-size:10.5px; font-weight:700; padding:9px 12px; line-height:1.25;
+  }
+  .ipyr-1{width:96%; clip-path:polygon(6% 0,94% 0,100% 100%,0% 100%); background:rgba(255,255,255,0.32); font-size:11px;}
+  .ipyr-2{width:80%; clip-path:polygon(4% 0,96% 0,100% 100%,0% 100%); background:rgba(255,255,255,0.26);}
+  .ipyr-3{width:64%; clip-path:polygon(2% 0,98% 0,100% 100%,0% 100%); background:rgba(255,255,255,0.2);}
+  .ipyr-4{width:48%; clip-path:polygon(0 0,100% 0,100% 100%,0 100%); background:rgba(255,255,255,0.16); border-radius:0 0 4px 4px;}
+  .ipyr-example{font-size:10px; opacity:0.75; text-align:center; max-width:340px; margin-top:8px; font-style:italic;}
+
+  .iroles-timeline{position:relative; margin-top:4px;}
+
+  .iquestions{display:flex; flex-direction:column; gap:8px; margin-top:16px;}
+  .iquestion-chip{display:flex; gap:10px; align-items:flex-start; background:rgba(255,255,255,0.13); border-radius:9px; padding:9px 13px; font-size:11px; line-height:1.4;}
+  .iquestion-num{width:18px; height:18px; border-radius:100px; background:rgba(255,255,255,0.85); color:var(--gray-900); display:flex; align-items:center; justify-content:center; font-size:9.5px; font-weight:700; flex-shrink:0; margin-top:1px;}
   .icarousel-slide.in h3, .icarousel-slide.in .ianim{animation:iSlideUp .5s cubic-bezier(.2,.8,.3,1) forwards;}
   .icarousel-slide.in .ianim:nth-child(2){animation-delay:.06s;}
   .icarousel-slide.in .ianim:nth-child(3){animation-delay:.12s;}
@@ -410,88 +462,114 @@ const PRACTICAS = {
         {
           id: 'que-es', label: '¿Qué es?', theme: 0,
           html: `
-            <div class="idef-grid ianim">
-              <div class="iglass">
-                <h4>¿Qué se busca lograr?</h4>
-                <p>Formular una visión clara sobre qué es lo que aspiramos y a qué nos comprometemos para lograrlo.</p>
+            <div class="islide-watermark ianim">01</div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Objetivo e importancia</div>
+              <div class="islide-headline ianim">Conectar el propósito del sitio con la acción diaria</div>
+              <div class="iquote-grid ianim">
+                <div class="iquote"><div class="iquote-label">Qué se busca lograr</div><div class="iquote-text">Formular una visión clara de qué aspiramos y a qué nos comprometemos.</div></div>
+                <div class="iquote"><div class="iquote-label">Cómo se logra</div><div class="iquote-text">Un proceso estructurado que conecta el propósito con las metas de mediano plazo.</div></div>
               </div>
-              <div class="iglass">
-                <h4>¿Cómo se logra?</h4>
-                <p>A través de un proceso estructurado que conecta el propósito de una organización con las aspiraciones y metas en el mediano plazo.</p>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Optimiza recursos</div><div class="icheck-sub">Maximiza el impacto de la estrategia</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Alinea a los equipos</div><div class="icheck-sub">Todos trabajando hacia lo mismo</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Desafía a la organización</div><div class="icheck-sub">Ir más allá de las metas establecidas</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Resultados sostenibles</div><div class="icheck-sub">Metas concretas y claras</div></div></div>
               </div>
-            </div>
-            <div class="ipoints-flow ianim">
-              <div class="ipoint-chip"><span class="ipoint-num">1</span>Optimiza el uso de recursos</div>
-              <div class="ipoint-chip"><span class="ipoint-num">2</span>Alinea a todos los equipos</div>
-              <div class="ipoint-chip"><span class="ipoint-num">3</span>Desafía a ir más allá</div>
-              <div class="ipoint-chip"><span class="ipoint-num">4</span>Garantiza resultados sostenibles</div>
             </div>`
         },
         {
           id: 'definiciones', label: 'Definiciones clave', theme: 1,
           html: `
-            <div class="idef-grid ianim">
-              <div class="iglass"><h4>Propósito</h4><p>La razón fundamental por la que existe una organización, sitio o área, más allá de generar utilidades.</p></div>
-              <div class="iglass"><h4>Misión</h4><p>Declaración clara y concisa del rol actual: qué hace, para quién lo hace y cómo crea valor.</p></div>
-              <div class="iglass"><h4>Visión</h4><p>Proyección aspiracional de lo que la organización busca llegar a ser en el futuro.</p></div>
-              <div class="iglass"><h4>Aspiración</h4><p>Meta de corto-mediano plazo, específica y ambiciosa, alineada con los objetivos estratégicos.</p></div>
+            <div class="islide-watermark ianim">02</div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Definiciones</div>
+              <div class="islide-headline ianim">Cuatro palabras que hay que saber distinguir</div>
+              <div class="idef-rows ianim">
+                <div class="idef-row"><div class="idef-word">Propósito</div><div class="idef-desc">La razón fundamental por la que existe el sitio, más allá de generar utilidades. Orienta cada decisión estratégica.</div></div>
+                <div class="idef-row"><div class="idef-word">Misión</div><div class="idef-desc">El rol actual de la organización: qué hace, para quién, y cómo crea valor hoy.</div></div>
+                <div class="idef-row"><div class="idef-word">Visión</div><div class="idef-desc">Proyección aspiracional de lo que el sitio busca llegar a ser. Guía las decisiones de largo plazo.</div></div>
+                <div class="idef-row"><div class="idef-word">Aspiración</div><div class="idef-desc">Meta de corto-mediano plazo, específica y ambiciosa. Es el punto de llegada al final de un período.</div></div>
+              </div>
             </div>`
         },
         {
-          id: 'dimensiones', label: 'Dimensiones', theme: 2,
+          id: 'camino', label: 'El camino de la aspiración', theme: 2,
           html: `
-            <div class="idim-scheme ianim">
-              <div class="idim-badge idim-1">
-                <div class="idim-num">1</div>
-                <h4>Sostenibilidad</h4>
-                <ul><li>0 eventos de alto potencial</li><li>0 incidentes ambientales</li></ul>
+            <div class="islide-watermark ianim">03</div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Cómo se construye</div>
+              <div class="islide-headline ianim" style="font-size:18px;">De la línea base al límite técnico</div>
+              <div class="iprogress-line ianim">
+                <div class="iprogress-stop" style="left:4%;"></div>
+                <div class="iprogress-label" style="left:4%;">Estado actual</div>
+                <div class="iprogress-sub" style="left:4%;">Línea base sin LEM</div>
+                <div class="iprogress-stop" style="left:34%;"></div>
+                <div class="iprogress-label" style="left:34%;">Budget</div>
+                <div class="iprogress-sub" style="left:34%;">Compromiso del programa</div>
+                <div class="iprogress-stop" style="left:66%;"></div>
+                <div class="iprogress-label" style="left:66%;">Aspiración</div>
+                <div class="iprogress-sub" style="left:66%;">Meta acordada por el equipo</div>
+                <div class="iprogress-stop" style="left:96%;"></div>
+                <div class="iprogress-label" style="left:96%;">Límite técnico</div>
+                <div class="iprogress-sub" style="left:96%;">Máxima capacidad real</div>
               </div>
-              <div class="idim-connector">→</div>
-              <div class="idim-badge idim-2">
-                <div class="idim-num">2</div>
-                <h4>Generación de Valor</h4>
-                <ul><li>Captura Full Potential</li><li>OEE / reducción de costos</li></ul>
+              <div class="iexample-grid ianim">
+                <div class="iexample-card"><div class="inum">01 · Sostenibilidad</div><div class="ititle">Ejemplo real</div><ul><li>0 eventos de alto potencial</li><li>0 incidentes ambientales</li><li>−50% emisiones GHG</li></ul></div>
+                <div class="iexample-card"><div class="inum">02 · Generación de valor</div><div class="ititle">Ejemplo real</div><ul><li>Full Potential $50M</li><li>OEE 70% en Carguío</li><li>−$38M/año en costos</li></ul></div>
+                <div class="iexample-card"><div class="inum">03 · Personas</div><div class="ititle">Ejemplo real</div><ul><li>100% despliegue LEM</li><li>80% en Encuesta de Cultura</li></ul></div>
               </div>
-              <div class="idim-connector">→</div>
-              <div class="idim-badge idim-3">
-                <div class="idim-num">3</div>
-                <h4>Personas</h4>
-                <ul><li>% implementación LEM</li><li>% encuesta de cultura</li></ul>
-              </div>
-            </div>
-            <div class="iglass ianim" style="margin-top:14px;"><p><b style="color:#fff;">Se redefine cada 6–12 meses</b> — para que se mantenga como una meta desafiante, no una ya alcanzada.</p></div>`
+            </div>`
         },
         {
-          id: 'roles', label: 'Roles', theme: 3,
+          id: 'roles', label: 'Roles y jerarquía', theme: 3,
           html: `
-            <div class="iroles-timeline ianim">
-              <div class="irole-row"><div class="irole-dot">1</div><div class="irole-body"><b>Gerente General</b><span>Transmite los resultados y su relación con la aspiración.</span></div></div>
-              <div class="irole-row"><div class="irole-dot">2</div><div class="irole-body"><b>Gerentes</b><span>Establecen y sustentan las aspiraciones según el ciclo de planificación.</span></div></div>
-              <div class="irole-row"><div class="irole-dot">3</div><div class="irole-body"><b>Superintendentes</b><span>Desarrollan y actualizan las aspiraciones de su área.</span></div></div>
-              <div class="irole-row"><div class="irole-dot">4</div><div class="irole-body"><b>Jefes/Supervisores</b><span>Ejecutan las acciones y hacen seguimiento directo.</span></div></div>
+            <div class="islide-watermark ianim">04</div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · De arriba hacia abajo</div>
+              <div class="islide-headline ianim" style="font-size:18px;">El propósito cascadea desde Glencore hasta el turno</div>
+              <div class="ipyramid ianim">
+                <div class="ipyr-tier ipyr-1">Propósito Glencore</div>
+                <div class="ipyr-tier ipyr-2">Propósito región / departamento</div>
+                <div class="ipyr-tier ipyr-3">Propósito del sitio</div>
+                <div class="ipyr-tier ipyr-4">Aspiración del área</div>
+              </div>
+              <div class="ipyr-example ianim">Ejemplo real: "Proveer servicios de mantenimiento de clase mundial de forma predictiva y sostenible" → 0 accidentes · 130 ton CuF/año · 80% despliegue LEM</div>
+              <div class="iroles-timeline ianim">
+                <div class="irole-row"><div class="irole-dot">1</div><div class="irole-body"><b>Gerente General</b><span>Transmite los resultados y su relación con la aspiración.</span></div></div>
+                <div class="irole-row"><div class="irole-dot">2</div><div class="irole-body"><b>Gerentes → Jefes/Supervisores</b><span>Establecen, actualizan y ejecutan el seguimiento en cada nivel.</span></div></div>
+              </div>
             </div>`
         },
         {
           id: 'practicas', label: 'Buenas prácticas', theme: 4,
           html: `
-            <div class="igoodbad ianim">
-              <div class="igb-col igb-good">
-                <div class="igb-head"><div class="igb-icon">✓</div><h4>Esto sí</h4></div>
-                <ul>
-                  <li>Diagnóstico de línea base + metas de indicadores.</li>
-                  <li>Involucrar al equipo en la definición.</li>
-                  <li>Detallar cómo se logrará: palancas, conductas, iniciativas.</li>
-                  <li>Difundir desde Gerencia hasta el Operador.</li>
-                </ul>
+            <div class="islide-watermark ianim">05</div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Recomendaciones</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Antes de fijar la aspiración, hazte estas preguntas</div>
+              <div class="iquestions ianim">
+                <div class="iquestion-chip"><span class="iquestion-num">1</span>¿Por qué se escogieron estos indicadores?</div>
+                <div class="iquestion-chip"><span class="iquestion-num">2</span>¿Cómo se va a alcanzar la meta establecida?</div>
+                <div class="iquestion-chip"><span class="iquestion-num">3</span>¿Podríamos plantear una aspiración más desafiante?</div>
               </div>
-              <div class="igb-col igb-bad">
-                <div class="igb-head"><div class="igb-icon">✕</div><h4>Esto no</h4></div>
-                <ul>
-                  <li>Aspiraciones sin conexión entre niveles.</li>
-                  <li>Metas poco desafiantes.</li>
-                  <li>Definirlas con un solo representante.</li>
-                  <li>Basarse en suposiciones sin datos.</li>
-                </ul>
+              <div class="igoodbad ianim" style="margin-top:16px;">
+                <div class="igb-col igb-good">
+                  <div class="igb-head"><div class="igb-icon">✓</div><h4>Esto sí</h4></div>
+                  <ul>
+                    <li>Diagnóstico de línea base + metas claras.</li>
+                    <li>Involucrar al equipo, no solo a un representante.</li>
+                    <li>Difundir desde Gerencia hasta el Operador.</li>
+                  </ul>
+                </div>
+                <div class="igb-col igb-bad">
+                  <div class="igb-head"><div class="igb-icon">✕</div><h4>Esto no</h4></div>
+                  <ul>
+                    <li>Metas desconectadas entre niveles.</li>
+                    <li>Basarse en suposiciones sin datos.</li>
+                    <li>Revisarla solo una vez al año.</li>
+                  </ul>
+                </div>
               </div>
             </div>`
         }

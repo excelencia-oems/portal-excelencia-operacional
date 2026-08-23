@@ -74,15 +74,24 @@
   .interactive-placeholder span{font-weight:700; font-size:12.5px; color:var(--gray-700);}
   .interactive-placeholder p{font-size:11.5px; max-width:360px;}
 
-  /* ---- Interactive learning module ---- */
-  .itabs{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px;}
-  .itab-btn{
-    font-size:12px; font-weight:700; padding:8px 14px; border-radius:100px; border:1px solid var(--warm-gray-100);
-    background:#fff; color:var(--gray-700); cursor:pointer;
+  /* ---- Interactive learning module: carousel ---- */
+  .icarousel-viewport{position:relative; border-radius:12px; background:var(--warm-gray-50); overflow:hidden; height:400px;}
+  .icarousel-track{display:flex; height:100%; transition:transform .38s cubic-bezier(.4,0,.2,1);}
+  .icarousel-slide{flex:0 0 100%; max-width:100%; box-sizing:border-box; height:100%; overflow-y:auto; padding:22px 24px;}
+  .icarousel-slide h3{font-family:var(--font-display); font-size:13.5px; font-weight:700; color:var(--oems-teal-dark); margin-bottom:14px;}
+
+  .icarousel-nav{display:flex; align-items:center; justify-content:space-between; margin-top:12px; gap:12px;}
+  .icarousel-arrow{
+    width:34px; height:34px; border-radius:100px; background:#fff; border:1px solid var(--warm-gray-100);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--oems-teal-dark); flex-shrink:0;
   }
-  .itab-btn.active{background:var(--oems-teal); border-color:var(--oems-teal); color:#fff;}
-  .itab-panel{display:none;}
-  .itab-panel.active{display:block;}
+  .icarousel-arrow:hover{background:var(--warm-gray-100);}
+  .icarousel-arrow:disabled{opacity:0.3; cursor:default;}
+  .icarousel-arrow svg{width:16px; height:16px;}
+  .icarousel-dots{display:flex; gap:6px; align-items:center; flex-wrap:wrap; justify-content:center;}
+  .icarousel-dot{width:7px; height:7px; border-radius:100px; background:var(--warm-gray-300); cursor:pointer; border:none; padding:0; transition:width .2s ease, background .2s ease;}
+  .icarousel-dot.active{background:var(--oems-teal); width:22px;}
+  .icarousel-label{font-size:11px; font-weight:700; color:var(--warm-gray-500); white-space:nowrap;}
 
   .idef-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px;}
   .idef-card{background:var(--warm-gray-50); border-radius:10px; padding:14px 16px;}
@@ -272,7 +281,7 @@
   </div>
 
   <div class="panel" id="interactivePanel">
-    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V6l7 6-7 6z"/><rect x="2" y="3" width="20" height="18" rx="2"/></svg>Refuerza lo aprendido</h2>
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V6l7 6-7 6z"/><rect x="2" y="3" width="20" height="18" rx="2"/></svg>Algunos tips de esta práctica</h2>
     <div id="interactiveContent">
       <div class="interactive-placeholder">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg>
@@ -620,40 +629,60 @@ if (practica.historial.length === 0) {
   });
 }
 
-/* ---------------- módulo interactivo (pestañas + quiz) ---------------- */
+/* ---------------- módulo interactivo (carrusel + quiz) ---------------- */
 if (practica.interactive) {
   const ic = document.getElementById('interactiveContent');
   const tabs = practica.interactive.tabs;
   const quiz = practica.interactive.quiz;
+  const totalSlides = tabs.length + 1; // + quiz slide
+  let current = 0;
 
-  let tabsHtml = '<div class="itabs">';
-  tabs.forEach((t, i) => {
-    tabsHtml += `<button class="itab-btn${i===0?' active':''}" data-tab="${t.id}">${t.label}</button>`;
+  let slidesHtml = '';
+  tabs.forEach(t => {
+    slidesHtml += `<div class="icarousel-slide"><h3>${t.label}</h3>${t.html}</div>`;
   });
-  tabsHtml += `<button class="itab-btn" data-tab="__quiz__">Ponte a prueba</button></div>`;
+  slidesHtml += `<div class="icarousel-slide"><h3>Ponte a prueba</h3><div class="iquiz-box" id="iquizBox"></div></div>`;
 
-  let panelsHtml = '';
-  tabs.forEach((t, i) => {
-    panelsHtml += `<div class="itab-panel${i===0?' active':''}" data-panel="${t.id}">${t.html}</div>`;
-  });
+  let dotsHtml = '';
+  for (let i = 0; i < totalSlides; i++) {
+    dotsHtml += `<button class="icarousel-dot${i===0?' active':''}" data-i="${i}" aria-label="Ir a la sección ${i+1}"></button>`;
+  }
 
-  panelsHtml += `<div class="itab-panel" data-panel="__quiz__">
-    <div class="iquiz-box" id="iquizBox"></div>
-  </div>`;
+  ic.innerHTML = `
+    <div class="icarousel-viewport">
+      <div class="icarousel-track" id="icTrack">${slidesHtml}</div>
+    </div>
+    <div class="icarousel-nav">
+      <button class="icarousel-arrow" id="icPrev" aria-label="Anterior">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="icarousel-dots">${dotsHtml}</div>
+      <button class="icarousel-arrow" id="icNext" aria-label="Siguiente">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  `;
 
-  ic.innerHTML = tabsHtml + panelsHtml;
-
-  ic.querySelectorAll('.itab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      ic.querySelectorAll('.itab-btn').forEach(b => b.classList.remove('active'));
-      ic.querySelectorAll('.itab-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      ic.querySelector(`.itab-panel[data-panel="${btn.dataset.tab}"]`).classList.add('active');
-      if (btn.dataset.tab === '__quiz__' && !quizStarted) { quizStarted = true; renderQuestion(); }
-    });
-  });
-
+  const track = document.getElementById('icTrack');
+  const prevBtn = document.getElementById('icPrev');
+  const nextBtn = document.getElementById('icNext');
+  const dots = ic.querySelectorAll('.icarousel-dot');
   let quizStarted = false;
+
+  function goTo(i) {
+    current = Math.max(0, Math.min(totalSlides - 1, i));
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dots.forEach((d, idx) => d.classList.toggle('active', idx === current));
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === totalSlides - 1;
+    if (current === totalSlides - 1 && !quizStarted) { quizStarted = true; renderQuestion(); }
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+  dots.forEach(d => d.addEventListener('click', () => goTo(Number(d.dataset.i))));
+  goTo(0);
+
   let qIndex = 0;
   let qScore = 0;
 

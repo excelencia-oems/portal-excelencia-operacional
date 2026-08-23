@@ -95,33 +95,33 @@
 
   .iquote-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(210px,1fr)); gap:12px; margin-bottom:18px;}
   .iquote{background:rgba(255,255,255,0.13); border-left:3px solid rgba(255,255,255,0.6); border-radius:0 10px 10px 0; padding:12px 16px;}
-  .iquote-label{font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; opacity:0.7; margin-bottom:5px;}
+  .iquote-label{font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; opacity:0.9; margin-bottom:5px;}
   .iquote-text{font-size:14px; font-weight:600; line-height:1.35;}
 
   .ichecklist{display:flex; flex-direction:column; gap:10px;}
   .icheck-row{display:flex; align-items:center; gap:12px;}
   .icheck-badge{width:34px; height:34px; border-radius:10px; background:rgba(255,255,255,0.16); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; flex-shrink:0;}
   .icheck-title{font-size:14px; font-weight:700; line-height:1.2;}
-  .icheck-sub{font-size:10.5px; opacity:0.75; margin-top:1px;}
+  .icheck-sub{font-size:10.5px; opacity:0.92; margin-top:1px;}
 
   .idef-rows{display:flex; flex-direction:column;}
   .idef-row{display:flex; gap:16px; align-items:flex-start; padding:13px 0; border-bottom:1px solid rgba(255,255,255,0.16);}
   .idef-row:last-child{border-bottom:none;}
   .idef-word{font-family:var(--font-display); font-size:26px; font-weight:700; min-width:118px; line-height:1.05; opacity:0.95;}
-  .idef-desc{font-size:12px; line-height:1.55; opacity:0.9; padding-top:5px;}
+  .idef-desc{font-size:12px; line-height:1.55; opacity:0.96; padding-top:5px;}
 
   .iprogress-steps{display:flex; margin:26px 0 20px; position:relative;}
   .iprogress-steps::before{content:""; position:absolute; top:6px; left:2%; right:2%; height:2px; background:rgba(255,255,255,0.28);}
   .iprogress-step{flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; position:relative; padding:0 4px;}
   .iprogress-dot{width:13px; height:13px; border-radius:100px; background:#fff; box-shadow:0 0 0 4px rgba(255,255,255,0.18); margin-bottom:12px; position:relative; z-index:2;}
   .iprogress-lbl{font-size:10.5px; font-weight:700; margin-bottom:3px;}
-  .iprogress-sub{font-size:9px; opacity:0.72; line-height:1.35;}
+  .iprogress-sub{font-size:9.5px; opacity:0.9; line-height:1.35;}
 
   .iexample-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px; margin-top:44px;}
   .iexample-card{background:rgba(255,255,255,0.13); border-radius:10px; padding:12px 14px;}
   .iexample-card .inum{font-family:var(--font-display); font-size:11px; font-weight:700; opacity:0.6; margin-bottom:4px;}
   .iexample-card .ititle{font-size:11.5px; font-weight:700; margin-bottom:6px;}
-  .iexample-card ul{padding-left:14px; font-size:10px; line-height:1.6; opacity:0.85;}
+  .iexample-card ul{padding-left:14px; font-size:10px; line-height:1.6; opacity:0.95;}
 
   .ipyramid{display:flex; flex-direction:column; align-items:center; gap:2px; margin:6px 0 4px;}
   .ipyr-tier{
@@ -134,7 +134,7 @@
   .ipyr-4{width:62%; clip-path:polygon(4% 0,96% 0,100% 100%,0% 100%); background:rgba(255,255,255,0.21);}
   .ipyr-5{width:50%; clip-path:polygon(3% 0,97% 0,100% 100%,0% 100%); background:rgba(255,255,255,0.17);}
   .ipyr-6{width:38%; clip-path:polygon(0 0,100% 0,100% 100%,0 100%); background:rgba(255,255,255,0.13); border-radius:0 0 4px 4px;}
-  .ipyr-example{font-size:9.5px; opacity:0.78; text-align:center; max-width:360px; margin:6px auto 0; font-style:italic; line-height:1.4;}
+  .ipyr-example{font-size:9.5px; opacity:0.92; text-align:center; max-width:360px; margin:6px auto 0; font-style:italic; line-height:1.4;}
 
   .iwheel{position:relative; width:220px; max-width:70%; aspect-ratio:1; margin:6px auto 4px;}
   .iwheel-ring{position:absolute; inset:15%; border:10px solid rgba(255,255,255,0.22); border-radius:100%;}
@@ -169,16 +169,25 @@
   .itool-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:10px; margin-top:6px;}
   .itool-card{background:rgba(255,255,255,0.13); border-radius:10px; padding:14px 16px;}
   .itool-title{font-family:var(--font-display); font-size:18px; font-weight:700; margin-bottom:2px;}
-  .itool-sub{font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; opacity:0.7; margin-bottom:8px;}
-  .itool-card p{font-size:10.5px; line-height:1.5; opacity:0.9;}
+  .itool-sub{font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; opacity:0.92; margin-bottom:8px;}
+  .itool-card p{font-size:10.5px; line-height:1.5; opacity:0.97;}
 
-  .imatrix{margin-top:8px;}
-  .imatrix-axis-y{font-size:9px; font-weight:700; opacity:0.7; margin-bottom:6px;}
-  .imatrix-grid{display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:4px; height:150px;}
-  .imatrix-cell{background:rgba(255,255,255,0.1); border-radius:8px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:10px; font-weight:700; padding:8px;}
-  .imatrix-qw{background:rgba(255,255,255,0.32);}
-  .imatrix-hi{background:rgba(255,255,255,0.2);}
-  .imatrix-axis-x{font-size:9px; font-weight:700; opacity:0.7; margin-top:6px; text-align:center;}
+  .imatrix{margin-top:10px; display:flex; gap:8px;}
+  .imatrix-yaxis{display:flex; flex-direction:column; justify-content:space-between; align-items:center; width:16px; padding:4px 0;}
+  .imatrix-yaxis span{writing-mode:vertical-rl; transform:rotate(180deg); font-size:8.5px; font-weight:700; opacity:0.85; letter-spacing:0.02em;}
+  .imatrix-main{flex:1;}
+  .imatrix-grid{
+    position:relative; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr;
+    height:168px; border:1.5px solid rgba(255,255,255,0.45); border-radius:8px; overflow:hidden;
+  }
+  .imatrix-cell{display:flex; align-items:center; justify-content:center; text-align:center; font-size:10px; font-weight:700; padding:8px; position:relative;}
+  .imatrix-grid .imatrix-cell:nth-child(1){border-right:1.5px solid rgba(255,255,255,0.45); border-bottom:1.5px solid rgba(255,255,255,0.45); background:rgba(255,255,255,0.14);}
+  .imatrix-grid .imatrix-cell:nth-child(2){border-bottom:1.5px solid rgba(255,255,255,0.45); background:rgba(255,255,255,0.34);}
+  .imatrix-grid .imatrix-cell:nth-child(3){border-right:1.5px solid rgba(255,255,255,0.45); background:rgba(255,255,255,0.06);}
+  .imatrix-grid .imatrix-cell:nth-child(4){background:rgba(255,255,255,0.18);}
+  .imatrix-tag{position:absolute; top:5px; left:6px; font-size:7.5px; font-weight:700; opacity:0.7; text-transform:uppercase;}
+  .imatrix-xaxis{display:flex; justify-content:space-between; font-size:8.5px; font-weight:700; opacity:0.85; margin-top:6px; padding:0 2px;}
+  .imatrix-title{font-size:9px; font-weight:700; opacity:0.85; text-align:center; margin-bottom:4px;}
   .icarousel-slide.in h3, .icarousel-slide.in .ianim{animation:iSlideUp .5s cubic-bezier(.2,.8,.3,1) forwards;}
   .icarousel-slide.in .ianim:nth-child(2){animation-delay:.06s;}
   .icarousel-slide.in .ianim:nth-child(3){animation-delay:.12s;}
@@ -217,7 +226,7 @@
   .idim-2 .idim-num{background:#C04F15;}
   .idim-3 .idim-num{background:#BA7517;}
   .idim-badge h4{font-family:var(--font-display); font-size:12px; font-weight:700;}
-  .idim-badge ul{text-align:left; font-size:10.5px; line-height:1.55; padding-left:14px; color:rgba(255,255,255,0.88);}
+  .idim-badge ul{text-align:left; font-size:10.5px; line-height:1.55; padding-left:14px; color:rgba(255,255,255,0.95);}
   .idim-connector{width:20px; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.4); font-size:14px; flex-shrink:0;}
   @media (max-width:560px){ .idim-scheme{flex-direction:column; gap:10px;} .idim-connector{display:none;} }
 
@@ -233,7 +242,7 @@
   }
   .irole-body{background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:10px 14px; flex:1;}
   .irole-body b{display:block; font-size:12px; margin-bottom:3px;}
-  .irole-body span{font-size:11.5px; color:rgba(255,255,255,0.88); line-height:1.5;}
+  .irole-body span{font-size:11.5px; color:rgba(255,255,255,0.96); line-height:1.5;}
 
   .igoodbad{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
   .igb-col{background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:14px 16px;}
@@ -242,7 +251,7 @@
   .igb-good .igb-icon{background:#1F8A4C; color:#fff;}
   .igb-bad .igb-icon{background:#C04F15; color:#fff;}
   .igb-col h4{font-size:12px; font-weight:700;}
-  .igb-col ul{padding-left:15px; font-size:11px; color:rgba(255,255,255,0.9); line-height:1.6;}
+  .igb-col ul{padding-left:15px; font-size:11px; color:rgba(255,255,255,0.97); line-height:1.6;}
   @media (max-width:520px){ .igoodbad{grid-template-columns:1fr;} }
 
   .icarousel-arrow{
@@ -778,17 +787,19 @@ const PRACTICAS = {
           html: `
             <div class="ishape ishape-hex ishape-1 ianim"></div>
             <div class="islide-body">
-              <div class="islide-eyebrow ianim">Diseño · Valor × facilidad</div>
+              <div class="islide-eyebrow ianim">Diseño · Matriz de esfuerzo e impacto</div>
               <div class="islide-headline ianim" style="font-size:18px;">Nunca <em style="--hl:#FAEEDA;">priorizar</em> sin haber valorizado antes</div>
               <div class="imatrix ianim">
-                <div class="imatrix-axis-y">Más valor</div>
-                <div class="imatrix-grid">
-                  <div class="imatrix-cell imatrix-hi"><span>Alto valor<br>Más difícil</span></div>
-                  <div class="imatrix-cell imatrix-qw"><span>Prioridad<br>Quick Win</span></div>
-                  <div class="imatrix-cell"><span>Menor foco</span></div>
-                  <div class="imatrix-cell"><span>Fácil, bajo<br>impacto</span></div>
+                <div class="imatrix-yaxis"><span>Alto impacto</span><span>Bajo impacto</span></div>
+                <div class="imatrix-main">
+                  <div class="imatrix-grid">
+                    <div class="imatrix-cell"><span class="imatrix-tag">Evaluar</span>Alto impacto<br>Alto esfuerzo</div>
+                    <div class="imatrix-cell"><span class="imatrix-tag">Priorizar</span>Alto impacto<br>Bajo esfuerzo</div>
+                    <div class="imatrix-cell"><span class="imatrix-tag">Descartar</span>Bajo impacto<br>Alto esfuerzo</div>
+                    <div class="imatrix-cell"><span class="imatrix-tag">Oportunista</span>Bajo impacto<br>Bajo esfuerzo</div>
+                  </div>
+                  <div class="imatrix-xaxis"><span>Alto esfuerzo</span><span>Bajo esfuerzo</span></div>
                 </div>
-                <div class="imatrix-axis-x">Difícil ← Facilidad de implementación → Fácil</div>
               </div>
               <div class="iroles-chips ianim">
                 <span class="irole-chip">Impacto EBITDA</span>

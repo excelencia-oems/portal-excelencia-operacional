@@ -140,9 +140,32 @@
   .dt-icon svg{width:34px; height:34px;}
   @keyframes dtPulse{ 0%,100%{ transform:scale(1); opacity:0.9; } 50%{ transform:scale(1.08); opacity:1; } }
   .dt-label{color:#fff; font-family:var(--font-display); font-weight:700; font-size:13.5px; letter-spacing:0.02em; opacity:0.9;}
+
+  .home-arrival{
+    position:fixed; inset:0; z-index:200; overflow:hidden;
+    background:linear-gradient(135deg, var(--teal-800), var(--terra-600));
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+    opacity:1; transition:opacity .4s ease;
+  }
+  .home-arrival.fade-out{opacity:0; pointer-events:none;}
 </style>
 </head>
 <body>
+
+<div class="home-arrival" id="homeArrival">
+  <div class="dt-scanlines"></div>
+  <div class="dt-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+  </div>
+  <div class="dt-label">Excelencia Operacional</div>
+</div>
+
+<script>
+  setTimeout(function(){
+    var el = document.getElementById('homeArrival');
+    if (el) el.classList.add('fade-out');
+  }, 450);
+</script>
 
 <header>
   <div class="header-inner">

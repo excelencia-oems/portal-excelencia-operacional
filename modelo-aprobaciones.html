@@ -25,6 +25,28 @@
   h1{font-family:var(--font-display); font-size:20px; font-weight:700; margin-bottom:10px;}
   p{font-size:13.5px; color:var(--warm-gray-500); max-width:420px; margin:0 auto;}
 
+  .digital-transition{
+    position:fixed; inset:0; z-index:200; overflow:hidden;
+    background:linear-gradient(135deg, #854F0B, #BA7517);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+    opacity:1; transition:opacity .4s ease;
+  }
+  .digital-transition.fade-out{opacity:0; pointer-events:none;}
+  .dt-scanlines{
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 4px);
+    animation:dtScan 1.1s linear infinite;
+  }
+  @keyframes dtScan{ from{ background-position-y:0; } to{ background-position-y:40px; } }
+  .dt-icon{
+    width:74px; height:74px; border-radius:18px; background:rgba(255,255,255,0.16);
+    display:flex; align-items:center; justify-content:center; color:#fff;
+    animation:dtPulse 1s ease-in-out infinite;
+  }
+  .dt-icon svg{width:34px; height:34px;}
+  @keyframes dtPulse{ 0%,100%{ transform:scale(1); opacity:0.9; } 50%{ transform:scale(1.08); opacity:1; } }
+  .dt-label{color:#fff; font-family:var(--font-display); font-weight:700; font-size:13.5px; letter-spacing:0.02em; opacity:0.9;}
+
   
   .topbanner{background:#fff; border-bottom:1px solid var(--warm-gray-100); padding:12px clamp(16px,3vw,32px); position:sticky; top:0; z-index:40;}
   .topbanner-inner{max-width:min(1300px,92vw); margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:16px;}
@@ -78,6 +100,29 @@
   <h1>Bandeja de aprobaciones — en diseño</h1>
   <p>Este flujo todavía se está definiendo. Cuando esté listo, aquí el equipo de Excelencia Operacional podrá revisar y aprobar los registros que envíen los líderes de área.</p>
 </main>
+
+<div class="digital-transition" id="arrivalOverlay">
+  <div class="dt-scanlines"></div>
+  <div class="dt-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="3" width="12" height="4" rx="1"/><path d="M6 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1"/><path d="M9 12l2 2 4-4"/></svg>
+  </div>
+  <div class="dt-label">Modelo de Excelencia Operacional</div>
+</div>
+
+<script>
+  setTimeout(function(){
+    document.getElementById('arrivalOverlay').classList.add('fade-out');
+  }, 550);
+
+  document.querySelectorAll('a.fab-home, a.crumb-chip[href="index.html"]').forEach(function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var overlay = document.getElementById('arrivalOverlay');
+      overlay.classList.remove('fade-out');
+      setTimeout(function(){ window.location.href = 'index.html'; }, 480);
+    });
+  });
+</script>
 
 </body>
 </html>

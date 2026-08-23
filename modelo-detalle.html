@@ -84,12 +84,13 @@
   .icarousel-slide::-webkit-scrollbar{width:6px;}
   .icarousel-slide::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.25); border-radius:10px;}
   .icarousel-slide h3{display:none;}
-  .islide-eyebrow{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; opacity:0.7; margin-bottom:8px;}
+  .islide-eyebrow{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; opacity:0.7; margin-bottom:8px; position:relative; z-index:2;}
   .islide-headline{font-family:var(--font-display); font-size:23px; font-weight:700; line-height:1.18; margin-bottom:18px; max-width:480px; position:relative; z-index:2;}
-  .islide-watermark{
-    position:absolute; right:6px; top:-18px; font-family:var(--font-display); font-size:150px; font-weight:700;
-    opacity:0.09; line-height:1; pointer-events:none; user-select:none; z-index:1;
-  }
+  .islide-headline em{font-style:normal; color:var(--hl,#FAC775);}
+  .ishape{position:absolute; opacity:0.14; pointer-events:none; z-index:0;}
+  .ishape-hex{clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);}
+  .ishape-1{width:190px; height:190px; right:-40px; top:-50px; background:#fff;}
+  .ishape-2{width:110px; height:110px; right:70px; bottom:-30px; background:#fff; opacity:0.09;}
   .islide-body{position:relative; z-index:2;}
 
   .iquote-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(210px,1fr)); gap:12px; margin-bottom:18px;}
@@ -109,10 +110,12 @@
   .idef-word{font-family:var(--font-display); font-size:26px; font-weight:700; min-width:118px; line-height:1.05; opacity:0.95;}
   .idef-desc{font-size:12px; line-height:1.55; opacity:0.9; padding-top:5px;}
 
-  .iprogress-line{position:relative; margin:34px 10px 10px; height:3px; background:rgba(255,255,255,0.25); border-radius:4px;}
-  .iprogress-stop{position:absolute; top:50%; transform:translate(-50%,-50%); width:13px; height:13px; border-radius:100px; background:#fff; box-shadow:0 0 0 4px rgba(255,255,255,0.18);}
-  .iprogress-label{position:absolute; top:-30px; transform:translateX(-50%); font-size:10px; font-weight:700; text-align:center; width:90px; line-height:1.3;}
-  .iprogress-sub{position:absolute; top:16px; transform:translateX(-50%); font-size:9.5px; opacity:0.75; text-align:center; width:100px;}
+  .iprogress-steps{display:flex; margin:26px 0 20px; position:relative;}
+  .iprogress-steps::before{content:""; position:absolute; top:6px; left:2%; right:2%; height:2px; background:rgba(255,255,255,0.28);}
+  .iprogress-step{flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; position:relative; padding:0 4px;}
+  .iprogress-dot{width:13px; height:13px; border-radius:100px; background:#fff; box-shadow:0 0 0 4px rgba(255,255,255,0.18); margin-bottom:12px; position:relative; z-index:2;}
+  .iprogress-lbl{font-size:10.5px; font-weight:700; margin-bottom:3px;}
+  .iprogress-sub{font-size:9px; opacity:0.72; line-height:1.35;}
 
   .iexample-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px; margin-top:44px;}
   .iexample-card{background:rgba(255,255,255,0.13); border-radius:10px; padding:12px 14px;}
@@ -462,10 +465,11 @@ const PRACTICAS = {
         {
           id: 'que-es', label: '¿Qué es?', theme: 0,
           html: `
-            <div class="islide-watermark ianim">01</div>
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="ishape ishape-hex ishape-2 ianim"></div>
             <div class="islide-body">
               <div class="islide-eyebrow ianim">Objetivo e importancia</div>
-              <div class="islide-headline ianim">Conectar el propósito del sitio con la acción diaria</div>
+              <div class="islide-headline ianim">Conectar el <em style="--hl:#9FE1CB;">propósito</em> del sitio con la acción diaria</div>
               <div class="iquote-grid ianim">
                 <div class="iquote"><div class="iquote-label">Qué se busca lograr</div><div class="iquote-text">Formular una visión clara de qué aspiramos y a qué nos comprometemos.</div></div>
                 <div class="iquote"><div class="iquote-label">Cómo se logra</div><div class="iquote-text">Un proceso estructurado que conecta el propósito con las metas de mediano plazo.</div></div>
@@ -481,10 +485,10 @@ const PRACTICAS = {
         {
           id: 'definiciones', label: 'Definiciones clave', theme: 1,
           html: `
-            <div class="islide-watermark ianim">02</div>
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
             <div class="islide-body">
               <div class="islide-eyebrow ianim">Diseño · Definiciones</div>
-              <div class="islide-headline ianim">Cuatro palabras que hay que saber distinguir</div>
+              <div class="islide-headline ianim">Cuatro palabras que hay que saber <em style="--hl:#F5C4B3;">distinguir</em></div>
               <div class="idef-rows ianim">
                 <div class="idef-row"><div class="idef-word">Propósito</div><div class="idef-desc">La razón fundamental por la que existe el sitio, más allá de generar utilidades. Orienta cada decisión estratégica.</div></div>
                 <div class="idef-row"><div class="idef-word">Misión</div><div class="idef-desc">El rol actual de la organización: qué hace, para quién, y cómo crea valor hoy.</div></div>
@@ -496,23 +500,15 @@ const PRACTICAS = {
         {
           id: 'camino', label: 'El camino de la aspiración', theme: 2,
           html: `
-            <div class="islide-watermark ianim">03</div>
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
             <div class="islide-body">
               <div class="islide-eyebrow ianim">Diseño · Cómo se construye</div>
-              <div class="islide-headline ianim" style="font-size:18px;">De la línea base al límite técnico</div>
-              <div class="iprogress-line ianim">
-                <div class="iprogress-stop" style="left:4%;"></div>
-                <div class="iprogress-label" style="left:4%;">Estado actual</div>
-                <div class="iprogress-sub" style="left:4%;">Línea base sin LEM</div>
-                <div class="iprogress-stop" style="left:34%;"></div>
-                <div class="iprogress-label" style="left:34%;">Budget</div>
-                <div class="iprogress-sub" style="left:34%;">Compromiso del programa</div>
-                <div class="iprogress-stop" style="left:66%;"></div>
-                <div class="iprogress-label" style="left:66%;">Aspiración</div>
-                <div class="iprogress-sub" style="left:66%;">Meta acordada por el equipo</div>
-                <div class="iprogress-stop" style="left:96%;"></div>
-                <div class="iprogress-label" style="left:96%;">Límite técnico</div>
-                <div class="iprogress-sub" style="left:96%;">Máxima capacidad real</div>
+              <div class="islide-headline ianim" style="font-size:18px;">De la línea base al <em style="--hl:#B4B2A9;">límite técnico</em></div>
+              <div class="iprogress-steps ianim">
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Estado actual</div><div class="iprogress-sub">Línea base sin LEM</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Budget</div><div class="iprogress-sub">Compromiso del programa</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Aspiración</div><div class="iprogress-sub">Meta acordada</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Límite técnico</div><div class="iprogress-sub">Máxima capacidad real</div></div>
               </div>
               <div class="iexample-grid ianim">
                 <div class="iexample-card"><div class="inum">01 · Sostenibilidad</div><div class="ititle">Ejemplo real</div><ul><li>0 eventos de alto potencial</li><li>0 incidentes ambientales</li><li>−50% emisiones GHG</li></ul></div>
@@ -524,10 +520,10 @@ const PRACTICAS = {
         {
           id: 'roles', label: 'Roles y jerarquía', theme: 3,
           html: `
-            <div class="islide-watermark ianim">04</div>
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
             <div class="islide-body">
               <div class="islide-eyebrow ianim">Ejecución · De arriba hacia abajo</div>
-              <div class="islide-headline ianim" style="font-size:18px;">El propósito cascadea desde Glencore hasta el turno</div>
+              <div class="islide-headline ianim" style="font-size:18px;">El propósito <em style="--hl:#9FE1CB;">cascadea</em> desde Glencore hasta el turno</div>
               <div class="ipyramid ianim">
                 <div class="ipyr-tier ipyr-1">Propósito Glencore</div>
                 <div class="ipyr-tier ipyr-2">Propósito región / departamento</div>
@@ -544,10 +540,10 @@ const PRACTICAS = {
         {
           id: 'practicas', label: 'Buenas prácticas', theme: 4,
           html: `
-            <div class="islide-watermark ianim">05</div>
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
             <div class="islide-body">
               <div class="islide-eyebrow ianim">Recomendaciones</div>
-              <div class="islide-headline ianim" style="font-size:18px;">Antes de fijar la aspiración, hazte estas preguntas</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Antes de fijar la aspiración, <em style="--hl:#FAEEDA;">pregúntate esto</em></div>
               <div class="iquestions ianim">
                 <div class="iquestion-chip"><span class="iquestion-num">1</span>¿Por qué se escogieron estos indicadores?</div>
                 <div class="iquestion-chip"><span class="iquestion-num">2</span>¿Cómo se va a alcanzar la meta establecida?</div>

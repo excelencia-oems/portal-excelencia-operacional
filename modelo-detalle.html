@@ -242,6 +242,12 @@
   .icarousel-dot{width:6px; height:6px; border-radius:100px; background:rgba(255,255,255,0.5); cursor:pointer; border:none; padding:0; transition:width .2s ease, background .2s ease;}
   .icarousel-dot.active{background:#fff; width:20px;}
 
+  .icarousel-viewport.on-light .icarousel-arrow{background:rgba(0,0,0,0.08); border-color:rgba(0,0,0,0.15); color:var(--gray-900);}
+  .icarousel-viewport.on-light .icarousel-arrow:hover{background:rgba(0,0,0,0.14);}
+  .icarousel-viewport.on-light .icarousel-dots{background:rgba(0,0,0,0.08);}
+  .icarousel-viewport.on-light .icarousel-dot{background:rgba(0,0,0,0.3);}
+  .icarousel-viewport.on-light .icarousel-dot.active{background:var(--gray-900);}
+
   .iquiz-box{background:#fff; border:1px solid var(--warm-gray-100); border-radius:12px; padding:18px 20px; margin-top:2px;}
 
   .iquiz-progress{font-size:11px; font-weight:700; color:var(--warm-gray-500); margin-bottom:10px;}
@@ -808,6 +814,7 @@ if (practica.interactive) {
   `;
 
   const track = document.getElementById('icTrack');
+  const viewport = ic.querySelector('.icarousel-viewport');
   const prevBtn = document.getElementById('icPrev');
   const nextBtn = document.getElementById('icNext');
   const dots = ic.querySelectorAll('.icarousel-dot');
@@ -815,11 +822,10 @@ if (practica.interactive) {
   let quizStarted = false;
 
   function goTo(i) {
-    current = Math.max(0, Math.min(totalSlides - 1, i));
+    current = ((i % totalSlides) + totalSlides) % totalSlides;
     track.style.transform = `translateX(-${current * 100}%)`;
     dots.forEach((d, idx) => d.classList.toggle('active', idx === current));
-    prevBtn.disabled = current === 0;
-    nextBtn.disabled = current === totalSlides - 1;
+    viewport.classList.toggle('on-light', current === totalSlides - 1);
     slideEls.forEach((s, idx) => {
       s.classList.remove('in');
       if (idx === current) { void s.offsetWidth; s.classList.add('in'); }

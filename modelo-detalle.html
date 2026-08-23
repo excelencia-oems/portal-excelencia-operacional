@@ -74,6 +74,69 @@
   .interactive-placeholder span{font-weight:700; font-size:12.5px; color:var(--gray-700);}
   .interactive-placeholder p{font-size:11.5px; max-width:360px;}
 
+  /* ---- Interactive learning module ---- */
+  .itabs{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px;}
+  .itab-btn{
+    font-size:12px; font-weight:700; padding:8px 14px; border-radius:100px; border:1px solid var(--warm-gray-100);
+    background:#fff; color:var(--gray-700); cursor:pointer;
+  }
+  .itab-btn.active{background:var(--oems-teal); border-color:var(--oems-teal); color:#fff;}
+  .itab-panel{display:none;}
+  .itab-panel.active{display:block;}
+
+  .idef-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px;}
+  .idef-card{background:var(--warm-gray-50); border-radius:10px; padding:14px 16px;}
+  .idef-card h4{font-family:var(--font-display); font-size:12.5px; font-weight:700; margin-bottom:6px; color:var(--oems-teal-dark);}
+  .idef-card p{font-size:12px; color:var(--gray-700); line-height:1.5;}
+
+  .ipoints{display:flex; flex-direction:column; gap:8px; margin-top:10px;}
+  .ipoint{display:flex; gap:10px; align-items:flex-start; font-size:12.5px; color:var(--gray-700);}
+  .ipoint-num{
+    width:20px; height:20px; border-radius:100px; background:var(--oems-teal); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:10.5px; font-weight:700; flex-shrink:0; margin-top:1px;
+  }
+
+  .idim-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:12px;}
+  .idim-card{border-radius:10px; padding:14px 16px; color:#fff;}
+  .idim-card h4{font-family:var(--font-display); font-size:12.5px; font-weight:700; margin-bottom:8px;}
+  .idim-card ul{padding-left:16px; font-size:11.5px; line-height:1.6;}
+  .idim-1{background:var(--oems-teal-dark);}
+  .idim-2{background:#7A310D;}
+  .idim-3{background:#854F0B;}
+
+  .irole-list{display:flex; flex-direction:column; gap:2px;}
+  .irole-item{display:flex; gap:14px; align-items:flex-start; background:var(--warm-gray-50); border-radius:9px; padding:12px 14px; margin-bottom:6px;}
+  .irole-title{font-weight:700; font-size:12.5px; color:var(--oems-teal-dark); min-width:130px;}
+  .irole-desc{font-size:12px; color:var(--gray-700);}
+
+  .igoodbad{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .igb-col h4{font-size:12px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px;}
+  .igb-good h4{color:#0F6E56;}
+  .igb-bad h4{color:#993C1D;}
+  .igb-col ul{padding-left:16px; font-size:11.5px; color:var(--gray-700); line-height:1.6;}
+  @media (max-width:520px){ .igoodbad{grid-template-columns:1fr;} }
+
+  .iquiz-box{background:var(--warm-gray-50); border-radius:12px; padding:18px 20px; margin-top:6px;}
+  .iquiz-progress{font-size:11px; font-weight:700; color:var(--warm-gray-500); margin-bottom:10px;}
+  .iquiz-question{font-size:13px; font-weight:700; margin-bottom:12px;}
+  .iquiz-options{display:flex; flex-direction:column; gap:8px;}
+  .iquiz-option{
+    text-align:left; background:#fff; border:1px solid var(--warm-gray-100); border-radius:9px; padding:10px 14px;
+    font-size:12.5px; cursor:pointer; color:var(--gray-900);
+  }
+  .iquiz-option:hover{border-color:var(--oems-teal);}
+  .iquiz-option.correct{background:#E1F5EE; border-color:#0F6E56; color:#04342C; font-weight:600;}
+  .iquiz-option.wrong{background:#FAECE7; border-color:#993C1D; color:#4A1B0C; font-weight:600;}
+  .iquiz-option[disabled]{cursor:default;}
+  .iquiz-feedback{font-size:12px; margin-top:12px; padding:10px 12px; border-radius:8px; background:#fff; display:none;}
+  .iquiz-feedback.show{display:block;}
+  .iquiz-next{margin-top:12px; background:var(--oems-teal); color:#fff; border:none; padding:9px 16px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; display:none;}
+  .iquiz-next.show{display:inline-block;}
+  .iquiz-score{text-align:center; padding:10px 0;}
+  .iquiz-score .num{font-family:var(--font-display); font-size:32px; font-weight:700; color:var(--oems-teal-dark);}
+  .iquiz-score p{font-size:12.5px; color:var(--gray-700); margin-top:6px;}
+  .iquiz-retry{margin-top:12px; background:var(--warm-gray-100); color:var(--gray-700); border:none; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer;}
+
   .resource-list{display:flex; flex-direction:column; gap:8px;}
   .resource{
     display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--warm-gray-100); border-radius:9px;
@@ -210,10 +273,12 @@
 
   <div class="panel" id="interactivePanel">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V6l7 6-7 6z"/><rect x="2" y="3" width="20" height="18" rx="2"/></svg>Refuerza lo aprendido</h2>
-    <div class="interactive-placeholder">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg>
-      <span>Contenido interactivo — en desarrollo</span>
-      <p>Aquí irá un ejercicio o resumen interactivo para reforzar esta práctica.</p>
+    <div id="interactiveContent">
+      <div class="interactive-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg>
+        <span>Contenido interactivo — en desarrollo</span>
+        <p>Aquí irá un ejercicio o resumen interactivo para reforzar esta práctica.</p>
+      </div>
     </div>
   </div>
 
@@ -278,7 +343,7 @@ const PRACTICAS = {
   },
   'alineacion-estrategica': {
     nombre: 'Alineación Estratégica', pilar: 'objetivo',
-    definicion: 'Proceso para conectar los objetivos del equipo con la estrategia general del sitio, asegurando que cada área entienda cómo su trabajo diario contribuye a las metas de Lomas Bayas.',
+    definicion: 'Proceso mediante el cual todas las áreas, funciones, recursos y personas de una organización se orientan y sincronizan con la estrategia definida, asegurando coherencia entre los objetivos de largo plazo y la ejecución diaria. El foco está en el diseño de la aspiración y cómo esta se alinea con el propósito del sitio.',
     video: 'https://glencore.sharepoint.com/:v:/r/sites/CLModeloEOCapacitaciones/Shared%20Documents/General/01%20-%20Alineacion%20Estrategica/GLENCORE_LEM_PRACTICA_1.mp4?d=we548cdf235604cfb9a5f7abb730c1cce&csf=1&web=1',
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=e548cdf2-3560-4cfb-9a5f-7abb730c1cce&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Mapa de objetivos estratégicos del sitio', t:'PDF · 1.4 MB'}, {n:'Video: cómo alinear metas de equipo', t:'Video · 8 min'}],
@@ -286,7 +351,147 @@ const PRACTICAS = {
     historial: [
       {fecha:'14 ago 2026', resp:'Ana Rojas', desc:'Taller de despliegue de objetivos trimestrales con el equipo de planta.', estado:'approved'},
       {fecha:'01 ago 2026', resp:'Jorge Muñoz', desc:'Revisión de alineación de metas del área de mantención.', estado:'approved'},
-    ]
+    ],
+    interactive: {
+      tabs: [
+        {
+          id: 'que-es', label: '¿Qué es?',
+          html: `
+            <div class="idef-grid">
+              <div class="idef-card">
+                <h4>¿Qué se busca lograr?</h4>
+                <p>Formular una visión clara sobre qué es lo que aspiramos y a qué nos comprometemos para lograrlo.</p>
+              </div>
+              <div class="idef-card">
+                <h4>¿Cómo se logra?</h4>
+                <p>A través de un proceso estructurado que conecta el propósito de una organización con las aspiraciones y metas en el mediano plazo.</p>
+              </div>
+            </div>
+            <div class="ipoints">
+              <div class="ipoint"><span class="ipoint-num">1</span>Optimiza el uso de recursos para maximizar el impacto de la estrategia.</div>
+              <div class="ipoint"><span class="ipoint-num">2</span>Asegura que todos los equipos trabajen alineados hacia los mismos objetivos.</div>
+              <div class="ipoint"><span class="ipoint-num">3</span>Desafía a la organización para ir más allá de las metas establecidas.</div>
+              <div class="ipoint"><span class="ipoint-num">4</span>Garantiza resultados sostenibles mediante metas concretas y claras.</div>
+            </div>`
+        },
+        {
+          id: 'definiciones', label: 'Definiciones clave',
+          html: `
+            <div class="idef-grid">
+              <div class="idef-card">
+                <h4>Propósito</h4>
+                <p>La razón fundamental por la que existe una organización, sitio o área, más allá de generar utilidades. Orienta las decisiones estratégicas y operacionales.</p>
+              </div>
+              <div class="idef-card">
+                <h4>Misión</h4>
+                <p>Declaración clara y concisa del rol actual de la organización: qué hace, para quién lo hace y cómo crea valor.</p>
+              </div>
+              <div class="idef-card">
+                <h4>Visión</h4>
+                <p>Proyección aspiracional de lo que la organización busca llegar a ser en el futuro. Guía la toma de decisiones a largo plazo.</p>
+              </div>
+              <div class="idef-card">
+                <h4>Aspiración</h4>
+                <p>Meta de corto-mediano plazo, específica y ambiciosa, alineada con los objetivos estratégicos. Es la meta a fin de un período para avanzar hacia la visión.</p>
+              </div>
+            </div>`
+        },
+        {
+          id: 'dimensiones', label: 'Dimensiones',
+          html: `
+            <div class="idim-grid">
+              <div class="idim-card idim-1">
+                <h4>1 · Sostenibilidad</h4>
+                <p style="font-size:11px; margin-bottom:8px; opacity:0.9;">KPIs de seguridad y medio ambiente. Al menos 1 KPI obligatorio.</p>
+                <ul><li>0 eventos de alto potencial</li><li>0 incidentes ambientales</li><li>Reducción de emisiones GHG</li></ul>
+              </div>
+              <div class="idim-card idim-2">
+                <h4>2 · Generación de Valor</h4>
+                <p style="font-size:11px; margin-bottom:8px; opacity:0.9;">Resultados clave del negocio y portafolio de iniciativas.</p>
+                <ul><li>Captura de valor Full Potential</li><li>OEE por proceso</li><li>Reducción de costos</li></ul>
+              </div>
+              <div class="idim-card idim-3">
+                <h4>3 · Personas</h4>
+                <p style="font-size:11px; margin-bottom:8px; opacity:0.9;">Implementación de LEM y cultura.</p>
+                <ul><li>% implementación plan de despliegue</li><li>% encuesta de cultura</li></ul>
+              </div>
+            </div>
+            <p style="font-size:11.5px; color:var(--gray-700); margin-top:12px; background:var(--warm-gray-50); padding:10px 14px; border-radius:8px;">La aspiración debe ser redefinida cada <b>6–12 meses</b> para que se mantenga como una meta desafiante.</p>`
+        },
+        {
+          id: 'roles', label: 'Roles',
+          html: `
+            <div class="irole-list">
+              <div class="irole-item"><div class="irole-title">Gerente General</div><div class="irole-desc">Transmite los resultados y su relación con la aspiración.</div></div>
+              <div class="irole-item"><div class="irole-title">Gerentes</div><div class="irole-desc">Establecen y sustentan las aspiraciones y metas según el ciclo de planificación del negocio.</div></div>
+              <div class="irole-item"><div class="irole-title">Superintendentes</div><div class="irole-desc">Desarrollan y actualizan las aspiraciones de su área, conectadas con los KPIs en todos los niveles.</div></div>
+              <div class="irole-item"><div class="irole-title">Jefes/Supervisores</div><div class="irole-desc">Ejecutan las acciones y realizan seguimiento para el logro de las aspiraciones y objetivos.</div></div>
+            </div>`
+        },
+        {
+          id: 'practicas', label: 'Buenas prácticas',
+          html: `
+            <div class="igoodbad">
+              <div class="igb-col igb-good">
+                <h4>✓ Esto sí</h4>
+                <ul>
+                  <li>Elaborar el diagnóstico de procesos (línea base) y definir metas de indicadores clave.</li>
+                  <li>Involucrar al equipo en la definición de las metas de iniciativas.</li>
+                  <li>Detallar cómo se va a conseguir la aspiración: palancas, conductas, iniciativas.</li>
+                  <li>Difundir desde el Nivel 5 (Gerente General) hasta el Nivel 1 (Operador).</li>
+                  <li>Hacer acompañamiento mensual o trimestral.</li>
+                </ul>
+              </div>
+              <div class="igb-col igb-bad">
+                <h4>✕ Esto no</h4>
+                <ul>
+                  <li>Desarrollar aspiraciones sin conexión entre niveles organizacionales.</li>
+                  <li>Considerar metas poco desafiantes.</li>
+                  <li>Elaborarlas solo con un representante del área.</li>
+                  <li>Basarse en suposiciones sin data sólida.</li>
+                  <li>Revisar la aspiración solo una vez al año.</li>
+                </ul>
+              </div>
+            </div>`
+        }
+      ],
+      quiz: [
+        {
+          q: '¿Qué es la aspiración, según el modelo?',
+          options: [
+            'Una meta de corto-mediano plazo, específica y ambiciosa, alineada con los objetivos estratégicos',
+            'El presupuesto anual comprometido con el área de finanzas',
+            'Un reglamento interno de cumplimiento obligatorio'
+          ],
+          correct: 0,
+          feedback: 'La aspiración es la meta que impulsa a los equipos a superarse, alineada con la visión y los objetivos estratégicos.'
+        },
+        {
+          q: '¿Cuántas dimensiones tiene la aspiración?',
+          options: ['Dos: Seguridad y Producción', 'Tres: Sostenibilidad, Generación de Valor y Personas', 'Cinco, una por cada gerencia'],
+          correct: 1,
+          feedback: 'Las tres dimensiones son Sostenibilidad, Generación de Valor y Personas — cada una con sus propios KPIs.'
+        },
+        {
+          q: '¿Cada cuánto debe redefinirse la aspiración?',
+          options: ['Cada 6–12 meses', 'Solo una vez, al crear el sitio', 'Cada 5 años'],
+          correct: 0,
+          feedback: 'Debe redefinirse cada 6–12 meses para que se mantenga como una meta desafiante, no una ya alcanzada.'
+        },
+        {
+          q: '¿Quién ejecuta las acciones y hace seguimiento directo al logro de las aspiraciones?',
+          options: ['Solo el Gerente General', 'Jefes y Supervisores', 'Un consultor externo'],
+          correct: 1,
+          feedback: 'Jefes y Supervisores son quienes ejecutan las acciones y hacen seguimiento en el día a día.'
+        },
+        {
+          q: '¿Es una buena práctica que la aspiración la defina solo un representante del área?',
+          options: ['Sí, así se define más rápido', 'No, debe involucrar al equipo y basarse en datos, no en suposiciones'],
+          correct: 1,
+          feedback: 'El documento lo marca explícitamente como algo a evitar: la aspiración debe construirse con el equipo y con datos sólidos.'
+        }
+      ]
+    }
   },
   'full-potential': {
     nombre: 'Full Potential', pilar: 'objetivo',
@@ -414,6 +619,84 @@ if (practica.historial.length === 0) {
     </div>`;
   });
 }
+
+/* ---------------- módulo interactivo (pestañas + quiz) ---------------- */
+if (practica.interactive) {
+  const ic = document.getElementById('interactiveContent');
+  const tabs = practica.interactive.tabs;
+  const quiz = practica.interactive.quiz;
+
+  let tabsHtml = '<div class="itabs">';
+  tabs.forEach((t, i) => {
+    tabsHtml += `<button class="itab-btn${i===0?' active':''}" data-tab="${t.id}">${t.label}</button>`;
+  });
+  tabsHtml += `<button class="itab-btn" data-tab="__quiz__">Ponte a prueba</button></div>`;
+
+  let panelsHtml = '';
+  tabs.forEach((t, i) => {
+    panelsHtml += `<div class="itab-panel${i===0?' active':''}" data-panel="${t.id}">${t.html}</div>`;
+  });
+
+  panelsHtml += `<div class="itab-panel" data-panel="__quiz__">
+    <div class="iquiz-box" id="iquizBox"></div>
+  </div>`;
+
+  ic.innerHTML = tabsHtml + panelsHtml;
+
+  ic.querySelectorAll('.itab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      ic.querySelectorAll('.itab-btn').forEach(b => b.classList.remove('active'));
+      ic.querySelectorAll('.itab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      ic.querySelector(`.itab-panel[data-panel="${btn.dataset.tab}"]`).classList.add('active');
+      if (btn.dataset.tab === '__quiz__' && !quizStarted) { quizStarted = true; renderQuestion(); }
+    });
+  });
+
+  let quizStarted = false;
+  let qIndex = 0;
+  let qScore = 0;
+
+  function renderQuestion() {
+    const box = document.getElementById('iquizBox');
+    if (qIndex >= quiz.length) {
+      box.innerHTML = `<div class="iquiz-score">
+        <div class="num">${qScore}/${quiz.length}</div>
+        <p>Respuestas correctas</p>
+        <button class="iquiz-retry" id="iquizRetry">Volver a intentar</button>
+      </div>`;
+      document.getElementById('iquizRetry').addEventListener('click', () => { qIndex = 0; qScore = 0; renderQuestion(); });
+      return;
+    }
+    const item = quiz[qIndex];
+    box.innerHTML = `
+      <div class="iquiz-progress">Pregunta ${qIndex+1} de ${quiz.length}</div>
+      <div class="iquiz-question">${item.q}</div>
+      <div class="iquiz-options">
+        ${item.options.map((opt, i) => `<button class="iquiz-option" data-i="${i}">${opt}</button>`).join('')}
+      </div>
+      <div class="iquiz-feedback" id="iquizFeedback"></div>
+      <button class="iquiz-next" id="iquizNext">${qIndex === quiz.length-1 ? 'Ver resultado' : 'Siguiente →'}</button>
+    `;
+    const optBtns = box.querySelectorAll('.iquiz-option');
+    optBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        optBtns.forEach(b => b.disabled = true);
+        const chosen = Number(btn.dataset.i);
+        if (chosen === item.correct) { btn.classList.add('correct'); qScore++; }
+        else {
+          btn.classList.add('wrong');
+          optBtns[item.correct].classList.add('correct');
+        }
+        const fb = document.getElementById('iquizFeedback');
+        fb.textContent = item.feedback;
+        fb.classList.add('show');
+        document.getElementById('iquizNext').classList.add('show');
+      });
+    });
+    document.getElementById('iquizNext').addEventListener('click', () => { qIndex++; renderQuestion(); });
+  }
+}
 </script>
 
 <div class="digital-transition" id="arrivalOverlay">
@@ -430,6 +713,14 @@ if (practica.historial.length === 0) {
   }, 550);
 
 
+  document.querySelectorAll('a.fab-home, a.crumb-chip[href="index.html"]').forEach(function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      document.body.style.transition = 'opacity .15s ease';
+      document.body.style.opacity = '0';
+      setTimeout(function(){ window.location.href = 'index.html'; }, 160);
+    });
+  });
 </script>
 
 </body>

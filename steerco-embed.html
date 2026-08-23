@@ -103,14 +103,7 @@
     document.getElementById('arrivalOverlay').classList.add('fade-out');
   }, 550);
 
-  document.querySelectorAll('a.fab-home, a.crumb-chip[href="index.html"]').forEach(function(link){
-    link.addEventListener('click', function(e){
-      e.preventDefault();
-      var overlay = document.getElementById('arrivalOverlay');
-      overlay.classList.remove('fade-out');
-      setTimeout(function(){ window.location.href = 'index.html'; }, 480);
-    });
-  });
+
 </script>
 
 </body>

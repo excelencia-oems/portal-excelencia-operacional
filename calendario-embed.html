@@ -40,6 +40,28 @@
   .embed-wrap{flex:1; position:relative;}
   .embed-wrap iframe{position:absolute; inset:0; width:100%; height:100%; border:none; display:block;}
 
+  .digital-transition{
+    position:fixed; inset:0; z-index:200; overflow:hidden;
+    background:linear-gradient(135deg, #993C1D, #D85A30);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+    opacity:1; transition:opacity .4s ease;
+  }
+  .digital-transition.fade-out{opacity:0; pointer-events:none;}
+  .dt-scanlines{
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 4px);
+    animation:dtScan 1.1s linear infinite;
+  }
+  @keyframes dtScan{ from{ background-position-y:0; } to{ background-position-y:40px; } }
+  .dt-icon{
+    width:74px; height:74px; border-radius:18px; background:rgba(255,255,255,0.16);
+    display:flex; align-items:center; justify-content:center; color:#fff;
+    animation:dtPulse 1s ease-in-out infinite;
+  }
+  .dt-icon svg{width:34px; height:34px;}
+  @keyframes dtPulse{ 0%,100%{ transform:scale(1); opacity:0.9; } 50%{ transform:scale(1.08); opacity:1; } }
+  .dt-label{color:#fff; font-family:var(--font-display); font-weight:700; font-size:13.5px; letter-spacing:0.02em; opacity:0.9;}
+
   @media (max-width:480px){ .fab-home{width:46px; height:46px; bottom:16px; right:16px;} }
 </style>
 </head>
@@ -67,6 +89,20 @@
 <div class="embed-wrap">
   <iframe src="https://calendario-turnos-oems.web.app/" title="Calendario Ejecutivo de Turnos"></iframe>
 </div>
+
+<div class="digital-transition" id="arrivalOverlay">
+  <div class="dt-scanlines"></div>
+  <div class="dt-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+  </div>
+  <div class="dt-label">Calendario Ejecutivo de Turnos</div>
+</div>
+
+<script>
+  setTimeout(function(){
+    document.getElementById('arrivalOverlay').classList.add('fade-out');
+  }, 550);
+</script>
 
 </body>
 </html>

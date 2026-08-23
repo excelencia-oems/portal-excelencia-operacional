@@ -79,7 +79,7 @@
   .icarousel-track{display:flex; height:100%; transition:transform .45s cubic-bezier(.4,0,.2,1);}
   .icarousel-slide{
     flex:0 0 100%; max-width:100%; box-sizing:border-box; height:100%; overflow-y:auto;
-    padding:30px 30px 62px; position:relative; color:#fff;
+    padding:30px 56px 62px; position:relative; color:#fff;
   }
   .icarousel-slide::-webkit-scrollbar{width:6px;}
   .icarousel-slide::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.25); border-radius:10px;}
@@ -87,10 +87,10 @@
   .islide-eyebrow{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; opacity:0.7; margin-bottom:8px; position:relative; z-index:2;}
   .islide-headline{font-family:var(--font-display); font-size:23px; font-weight:700; line-height:1.18; margin-bottom:18px; max-width:480px; position:relative; z-index:2;}
   .islide-headline em{font-style:normal; color:var(--hl,#FAC775);}
-  .ishape{position:absolute; opacity:0.14; pointer-events:none; z-index:0;}
-  .ishape-hex{clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);}
-  .ishape-1{width:190px; height:190px; right:-40px; top:-50px; background:#fff;}
-  .ishape-2{width:110px; height:110px; right:70px; bottom:-30px; background:#fff; opacity:0.09;}
+  .ishape{position:absolute; opacity:0.22; pointer-events:none; z-index:0;}
+  .ishape-hex{clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); background:linear-gradient(135deg, var(--oems-teal) 0%, var(--oems-beige) 50%, var(--oems-terra) 100%);}
+  .ishape-1{width:190px; height:190px; right:-40px; top:-50px;}
+  .ishape-2{width:110px; height:110px; right:70px; bottom:-30px; opacity:0.14;}
   .islide-body{position:relative; z-index:2;}
 
   .iquote-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(210px,1fr)); gap:12px; margin-bottom:18px;}
@@ -123,16 +123,35 @@
   .iexample-card .ititle{font-size:11.5px; font-weight:700; margin-bottom:6px;}
   .iexample-card ul{padding-left:14px; font-size:10px; line-height:1.6; opacity:0.85;}
 
-  .ipyramid{display:flex; flex-direction:column; align-items:center; gap:2px; margin:8px 0 20px;}
+  .ipyramid{display:flex; flex-direction:column; align-items:center; gap:2px; margin:6px 0 4px;}
   .ipyr-tier{
     display:flex; align-items:center; justify-content:center; text-align:center; color:#fff;
-    font-size:10.5px; font-weight:700; padding:9px 12px; line-height:1.25;
+    font-size:10px; font-weight:700; padding:7px 10px; line-height:1.2;
   }
-  .ipyr-1{width:96%; clip-path:polygon(6% 0,94% 0,100% 100%,0% 100%); background:rgba(255,255,255,0.32); font-size:11px;}
-  .ipyr-2{width:80%; clip-path:polygon(4% 0,96% 0,100% 100%,0% 100%); background:rgba(255,255,255,0.26);}
-  .ipyr-3{width:64%; clip-path:polygon(2% 0,98% 0,100% 100%,0% 100%); background:rgba(255,255,255,0.2);}
-  .ipyr-4{width:48%; clip-path:polygon(0 0,100% 0,100% 100%,0 100%); background:rgba(255,255,255,0.16); border-radius:0 0 4px 4px;}
-  .ipyr-example{font-size:10px; opacity:0.75; text-align:center; max-width:340px; margin-top:8px; font-style:italic;}
+  .ipyr-1{width:98%; clip-path:polygon(8% 0,92% 0,100% 100%,0% 100%); background:rgba(255,255,255,0.36); font-size:10.5px;}
+  .ipyr-2{width:86%; clip-path:polygon(6% 0,94% 0,100% 100%,0% 100%); background:rgba(255,255,255,0.30);}
+  .ipyr-3{width:74%; clip-path:polygon(5% 0,95% 0,100% 100%,0% 100%); background:rgba(255,255,255,0.26);}
+  .ipyr-4{width:62%; clip-path:polygon(4% 0,96% 0,100% 100%,0% 100%); background:rgba(255,255,255,0.21);}
+  .ipyr-5{width:50%; clip-path:polygon(3% 0,97% 0,100% 100%,0% 100%); background:rgba(255,255,255,0.17);}
+  .ipyr-6{width:38%; clip-path:polygon(0 0,100% 0,100% 100%,0 100%); background:rgba(255,255,255,0.13); border-radius:0 0 4px 4px;}
+  .ipyr-example{font-size:9.5px; opacity:0.78; text-align:center; max-width:360px; margin:6px auto 0; font-style:italic; line-height:1.4;}
+
+  .iwheel{position:relative; width:220px; max-width:70%; aspect-ratio:1; margin:6px auto 4px;}
+  .iwheel-ring{position:absolute; inset:15%; border:10px solid rgba(255,255,255,0.22); border-radius:100%;}
+  .iwheel-center{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:40%; height:40%; border-radius:100%;
+    background:#fff; color:var(--oems-teal-dark); display:flex; align-items:center; justify-content:center; text-align:center;
+    font-weight:700; font-size:12px; padding:6px; box-shadow:0 10px 22px rgba(0,0,0,0.22); z-index:2;
+  }
+  .iwheel-sat{
+    position:absolute; width:36%; height:36%; border-radius:100%; background:rgba(255,255,255,0.24); border:1px solid rgba(255,255,255,0.4);
+    display:flex; align-items:center; justify-content:center; text-align:center; font-size:9.5px; font-weight:700; padding:6px; z-index:2; line-height:1.2;
+  }
+  .iwheel-sat.top{top:-4%; left:50%; transform:translate(-50%,0);}
+  .iwheel-sat.right{bottom:2%; right:-4%;}
+  .iwheel-sat.left{bottom:2%; left:-4%;}
+  .iroles-chips{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:16px;}
+  .irole-chip{background:rgba(255,255,255,0.14); border-radius:100px; padding:6px 14px; font-size:10.5px; font-weight:700;}
 
   .iroles-timeline{position:relative; margin-top:4px;}
 
@@ -518,22 +537,43 @@ const PRACTICAS = {
             </div>`
         },
         {
-          id: 'roles', label: 'Roles y jerarquía', theme: 3,
+          id: 'piramide', label: 'Pirámide del propósito', theme: 3,
           html: `
             <div class="ishape ishape-hex ishape-1 ianim"></div>
             <div class="islide-body">
               <div class="islide-eyebrow ianim">Ejecución · De arriba hacia abajo</div>
-              <div class="islide-headline ianim" style="font-size:18px;">El propósito <em style="--hl:#9FE1CB;">cascadea</em> desde Glencore hasta el turno</div>
+              <div class="islide-headline ianim" style="font-size:17px;">El propósito <em style="--hl:#9FE1CB;">cascadea</em> desde Glencore hasta el turno</div>
               <div class="ipyramid ianim">
                 <div class="ipyr-tier ipyr-1">Propósito Glencore</div>
-                <div class="ipyr-tier ipyr-2">Propósito región / departamento</div>
-                <div class="ipyr-tier ipyr-3">Propósito del sitio</div>
-                <div class="ipyr-tier ipyr-4">Aspiración del área</div>
+                <div class="ipyr-tier ipyr-2">Propósito departamento</div>
+                <div class="ipyr-tier ipyr-3">Propósito región</div>
+                <div class="ipyr-tier ipyr-4">Propósito del sitio</div>
+                <div class="ipyr-tier ipyr-5">Visión / Propósito del área</div>
+                <div class="ipyr-tier ipyr-6">Aspiración</div>
               </div>
-              <div class="ipyr-example ianim">Ejemplo real: "Proveer servicios de mantenimiento de clase mundial de forma predictiva y sostenible" → 0 accidentes · 130 ton CuF/año · 80% despliegue LEM</div>
-              <div class="iroles-timeline ianim">
-                <div class="irole-row"><div class="irole-dot">1</div><div class="irole-body"><b>Gerente General</b><span>Transmite los resultados y su relación con la aspiración.</span></div></div>
-                <div class="irole-row"><div class="irole-dot">2</div><div class="irole-body"><b>Gerentes → Jefes/Supervisores</b><span>Establecen, actualizan y ejecutan el seguimiento en cada nivel.</span></div></div>
+              <div class="ipyr-example ianim">"Proveer de forma responsable los productos que hacen posible la vida cotidiana" — propósito Glencore</div>
+              <div class="ipyr-example ianim">Ejemplo de área: "Proveer servicios de mantenimiento de clase mundial de forma predictiva y sostenible" → 0 accidentes · 130 ton CuF/año · 80% despliegue LEM</div>
+            </div>`
+        },
+        {
+          id: 'circulo', label: 'Círculo de alineación', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Cómo se sostiene en el tiempo</div>
+              <div class="islide-headline ianim" style="font-size:17px;">La <em style="--hl:#B4B2A9;">aspiración</em> conecta con otras 3 prácticas LEM</div>
+              <div class="iwheel ianim">
+                <div class="iwheel-ring"></div>
+                <div class="iwheel-sat top">Full<br>Potential</div>
+                <div class="iwheel-sat right">Gestión de<br>iniciativas</div>
+                <div class="iwheel-sat left">Visualizar y<br>gestionar<br>el progreso</div>
+                <div class="iwheel-center">Aspiración</div>
+              </div>
+              <div class="iroles-chips ianim">
+                <span class="irole-chip">Gerente General</span>
+                <span class="irole-chip">Gerentes</span>
+                <span class="irole-chip">Superintendentes</span>
+                <span class="irole-chip">Jefes/Supervisores</span>
               </div>
             </div>`
         },

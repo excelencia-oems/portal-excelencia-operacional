@@ -84,7 +84,7 @@
   .icarousel-slide::-webkit-scrollbar{width:6px;}
   .icarousel-slide::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.25); border-radius:10px;}
   .icarousel-slide h3{display:none;}
-  .islide-eyebrow{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; opacity:0.7; margin-bottom:8px; position:relative; z-index:2;}
+  .islide-eyebrow{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; opacity:0.92; margin-bottom:8px; position:relative; z-index:2;}
   .islide-headline{font-family:var(--font-display); font-size:23px; font-weight:700; line-height:1.18; margin-bottom:18px; max-width:480px; position:relative; z-index:2;}
   .islide-headline em{font-style:normal; color:var(--hl,#FAC775);}
   .ishape{position:absolute; opacity:0.22; pointer-events:none; z-index:0;}
@@ -119,7 +119,7 @@
 
   .iexample-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px; margin-top:44px;}
   .iexample-card{background:rgba(255,255,255,0.13); border-radius:10px; padding:12px 14px;}
-  .iexample-card .inum{font-family:var(--font-display); font-size:11px; font-weight:700; opacity:0.6; margin-bottom:4px;}
+  .iexample-card .inum{font-family:var(--font-display); font-size:11px; font-weight:700; opacity:0.88; margin-bottom:4px;}
   .iexample-card .ititle{font-size:11.5px; font-weight:700; margin-bottom:6px;}
   .iexample-card ul{padding-left:14px; font-size:10px; line-height:1.6; opacity:0.95;}
 
@@ -875,13 +875,186 @@ const PRACTICAS = {
   },
   'visualizar-progreso': {
     nombre: 'Visualizar y Gestionar el Progreso', pilar: 'objetivo',
-    definicion: 'Uso de tableros visuales en terreno para hacer seguimiento diario o semanal del avance del equipo frente a sus metas, facilitando la toma de decisiones oportuna.',
+    definicion: 'Reunión regular y programada entre líder y equipo — el Diálogo de Desempeño — para revisar el avance frente a los objetivos usando datos y hechos visualizados en el tablero. No busca culpables: busca soluciones como equipo, con compromisos concretos, responsables y fechas para cerrar cada brecha.',
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=dc35286f-253d-4332-b2b8-414da4c4d9dc&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
-    materiales: [{n:'Guía de gestión visual en terreno', t:'PDF · 1.7 MB'}, {n:'Video: montaje de un tablero de gestión visual', t:'Video · 5 min'}],
-    plantilla: 'Plantilla de tablero de gestión visual (PDF imprimible)',
+    materiales: [{n:'Capacitación: Diálogos de Desempeño (CMLB)', t:'PPTX · 8.5 MB'}, {n:'Metodología LEM — Práctica 3: Visualizar y gestionar el progreso', t:'PDF · 0.6 MB'}],
+    plantilla: 'Estándar de Reunión — Diálogo de Desempeño (tablero de indicadores + tablero de compromisos)',
     historial: [
       {fecha:'13 ago 2026', resp:'Pedro Salas', desc:'Actualización semanal del tablero de gestión visual de chancado.', estado:'approved'},
-    ]
+    ],
+    interactive: {
+      tabs: [
+        {
+          id: 'que-es', label: '¿Qué es?', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="ishape ishape-hex ishape-2 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Objetivo e importancia</div>
+              <div class="islide-headline ianim">Una conversación regular con el equipo, basada en <em style="--hl:#9FE1CB;">datos y hechos</em></div>
+              <div class="iquote-grid ianim">
+                <div class="iquote"><div class="iquote-label">Qué es</div><div class="iquote-text">Reunión regular y programada entre líder y equipo para discutir el desempeño usando el tablero de desempeño.</div></div>
+                <div class="iquote"><div class="iquote-label">Qué no es</div><div class="iquote-text">No es un espacio para buscar culpables: es un espacio para encontrar soluciones como equipo.</div></div>
+              </div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Da visibilidad y transparencia</div><div class="icheck-sub">Del desempeño y las metas del equipo</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Levanta acciones rápidas</div><div class="icheck-sub">Para cerrar brechas de los indicadores clave</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Genera compromisos concretos</div><div class="icheck-sub">Frente a los problemas identificados</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Refuerza la dinámica de equipo</div><div class="icheck-sub">Objetivo común, feedback y coaching</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'cascada', label: 'Cascada de KPIs', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Cascada de KPIs y roles</div>
+              <div class="islide-headline ianim" style="font-size:17px;">El progreso se mide en <em style="--hl:#F5C4B3;">cascada</em>, desde la Gerencia hasta el turno</div>
+              <div class="ipyramid ianim">
+                <div class="ipyr-tier ipyr-1">Gerente General · Costos operativos del Asset</div>
+                <div class="ipyr-tier ipyr-2">Gerente de Mina · Costos de Mina</div>
+                <div class="ipyr-tier ipyr-3">SI Mina · Costos de Carguío</div>
+                <div class="ipyr-tier ipyr-4">Jefe / Supervisor · Uso de disponibilidad de palas</div>
+                <div class="ipyr-tier ipyr-5">Operador · Tiempo de carguío y tiempo Hang</div>
+              </div>
+              <div class="ipyr-example ianim">Cada nivel del árbol de KPI tiene un responsable claro y se conecta con su nivel organizacional — ejemplo real de cascada en mina.</div>
+              <div class="ipyr-example ianim">La frecuencia aumenta hacia el terreno: quincenal en Gerencia General, semanal en niveles intermedios, diaria en supervisión y operación.</div>
+            </div>`
+        },
+        {
+          id: 'tableros', label: 'Los 2 tableros', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Los dos tableros</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Un tablero de <em style="--hl:#9FE1CB;">indicadores</em> y uno de <em style="--hl:#9FE1CB;">compromisos</em></div>
+              <div class="itool-grid ianim">
+                <div class="itool-card">
+                  <div class="itool-title">Indicadores</div>
+                  <div class="itool-sub">Meta vs. real, por periodo</div>
+                  <p>Se actualiza al último periodo medido. Código de color: verde si se cumple la meta, rojo si no, negro para otras anotaciones.</p>
+                </div>
+                <div class="itool-card">
+                  <div class="itool-title">Compromisos</div>
+                  <div class="itool-sub">Acción, responsable y fecha</div>
+                  <p>Cada compromiso nace de un KPI desviado: acción concreta, responsable, fecha de cierre y estado de avance.</p>
+                </div>
+              </div>
+              <div class="iquestions ianim" style="margin-top:16px;">
+                <div class="iquestion-chip"><span class="iquestion-num">1</span>Fecha e identificador del compromiso</div>
+                <div class="iquestion-chip"><span class="iquestion-num">2</span>Descripción del problema, con el KPI afectado</div>
+                <div class="iquestion-chip"><span class="iquestion-num">3</span>Acción específica acordada y responsable</div>
+                <div class="iquestion-chip"><span class="iquestion-num">4</span>Estado: a tiempo, con demora, o requiere Resolución de Problemas</div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'ejemplo-real', label: 'Ejemplo real: la reunión', theme: 3,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejemplo real · Diálogo de Desempeño Gerente General</div>
+              <div class="islide-headline ianim" style="font-size:17px;">En Lomas Bayas, la reunión dura <em style="--hl:#9FE1CB;">90 minutos</em>, bloque a bloque</div>
+              <div class="iquote-grid ianim">
+                <div class="iquote"><div class="iquote-label">Cuándo</div><div class="iquote-text">Semanal, los lunes a las 16:00, en Sala 1 Gerencia / Teams.</div></div>
+                <div class="iquote"><div class="iquote-label">Quién lidera</div><div class="iquote-text">El Gerente General, con Gerentes de área, Jefe de Riesgos y los SI del sitio.</div></div>
+              </div>
+              <div class="itool-grid ianim" style="margin-top:14px;">
+                <div class="itool-card"><div class="itool-title">Compromisos</div><div class="itool-sub">5 min</div><p>Lectura de compromisos y apoyo para el cierre de acciones.</p></div>
+                <div class="itool-card"><div class="itool-title">HS</div><div class="itool-sub">15 min</div><p>Indicadores preventivos, KPI y tendencias, avance de matriz de liderazgo e incidentes relevantes.</p></div>
+                <div class="itool-card"><div class="itool-title">AP-MA&amp;COM</div><div class="itool-sub">10 min</div><p>Estatus de DIAs, incidentes, multas y actividades comunitarias.</p></div>
+                <div class="itool-card"><div class="itool-title">Desempeño Operacional</div><div class="itool-sub">25 min</div><p>Cobre fino, tonelaje movido y apilado, transferencia, depósito y calidad catódica.</p></div>
+                <div class="itool-card"><div class="itool-title">Mantenimiento</div><div class="itool-sub">15 min</div><p>Disponibilidad de equipos de mina y de planta.</p></div>
+                <div class="itool-card"><div class="itool-title">Producción</div><div class="itool-sub">15 min</div><p>Tendencias de PLS y proyección de producción catódica.</p></div>
+                <div class="itool-card"><div class="itool-title">Feedback</div><div class="itool-sub">5 min</div><p>Retroalimentación de la sesión.</p></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'liderar-rutina', label: 'Cómo liderar la rutina', theme: 4,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Cómo liderar la rutina</div>
+              <div class="islide-headline ianim" style="font-size:18px;">5 pasos y una regla simple: <em style="--hl:#FAEEDA;">1-3-10</em></div>
+              <div class="iprogress-steps ianim">
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Propósito y seguridad</div><div class="iprogress-sub">Apertura y momento de seguridad</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Acuerdos previos</div><div class="iprogress-sub">Revisión conjunta de compromisos anteriores</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">KPIs y desviaciones</div><div class="iprogress-sub">Cada líder expone, con foco en las brechas</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Nuevos compromisos</div><div class="iprogress-sub">Se registran con dueño y plazo</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Reconocimiento</div><div class="iprogress-sub">Se cierra según los valores Glencore</div></div>
+              </div>
+              <div class="iquestions ianim" style="margin-top:44px;">
+                <div class="iquestion-chip"><span class="iquestion-num">1″</span>¿Qué KPI está desviado?</div>
+                <div class="iquestion-chip"><span class="iquestion-num">3″</span>¿Cuál es el problema?</div>
+                <div class="iquestion-chip"><span class="iquestion-num">10″</span>¿Quién toma acción y cuándo debe estar completada?</div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'practicas', label: 'Buenas prácticas', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Recomendaciones</div>
+              <div class="islide-headline ianim" style="font-size:18px;">La diferencia entre una <em style="--hl:#9FE1CB;">buena</em> y una <em style="--hl:#9FE1CB;">mala</em> rutina</div>
+              <div class="igoodbad ianim">
+                <div class="igb-col igb-good">
+                  <div class="igb-head"><div class="igb-icon">✓</div><h4>Esto sí</h4></div>
+                  <ul>
+                    <li>Se desafían los resultados: ¿podemos hacerlo mejor?</li>
+                    <li>Foco en los KPI con mayor brecha frente a la meta.</li>
+                    <li>Responsabilidad clara por cada acción correctiva.</li>
+                    <li>Debate objetivo sobre causas, no sobre culpables.</li>
+                  </ul>
+                </div>
+                <div class="igb-col igb-bad">
+                  <div class="igb-head"><div class="igb-icon">✕</div><h4>Esto no</h4></div>
+                  <ul>
+                    <li>Rutina defensiva, buscando culpables.</li>
+                    <li>Revisar todos los KPI uno a uno, sin priorizar.</li>
+                    <li>Compromisos sin responsable ni fecha.</li>
+                    <li>Decisiones por preferencia personal, no por datos.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>`
+        }
+      ],
+      quiz: [
+        {
+          q: '¿Qué es un Diálogo de Desempeño?',
+          options: ['Una reunión regular y programada entre líder y equipo para revisar el desempeño con datos del tablero', 'Un reporte mensual que se envía por correo a Gerencia', 'Una capacitación técnica sobre el uso de un sistema'],
+          correct: 0,
+          feedback: 'Es una reunión regular programada entre líder y equipo, que usa datos y hechos visualizados en el tablero — no un reporte ni una capacitación.'
+        },
+        {
+          q: '¿Cuál de estos es uno de los 5 objetivos fundamentales de un Diálogo de Desempeño?',
+          options: ['Monitorear el desempeño y diagnosticar problemas', 'Aprobar el presupuesto anual del área', 'Reemplazar la reunión de coordinación diaria'],
+          correct: 0,
+          feedback: 'Los 5 objetivos son: monitorear el desempeño, diagnosticar problemas, tomar contramedidas, escalar problemas, y dar foco y responsabilidad.'
+        },
+        {
+          q: 'En la Regla 1-3-10, ¿qué se pregunta en los "10 segundos"?',
+          options: ['¿Qué KPI está desviado?', '¿Cuál es el problema?', '¿Quién toma acción y cuándo debe estar completada?'],
+          correct: 2,
+          feedback: 'La secuencia es: 1 segundo (qué KPI está desviado), 3 segundos (cuál es el problema), 10 segundos (quién actúa y cuándo).'
+        },
+        {
+          q: '¿Qué significa que un KPI aparezca en rojo en el tablero de indicadores?',
+          options: ['Que se alcanzó la meta', 'Que no se cumple la meta', 'Que es una anotación no relacionada a indicadores'],
+          correct: 1,
+          feedback: 'El código de color es: verde cuando se alcanza la meta, rojo cuando no se cumple, y negro para otras anotaciones.'
+        },
+        {
+          q: '¿Cómo cambia la frecuencia de los Diálogos de Desempeño según el nivel organizacional?',
+          options: ['Es la misma para todos los niveles', 'Aumenta hacia los niveles operativos: de quincenal/semanal en gerencia a diario en terreno', 'Solo se realizan a nivel de Gerencia General'],
+          correct: 1,
+          feedback: 'La cascada define frecuencias crecientes hacia el terreno: quincenal o semanal en los niveles altos, diaria en supervisión y operación.'
+        }
+      ]
+    }
   },
   'identificacion-mejoras': {
     nombre: 'Identificación de Mejoras', pilar: 'mejora',

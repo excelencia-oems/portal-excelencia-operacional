@@ -158,6 +158,27 @@
   .iquestions{display:flex; flex-direction:column; gap:8px; margin-top:16px;}
   .iquestion-chip{display:flex; gap:10px; align-items:flex-start; background:rgba(255,255,255,0.13); border-radius:9px; padding:9px 13px; font-size:11px; line-height:1.4;}
   .iquestion-num{width:18px; height:18px; border-radius:100px; background:rgba(255,255,255,0.85); color:var(--gray-900); display:flex; align-items:center; justify-content:center; font-size:9.5px; font-weight:700; flex-shrink:0; margin-top:1px;}
+
+  .ibottleneck{display:flex; align-items:flex-end; gap:10px; height:100px; margin:16px 0 10px;}
+  .ibn-bar{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative;}
+  .ibn-fill{width:100%; max-width:52px; background:rgba(255,255,255,0.28); border-radius:6px 6px 0 0;}
+  .ibn-critical .ibn-fill{background:#fff;}
+  .ibn-label{font-size:9px; font-weight:700; margin-top:6px; text-align:center; line-height:1.3;}
+  .ibn-critical .ibn-label{color:#fff;}
+
+  .itool-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:10px; margin-top:6px;}
+  .itool-card{background:rgba(255,255,255,0.13); border-radius:10px; padding:14px 16px;}
+  .itool-title{font-family:var(--font-display); font-size:18px; font-weight:700; margin-bottom:2px;}
+  .itool-sub{font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; opacity:0.7; margin-bottom:8px;}
+  .itool-card p{font-size:10.5px; line-height:1.5; opacity:0.9;}
+
+  .imatrix{margin-top:8px;}
+  .imatrix-axis-y{font-size:9px; font-weight:700; opacity:0.7; margin-bottom:6px;}
+  .imatrix-grid{display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:4px; height:150px;}
+  .imatrix-cell{background:rgba(255,255,255,0.1); border-radius:8px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:10px; font-weight:700; padding:8px;}
+  .imatrix-qw{background:rgba(255,255,255,0.32);}
+  .imatrix-hi{background:rgba(255,255,255,0.2);}
+  .imatrix-axis-x{font-size:9px; font-weight:700; opacity:0.7; margin-top:6px; text-align:center;}
   .icarousel-slide.in h3, .icarousel-slide.in .ianim{animation:iSlideUp .5s cubic-bezier(.2,.8,.3,1) forwards;}
   .icarousel-slide.in .ianim:nth-child(2){animation-delay:.06s;}
   .icarousel-slide.in .ianim:nth-child(3){animation-delay:.12s;}
@@ -656,11 +677,190 @@ const PRACTICAS = {
   },
   'full-potential': {
     nombre: 'Full Potential', pilar: 'objetivo',
-    definicion: 'Definición y seguimiento del máximo potencial esperado por área o proceso, estableciendo una brecha visible entre el desempeño actual y el óptimo alcanzable.',
+    definicion: 'Proceso formal y estructurado para maximizar el valor económico alcanzable de un activo en el mediano plazo (2-3 años), mediante incremento de producción, reducción de costos o ambos. Se ejecuta a través de un portafolio de iniciativas identificadas, diseñadas e implementadas con disciplina.',
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=72dee881-718b-43d2-b586-9795dc94f57b&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
-    materiales: [{n:'Guía de cálculo de Full Potential', t:'PDF · 1.1 MB'}],
-    plantilla: 'Plantilla de análisis de brecha (Excel)',
-    historial: []
+    materiales: [{n:'Guía de cálculo de Full Potential', t:'PDF · 1.1 MB'}, {n:'Cómo construir un Árbol de Valor (VDT)', t:'PDF · 0.9 MB'}, {n:'Cómo detectar un cuello de botella', t:'PDF · 0.8 MB'}],
+    plantilla: 'Template de iniciativas + 1Pager (Excel)',
+    historial: [],
+    interactive: {
+      tabs: [
+        {
+          id: 'que-es', label: '¿Qué es?', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="ishape ishape-hex ishape-2 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Objetivo e importancia</div>
+              <div class="islide-headline ianim">El <em style="--hl:#9FE1CB;">máximo valor</em> económico alcanzable, no una mejora incremental</div>
+              <div class="iquote-grid ianim">
+                <div class="iquote"><div class="iquote-label">Qué se busca lograr</div><div class="iquote-text">Maximizar el valor económico alcanzable de un activo en 2-3 años.</div></div>
+                <div class="iquote"><div class="iquote-label">Cómo se logra</div><div class="iquote-text">Un proceso formal para identificar, diseñar e implementar un portafolio de iniciativas.</div></div>
+              </div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Desafía el desempeño actual</div><div class="icheck-sub">No acepta el resultado como techo</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Objetivo común y desafiante</div><div class="icheck-sub">Claro, realista y alcanzable</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Alinea a toda la organización</div><div class="icheck-sub">Diagnóstico y diseño compartidos</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Disciplina de captura</div><div class="icheck-sub">Constancia en resultados y valor</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'conceptos', label: 'Conceptos clave', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Del estado actual al potencial</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Cuatro escalones entre <em style="--hl:#F5C4B3;">hoy</em> y el potencial máximo</div>
+              <div class="iprogress-steps ianim">
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Línea base</div><div class="iprogress-sub">Desempeño sin intervención</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Budget</div><div class="iprogress-sub">Compromiso &lt; 12 meses</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">FP alcanzable</div><div class="iprogress-sub">Escalón anual hacia el FP</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Full Potential</div><div class="iprogress-sub">Máximo en 2-3 años</div></div>
+              </div>
+              <div class="idef-rows ianim">
+                <div class="idef-row"><div class="idef-word" style="font-size:20px;">Oportunidad</div><div class="idef-desc">Brecha entre línea base y FP de un KPI. Ejemplo: costos de acarreo en la mina.</div></div>
+                <div class="idef-row"><div class="idef-word" style="font-size:20px;">Iniciativa</div><div class="idef-desc">Solución concreta con objetivo, dueño y plan para capturar una oportunidad. Ejemplo: reducir consumo de neumáticos con mantención de caminos.</div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'diagnostico', label: 'Diagnóstico', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diagnóstico · Dónde está la brecha</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Encuentra el <em style="--hl:#B4B2A9;">cuello de botella</em> antes de mejorar todo a la vez</div>
+              <div class="ibottleneck ianim">
+                <div class="ibn-bar"><div class="ibn-fill" style="height:78%;"></div><div class="ibn-label">Perforación<br>92%</div></div>
+                <div class="ibn-bar"><div class="ibn-fill" style="height:72%;"></div><div class="ibn-label">Voladura<br>87%</div></div>
+                <div class="ibn-bar ibn-critical"><div class="ibn-fill" style="height:52%;"></div><div class="ibn-label">Carguío<br>64%</div></div>
+                <div class="ibn-bar"><div class="ibn-fill" style="height:68%;"></div><div class="ibn-label">Acarreo<br>81%</div></div>
+              </div>
+              <div class="iglass ianim" style="margin-top:2px;"><p><b style="color:#fff;">Carguío es el cuello de botella</b> — su límite técnico es el más cercano a la producción real, generando pérdidas aguas arriba y abajo.</p></div>
+              <div class="iexample-grid ianim" style="margin-top:12px;">
+                <div class="iexample-card"><div class="inum">Árbol de Valor (VDT)</div><div class="ititle">Costo de acarreo →</div><ul><li>Eficiencia del equipo</li><li>Costo unitario</li></ul></div>
+                <div class="iexample-card"><div class="inum">Generar iniciativas</div><div class="ititle">En el nivel accionable</div><ul><li>Disponibilidad, tiempo de ciclo</li><li>No en el KPI agregado</li></ul></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'toolbox', label: 'Caja de herramientas', theme: 3,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Del síntoma a la solución</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Tres herramientas para pasar de <em style="--hl:#9FE1CB;">causa</em> a <em style="--hl:#9FE1CB;">idea</em></div>
+              <div class="itool-grid ianim">
+                <div class="itool-card">
+                  <div class="itool-title">RCA</div>
+                  <div class="itool-sub">Análisis de Causa Raíz</div>
+                  <p>5 Porqués, Ishikawa/5M, árboles de hipótesis. Validar con datos antes de declarar causa raíz.</p>
+                </div>
+                <div class="itool-card">
+                  <div class="itool-title">SGI</div>
+                  <div class="itool-sub">Sesión de Generación de Ideas</div>
+                  <p>Preparación → Conducción → Seguimiento. Prioriza por impacto × facilidad, con dueño y plazo.</p>
+                </div>
+                <div class="itool-card">
+                  <div class="itool-title">VSM</div>
+                  <div class="itool-sub">Value Stream Mapping</div>
+                  <p>Mapea flujo actual → futuro. Detecta esperas, retrabajo y cuellos de botella vs. takt time.</p>
+                </div>
+              </div>
+              <div class="iquestions ianim" style="margin-top:14px;">
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>Observar el problema directamente (Gemba)</div>
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>Involucrar distintas visiones del proceso</div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'priorizacion', label: 'Priorización', theme: 4,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Valor × facilidad</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Nunca <em style="--hl:#FAEEDA;">priorizar</em> sin haber valorizado antes</div>
+              <div class="imatrix ianim">
+                <div class="imatrix-axis-y">Más valor</div>
+                <div class="imatrix-grid">
+                  <div class="imatrix-cell imatrix-hi"><span>Alto valor<br>Más difícil</span></div>
+                  <div class="imatrix-cell imatrix-qw"><span>Prioridad<br>Quick Win</span></div>
+                  <div class="imatrix-cell"><span>Menor foco</span></div>
+                  <div class="imatrix-cell"><span>Fácil, bajo<br>impacto</span></div>
+                </div>
+                <div class="imatrix-axis-x">Difícil ← Facilidad de implementación → Fácil</div>
+              </div>
+              <div class="iroles-chips ianim">
+                <span class="irole-chip">Impacto EBITDA</span>
+                <span class="irole-chip">Relevancia estratégica</span>
+                <span class="irole-chip">Costo y recursos</span>
+                <span class="irole-chip">Riesgo de ejecución</span>
+              </div>
+            </div>`
+        },
+        {
+          id: 'practicas', label: 'Buenas prácticas', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Recomendaciones</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Un buen Full Potential se nota en la <em style="--hl:#9FE1CB;">disciplina</em></div>
+              <div class="igoodbad ianim">
+                <div class="igb-col igb-good">
+                  <div class="igb-head"><div class="igb-icon">✓</div><h4>Esto sí</h4></div>
+                  <ul>
+                    <li>El líder desafía: "¿podemos hacerlo mejor?"</li>
+                    <li>Foco en el cuello de botella del sitio.</li>
+                    <li>Priorizar solo después de valorizar.</li>
+                    <li>Responsabilidades claras por iniciativa.</li>
+                  </ul>
+                </div>
+                <div class="igb-col igb-bad">
+                  <div class="igb-head"><div class="igb-icon">✕</div><h4>Esto no</h4></div>
+                  <ul>
+                    <li>Aceptar resultados sin desafiarlos.</li>
+                    <li>Priorizar sin considerar la restricción.</li>
+                    <li>Decisiones por preferencia personal.</li>
+                    <li>Iniciativas sin dueño claro.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>`
+        }
+      ],
+      quiz: [
+        {
+          q: '¿Qué es Full Potential (FP)?',
+          options: ['El máximo valor económico alcanzable de un activo en 2-3 años', 'El presupuesto operativo del año en curso', 'Un reporte financiero trimestral'],
+          correct: 0,
+          feedback: 'FP es el máximo valor alcanzable en el mediano plazo, vía más producción, menos costos, o ambos.'
+        },
+        {
+          q: '¿Qué representa una "oportunidad" en esta metodología?',
+          options: ['Un rumor de mejora sin datos', 'La brecha entre la línea base y el Full Potential de un KPI', 'El presupuesto aprobado por finanzas'],
+          correct: 1,
+          feedback: 'La oportunidad es la brecha cuantificada entre dónde estamos (línea base) y dónde podríamos llegar (FP).'
+        },
+        {
+          q: '¿Por qué se prioriza atacar el cuello de botella primero?',
+          options: ['Porque es el proceso más fácil de mejorar', 'Porque su límite técnico gobierna el throughput de todo el sistema integrado', 'Porque siempre es el proceso más caro'],
+          correct: 1,
+          feedback: 'Mejorar un proceso que no es la restricción no aumenta el resultado del sistema — hay que liberar el cuello de botella.'
+        },
+        {
+          q: '¿Qué se debe hacer siempre antes de priorizar iniciativas?',
+          options: ['Valorizarlas (impacto económico)', 'Asignarles un color', 'Enviarlas directo a ejecución'],
+          correct: 0,
+          feedback: '"Nunca priorizar sin valorizar" — la priorización se basa en valor × facilidad de implementación.'
+        },
+        {
+          q: '¿Qué diferencia al "pensamiento Full Potential" de "actual + 5%"?',
+          options: ['Ninguna, son lo mismo', 'FP usa la brecha real vs. benchmark/límite técnico, típicamente 15-20%, no un incremento arbitrario', 'FP solo aplica a costos, nunca a producción'],
+          correct: 1,
+          feedback: 'Una meta de "+5%" suele ser menos desafiante que el potencial real — FP parte de la brecha contra benchmark o límite técnico.'
+        }
+      ]
+    }
   },
   'visualizar-progreso': {
     nombre: 'Visualizar y Gestionar el Progreso', pilar: 'objetivo',

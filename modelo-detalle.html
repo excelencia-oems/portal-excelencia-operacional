@@ -489,24 +489,470 @@ const PILARES = {
 const PRACTICAS = {
   'feedback-coaching': {
     nombre: 'Feedback & Coaching', pilar: 'personas',
-    definicion: 'Conversaciones estructuradas de retroalimentación entre líder y colaborador, orientadas a reconocer avances y acordar planes de acción concretos para el desarrollo individual.',
+    definicion: 'Conversaciones estructuradas entre líder y colaborador que cierran el ciclo de desarrollo individual del modelo LEM: el feedback cierra brechas de conducta y comportamiento sobre hechos ya ocurridos, y el coaching maximiza el potencial futuro de las personas guiándolas con preguntas abiertas hacia sus propias respuestas.',
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=59c61043-eaa1-4992-ac08-fdcd72a1e87e&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
-    materiales: [{n:'Guía de conversación de Feedback & Coaching', t:'PDF · 0.9 MB'}, {n:'Video de capacitación: cómo dar feedback efectivo', t:'Video · 6 min'}],
-    plantilla: 'Plantilla de registro de sesión de Coaching (Excel)',
+    materiales: [{n:'Metodología LEM — Práctica 10: Feedback y Coaching', t:'PDF · 0.5 MB'}, {n:'Capacitación: Coaching y Feedback (CMLB)', t:'PPTX · 3.9 MB'}],
+    plantilla: 'Guía de conversación de Feedback (método SBI) + Plantilla de sesión de Coaching GROW (Excel)',
     historial: [
       {fecha:'12 ago 2026', resp:'Camila Torres', desc:'Sesión mensual de feedback con 4 integrantes del turno B.', estado:'approved'},
       {fecha:'05 ago 2026', resp:'Luis Fernández', desc:'Feedback individual sobre cumplimiento de estándares de seguridad.', estado:'pending'},
-    ]
+    ],
+    interactive: {
+      tabs: [
+        {
+          id: 'que-es', label: '¿Qué es y por qué importa?', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="ishape ishape-hex ishape-2 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Objetivo e importancia</div>
+              <div class="islide-headline ianim">Cerrar brechas de <em style="--hl:#9FE1CB;">hoy</em>, abrir potencial de <em style="--hl:#9FE1CB;">mañana</em></div>
+              <div class="iquote-grid ianim">
+                <div class="iquote"><div class="iquote-label">¿Qué busca el feedback?</div><div class="iquote-text">Identificar y cerrar brechas en las conductas y comportamientos asociados a la ejecución de prácticas y actividades rutinarias.</div></div>
+                <div class="iquote"><div class="iquote-label">¿Qué busca el coaching?</div><div class="iquote-text">Maximizar el potencial de las personas, ayudándolas a planificar acciones orientadas a su conducta y su propio desarrollo.</div></div>
+              </div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Sostenibilidad de los resultados</div><div class="icheck-sub">A largo plazo</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Empodera a las personas</div><div class="icheck-sub">Las anima a asumir responsabilidad sobre sus conductas y desarrollo</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Autonomía del equipo</div><div class="icheck-sub">Ayuda a identificar problemas y soluciones por su cuenta</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Cultura de excelencia operacional</div><div class="icheck-sub">Con base en los valores de Glencore</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'conexion-lem', label: 'Conexión con el modelo LEM', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">¿Con qué otras prácticas se relaciona?</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Es el motor que <em style="--hl:#F5C4B3;">desarrolla al liderazgo</em></div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">3·6</div><div><div class="icheck-title">Visualizar progreso y Gestión de iniciativas</div><div class="icheck-sub">Asegura resultados sostenibles mediante el desarrollo continuo del liderazgo</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">9</div><div><div class="icheck-title">Confirmación de Rol/Procesos</div><div class="icheck-sub">Garantiza que los roles de liderazgo se desarrollen según los estándares establecidos</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">7</div><div><div class="icheck-title">Procedimientos Operativos y Trabajo Estandarizado</div><div class="icheck-sub">Garantiza consistencia en la adherencia a los estándares establecidos</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'principios', label: 'Principios del líder', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Modelo de Liderazgo Glencore</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Seis principios que <em style="--hl:#9FE1CB;">guían la conversación</em></div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Enfóquese en la seguridad real y los resultados</div><div class="icheck-sub">Del negocio</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">No olvide el panorama general</div><div class="icheck-sub">El desarrollo del empleado y sus aspiraciones profesionales</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Describa el comportamiento</div><div class="icheck-sub">No a la persona ni el carácter</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">No asuma que tiene la razón</div><div class="icheck-sub"></div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">5</div><div><div class="icheck-title">Brinde retroalimentación con frecuencia</div><div class="icheck-sub">Incluyendo alto rendimiento y períodos sostenidos de esfuerzo</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">6</div><div><div class="icheck-title">Sea clara, constructiva y procesable</div><div class="icheck-sub">Asegúrese de que su retroalimentación lo sea</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'tipos-feedback', label: 'Tipos de feedback', theme: 3,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · No todo feedback es igual</div>
+              <div class="islide-headline ianim" style="font-size:17px;">De positivo a <em style="--hl:#F5C4B3;">negativo</em>: cuál evitar</div>
+              <div class="itool-grid ianim">
+                <div class="itool-card"><div class="itool-title">Positivo</div><p>Un simple elogio, destacando cómo o por qué el empleado hizo un buen trabajo.</p></div>
+                <div class="itool-card"><div class="itool-title">Constructivo</div><p>Sincero, destacando cómo la persona podría hacer un mejor trabajo la próxima vez.</p></div>
+                <div class="itool-card"><div class="itool-title">Negativo — evitar</div><p>Destructivo: repetir algo que falló, culpando al individuo y sin proponer soluciones.</p></div>
+                <div class="itool-card"><div class="itool-title">Autoevaluación</div><p>El empleado evalúa su propio desempeño, fomentando autorreflexión y responsabilidad.</p></div>
+                <div class="itool-card"><div class="itool-title">Sobre proyectos específicos</div><p>Relacionado con una tarea concreta, enfocado en el proceso y los resultados obtenidos.</p></div>
+                <div class="itool-card"><div class="itool-title">De seguimiento</div><p>Entregado tras un cambio implementado, para evaluar el impacto y ajustar si es necesario.</p></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'feedback-sbi', label: 'Feedback: método SBI', theme: 4,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Situation · Behaviour · Impact</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Situación → Comportamiento → <em style="--hl:#9FE1CB;">Impacto</em></div>
+              <div class="idim-scheme ianim">
+                <div class="idim-badge idim-1">
+                  <div class="idim-num">S</div>
+                  <h4>Situación</h4>
+                  <ul><li>Describir la situación completa: contexto y tiempo</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-2">
+                  <div class="idim-num">B</div>
+                  <h4>Comportamiento</h4>
+                  <ul><li>Explicar la conducta observada, con acciones concretas</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-3">
+                  <div class="idim-num">I</div>
+                  <h4>Impacto</h4>
+                  <ul><li>Comentar el resultado y cómo afectó a otros o al proceso</li></ul>
+                </div>
+              </div>
+              <div class="iquestions ianim" style="margin-top:14px;">
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>Prepararse previamente, con fortalezas y debilidades identificadas</div>
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>Enfocarse en las acciones, no en las personas</div>
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>Generar y registrar compromisos con fecha</div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'ciclo-desempeno', label: 'Cuándo dar feedback', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Recomendaciones · Ciclo de Desempeño Anual</div>
+              <div class="islide-headline ianim" style="font-size:17px;">El feedback <em style="--hl:#9FE1CB;">acompaña todo el ciclo</em>, no solo el cierre</div>
+              <div class="iprogress-steps ianim">
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Fijación de objetivos</div><div class="iprogress-sub">Q1 · Acordar metas y planes de desarrollo</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Check-ins periódicos</div><div class="iprogress-sub">Retroalimentación constructiva y oportuna</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Revisión de mitad de año</div><div class="iprogress-sub">Junio · Revisar el progreso hacia las metas</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Evaluación final</div><div class="iprogress-sub">Octubre · Evaluar formalmente el desempeño</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Mesas de calibración</div><div class="iprogress-sub">Noviembre · Asegurar equidad y consistencia</div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'lider-coach', label: 'El líder como coach', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Coaching · Habilidades clave del líder-coach</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Escuchar, preguntar y <em style="--hl:#F5C4B3;">guiar</em> — no decir qué hacer</div>
+              <div class="itool-grid ianim">
+                <div class="itool-card"><div class="itool-title">Escucha activa</div><p>Comprende más allá de las palabras, buscando el entendimiento compartido.</p></div>
+                <div class="itool-card"><div class="itool-title">Preguntas poderosas</div><p>Orienta la conversación mediante el cuestionamiento; invita a la reflexión.</p></div>
+                <div class="itool-card"><div class="itool-title">Empatía y confianza</div><p>Genera seguridad psicológica que refuerza el compromiso y la autonomía.</p></div>
+                <div class="itool-card"><div class="itool-title">Feedback constructivo</div><p>Ayuda al coachee a establecer metas claras y a medir el progreso.</p></div>
+                <div class="itool-card"><div class="itool-title">Modela el comportamiento</div><p>Es un ejemplo continuo: demuestra las prácticas operacionales que desea ver.</p></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'grow', label: 'Coaching: modelo GROW', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Goal · Reality · Options · Will</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Preguntas que llevan al coachee <em style="--hl:#9FE1CB;">a su propio plan</em></div>
+              <div class="iprogress-steps ianim">
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Meta (Goal)</div><div class="iprogress-sub">¿Qué objetivo deseas alcanzar o resolver?</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Realidad (Reality)</div><div class="iprogress-sub">¿Qué has hecho hasta el momento?</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Opciones (Options)</div><div class="iprogress-sub">¿Qué te ha funcionado? ¿Qué alternativas tienes?</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Compromiso (Will)</div><div class="iprogress-sub">¿Qué acciones harás para alcanzar tu meta?</div></div>
+              </div>
+              <div class="ipyr-example ianim">No incluir la pregunta "¿Por qué?" — preguntas cortas, simples, abiertas y en afirmativo. No aconsejar: el coachee es el protagonista.</div>
+            </div>`
+        },
+        {
+          id: 'lideres', label: 'Comportamientos clave de los líderes', theme: 3,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Comportamientos clave de los líderes</div>
+              <div class="islide-headline ianim" style="font-size:18px;">De la observación a la <em style="--hl:#9FE1CB;">acción sostenida</em></div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Observa con objetividad y precisión</div><div class="icheck-sub">Basándose en hechos y estándares, consciente de sus propios sesgos</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Provee retroalimentación clara y constructiva</div><div class="icheck-sub">Comunica de forma específica fortalezas y áreas de mejora</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Inspira y fomenta la reflexión y el compromiso</div><div class="icheck-sub">Invita al colaborador a analizar la oportunidad de mejora y actuar</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Ejecuta el rol de coach</div><div class="icheck-sub">Facilita el desarrollo de habilidades del equipo y modela sus conductas</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">5</div><div><div class="icheck-title">Reconoce logros y esfuerzos</div><div class="icheck-sub">Valora los avances de forma genuina, motivando al equipo</div></div></div>
+              </div>
+            </div>`
+        }
+      ],
+      quiz: [
+        {
+          q: '¿Cuál es la diferencia clave entre feedback y coaching?',
+          options: ['El feedback hace referencia a un hecho ocurrido en el pasado y es directo; el coaching está focalizado en el desarrollo futuro y es guiado con preguntas abiertas', 'Son lo mismo, solo cambia el nombre según el nivel jerárquico', 'El feedback lo da un par y el coaching siempre lo da un jefe'],
+          correct: 0,
+          feedback: 'En el feedback, quien observó explica directamente lo ocurrido y sugiere acciones. En el coaching, quien recibe la guía construye sus propias respuestas mediante preguntas abiertas orientadas al futuro.'
+        },
+        {
+          q: 'Según el método SBI para dar feedback, ¿qué corresponde explicar en el paso "Impacto"?',
+          options: ['El impacto no forma parte del método SBI', 'El resultado de la acción y cómo afectó a otros, procesos o al equipo', 'Las emociones personales de quien entrega el feedback'],
+          correct: 1,
+          feedback: 'SBI significa Situación-Comportamiento-Impacto. El paso Impacto comenta el resultado de la acción y cómo afectó, cerrando con verificación de entendimiento.'
+        },
+        {
+          q: 'De los tipos de feedback, ¿cuál se describe como "destructivo, culpa al individuo y no propone soluciones"?',
+          options: ['Feedback constructivo', 'Feedback de seguimiento', 'Feedback negativo'],
+          correct: 2,
+          feedback: 'El feedback negativo simplemente repite algo que falló, culpando a la persona en vez de a las acciones, y sin proponer soluciones — es el tipo que debe evitarse.'
+        },
+        {
+          q: 'En el modelo GROW de coaching, ¿qué pregunta guía corresponde a la etapa "Opciones" (Options)?',
+          options: ['¿Qué objetivo deseas alcanzar?', '¿Qué te ha funcionado? ¿Qué otras alternativas tienes?', '¿Qué acciones harás para alcanzar tu meta?'],
+          correct: 1,
+          feedback: 'La etapa Opciones explora alternativas e invita al coachee a sugerir soluciones antes de definir el Compromiso (Will), que es donde se acuerdan las acciones concretas.'
+        },
+        {
+          q: '¿Con qué otras prácticas del modelo LEM se conecta principalmente Feedback & Coaching?',
+          options: ['Solo con la práctica de Agenda', 'Con Visualizar y gestionar el progreso (3), Gestión de iniciativas (6), Confirmación de Rol/Procesos (9) y Procedimientos Operativos (7)', 'No se conecta con otras prácticas, es independiente'],
+          correct: 1,
+          feedback: 'Feedback & Coaching sostiene los resultados de las prácticas 3 y 6 mediante el desarrollo del liderazgo, garantiza que los roles se desarrollen según los estándares (práctica 9) y refuerza la adherencia a los estándares de trabajo (práctica 7).'
+        }
+      ]
+    }
   },
   'confirmacion-rol': {
     nombre: 'Confirmación de Rol/Procesos', pilar: 'personas',
-    definicion: 'Verificación periódica de que cada persona del equipo comprende su rol, sus responsabilidades y los procesos operativos que le aplican, evitando desviaciones por desconocimiento.',
+    definicion: 'Verificación estandarizada y periódica, a través de observaciones estructuradas del liderazgo en las rutinas y la ejecución de procesos, de que los roles de gestión y los procesos operativos se desarrollan según los estándares mínimos establecidos — cerrando siempre con retroalimentación al líder u operador observado.',
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=1eb4f639-0a3f-4821-8763-c3b8af675521&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
-    materiales: [{n:'Checklist de confirmación de rol', t:'PDF · 0.6 MB'}, {n:'Presentación de inducción de procesos', t:'PPTX · 3.1 MB'}],
-    plantilla: 'Plantilla de confirmación de rol y procesos (Word)',
+    materiales: [{n:'Metodología LEM — Práctica 9: Confirmación de Rol y Procesos', t:'PDF · 0.5 MB'}, {n:'Capacitación: Confirmación de Rol (CMLB)', t:'PPTX · 4.9 MB'}, {n:'Capacitación: Confirmación de Estándares (CMLB)', t:'PPTX · 4.3 MB'}],
+    plantilla: 'Checklist de Confirmación de Rol de Diálogo de Desempeño + Checklist de Confirmación de Procesos (Excel)',
     historial: [
       {fecha:'10 ago 2026', resp:'Marcela Díaz', desc:'Confirmación de rol para 2 nuevos ingresos del área de mantención.', estado:'approved'},
-    ]
+    ],
+    interactive: {
+      tabs: [
+        {
+          id: 'que-es', label: '¿Qué es y por qué importa?', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="ishape ishape-hex ishape-2 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Objetivo e importancia</div>
+              <div class="islide-headline ianim">El líder confirma que rol y proceso <em style="--hl:#9FE1CB;">se cumplen</em>, no que se asumen</div>
+              <div class="iquote-grid ianim">
+                <div class="iquote"><div class="iquote-label">Confirmación de Rol (CdR)</div><div class="iquote-text">Forma estandarizada de evaluar una rutina de gestión para identificar brechas en habilidades y mentalidades. Al terminar, se brinda retroalimentación.</div></div>
+                <div class="iquote"><div class="iquote-label">Confirmación de Procesos (CdP)</div><div class="iquote-text">Forma estandarizada de ir a terreno a verificar que un proceso esté logrando su objetivo, y detectar oportunidades en el estándar de trabajo y su ejecución.</div></div>
+              </div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Identifica oportunidades de mejora</div><div class="icheck-sub">En el diseño o la ejecución de la práctica observada</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Refuerza los estándares establecidos</div><div class="icheck-sub">Evita que se relajen con el tiempo</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Modela comportamientos y mentalidades</div><div class="icheck-sub">Los deseados por el modelo LEM</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Asegura seguridad y resultados</div><div class="icheck-sub">El líder verifica ambos en terreno</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'conexion-lem', label: 'Conexión con el modelo LEM', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">¿Con qué otras prácticas se relaciona?</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Sostiene en el tiempo lo que <em style="--hl:#F5C4B3;">otras prácticas construyen</em></div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">3·5·6</div><div><div class="icheck-title">Visualizar progreso, Resolución de problemas, Gestión de iniciativas</div><div class="icheck-sub">Asegura que los líderes ejecuten de forma efectiva las rutinas, garantizando la sostenibilidad de los resultados</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">7</div><div><div class="icheck-title">Procedimientos Operativos y Trabajo Estandarizado</div><div class="icheck-sub">Garantiza la aplicación consistente de los estándares de trabajo</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">10</div><div><div class="icheck-title">Feedback & Coaching</div><div class="icheck-sub">Potencia las habilidades para dar feedback y acompañar a los líderes en el cierre de brechas de desempeño</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'diferencias', label: 'CdR vs. CdP: diferencias', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Dos confirmaciones, dos focos</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Una evalúa <em style="--hl:#9FE1CB;">a la persona</em>, la otra <em style="--hl:#9FE1CB;">al proceso</em></div>
+              <div class="itool-grid ianim">
+                <div class="itool-card">
+                  <div class="itool-title">Confirmación de Rol</div>
+                  <div class="itool-sub">Foco en las personas</div>
+                  <p>Se enfoca en las responsabilidades individuales. Asegura que cada miembro del equipo cumpla su rol correctamente, alineando a las personas con los objetivos.</p>
+                </div>
+                <div class="itool-card">
+                  <div class="itool-title">Confirmación de Procesos</div>
+                  <div class="itool-sub">Foco en los estándares</div>
+                  <p>Se enfoca en los flujos de procedimientos y estándares operacionales. Asegura que los procesos se realicen según lo planeado, sin fallos y con calidad.</p>
+                </div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'cascada', label: 'Cascada por niveles', theme: 3,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · De N5 a N1</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Cada nivel confirma <em style="--hl:#B4B2A9;">al nivel bajo suyo</em></div>
+              <div class="iroles-timeline ianim">
+                <div class="irole-row">
+                  <div class="irole-dot">1</div>
+                  <div class="irole-body"><b>Supervisor con Operadores/Técnicos (CdP)</b><span>Adherencia a la ejecución del trabajo según estándar y desarrollo del proceso según sus parámetros.</span></div>
+                </div>
+                <div class="irole-row">
+                  <div class="irole-dot">2</div>
+                  <div class="irole-body"><b>Superintendente con Supervisor (CdR)</b><span>Confirmación de rol del nivel N2.</span></div>
+                </div>
+                <div class="irole-row">
+                  <div class="irole-dot">3</div>
+                  <div class="irole-body"><b>Gerente con Superintendente (CdR)</b><span>Confirmación de rol del nivel N3.</span></div>
+                </div>
+                <div class="irole-row">
+                  <div class="irole-dot">4·5</div>
+                  <div class="irole-body"><b>Gerente General con Gerente, y con Supervisor (CdR)</b><span>El Gerente General confirma el rol del Gerente (N4), y junto al Gerente confirma también el rol del Supervisor (N2).</span></div>
+                </div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'proceso', label: 'El proceso en 4 pasos', theme: 4,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Preparación → Observación → Feedback → Consolidación</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Un ciclo de <em style="--hl:#9FE1CB;">4 pasos</em>, siempre con datos en mano</div>
+              <div class="iprogress-steps ianim">
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Identificar rutina/proceso</div><div class="iprogress-sub">Por confirmar, con anticipación</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Observar y completar checklist</div><div class="iprogress-sub">Atentamente, sin interrumpir</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Entregar feedback</div><div class="iprogress-sub">Al término, compartiendo el resultado</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Acordar plan de mejora</div><div class="iprogress-sub">Con responsable y fecha</div></div>
+              </div>
+              <div class="iquestions ianim" style="margin-top:14px;">
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>¿Se cumplieron los compromisos de la última confirmación?</div>
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>¿Qué mejoras se han observado desde entonces?</div>
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>¿Existen brechas que aún requieren acciones?</div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'checklist-rol', label: 'Checklist de Confirmación de Rol', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Formato de Confirmación de Rol</div>
+              <div class="islide-headline ianim" style="font-size:18px;">13 preguntas en <em style="--hl:#9FE1CB;">3 dimensiones</em></div>
+              <div class="idim-scheme ianim">
+                <div class="idim-badge idim-1">
+                  <div class="idim-num">1</div>
+                  <h4>Diseño y consistencia</h4>
+                  <ul><li>Estándar de agenda, participantes y KPIs gestionables</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-2">
+                  <div class="idim-num">2</div>
+                  <h4>Efectividad</h4>
+                  <ul><li>Seguridad, compromisos, escalamiento de desviaciones</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-3">
+                  <div class="idim-num">3</div>
+                  <h4>Calidad y liderazgo en la ejecución</h4>
+                  <ul><li>Secuencia, participación del equipo y reconocimiento</li></ul>
+                </div>
+              </div>
+              <div class="ipyr-example ianim">Puntuación: preguntas con respuesta "Sí" ÷ 13 preguntas totales.</div>
+            </div>`
+        },
+        {
+          id: 'checklist-procesos', label: 'Checklist de Confirmación de Procesos', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Formato de Confirmación de Procesos</div>
+              <div class="islide-headline ianim" style="font-size:18px;">12 preguntas en <em style="--hl:#F5C4B3;">3 dimensiones</em></div>
+              <div class="idim-scheme ianim">
+                <div class="idim-badge idim-1">
+                  <div class="idim-num">1</div>
+                  <h4>Disponibilidad de los estándares</h4>
+                  <ul><li>Acceso, versión vigente y controles de riesgo incluidos</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-2">
+                  <div class="idim-num">2</div>
+                  <h4>Entendimiento y convicción</h4>
+                  <ul><li>El ejecutor comprende el estándar y sus riesgos</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-3">
+                  <div class="idim-num">3</div>
+                  <h4>Ejecución</h4>
+                  <ul><li>Condiciones, controles y resultado esperado</li></ul>
+                </div>
+              </div>
+              <div class="ipyr-example ianim">Puntuación: preguntas con respuesta "Sí" ÷ 12 preguntas totales. Es clave acordar quién es responsable y cuándo se implementan las acciones.</div>
+            </div>`
+        },
+        {
+          id: 'feedback-sbi', label: 'Feedback: método SBI', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Modelo de Liderazgo Cobre</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Situación → Comportamiento → <em style="--hl:#9FE1CB;">Impacto</em></div>
+              <div class="idim-scheme ianim">
+                <div class="idim-badge idim-1">
+                  <div class="idim-num">S</div>
+                  <h4>Situación</h4>
+                  <ul><li>Comunicar la situación específica sobre la que se brinda feedback</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-2">
+                  <div class="idim-num">B</div>
+                  <h4>Comportamiento</h4>
+                  <ul><li>Describir con precisión el comportamiento observado</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-3">
+                  <div class="idim-num">I</div>
+                  <h4>Impacto</h4>
+                  <ul><li>Explicar el efecto en resultados/equipo y facilitar la reflexión</li></ul>
+                </div>
+              </div>
+              <div class="iquestions ianim" style="margin-top:14px;">
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>Enfocarse en hechos observables, no en opiniones</div>
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>Fomentar el diálogo y proponer soluciones conjuntas</div>
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>Reconocer también lo positivo</div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'lideres', label: 'Comportamientos clave de los líderes', theme: 3,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Comportamientos clave de los líderes</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Observar, retroalimentar y <em style="--hl:#9FE1CB;">cerrar el ciclo</em></div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Observa con objetividad y precisión</div><div class="icheck-sub">Enfocado en comportamientos y resultados según estándares y metas</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Provee retroalimentación clara y constructiva</div><div class="icheck-sub">Destaca fortalezas y señala mejoras con propuestas específicas</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Fomenta la reflexión y el alineamiento</div><div class="icheck-sub">Guía el análisis crítico y el compromiso con los estándares</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Promueve el compromiso y la acción</div><div class="icheck-sub">Acuerdos específicos, responsables y fechas claras</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">5</div><div><div class="icheck-title">Reconoce esfuerzos y avances</div><div class="icheck-sub">Refuerza comportamientos alineados a los valores organizacionales</div></div></div>
+              </div>
+            </div>`
+        }
+      ],
+      quiz: [
+        {
+          q: '¿Cuál es la diferencia principal entre la Confirmación de Rol (CdR) y la Confirmación de Procesos (CdP)?',
+          options: ['La CdR se hace en terreno y la CdP se hace en oficina', 'La CdR se enfoca en las responsabilidades individuales de las personas; la CdP se enfoca en los flujos y estándares operacionales de los procesos', 'Son exactamente lo mismo, solo cambia el nombre según el sitio'],
+          correct: 1,
+          feedback: 'La CdR evalúa una rutina de gestión para identificar brechas en habilidades y mentalidades; la CdP verifica en terreno que un proceso logre su objetivo según el estándar.'
+        },
+        {
+          q: 'Según la cascada de niveles, ¿quién realiza la Confirmación de Procesos (CdP) directamente con los operadores/técnicos?',
+          options: ['El Gerente General (N5)', 'El Superintendente (N3)', 'El Supervisor (N2)'],
+          correct: 2,
+          feedback: 'El Supervisor confirma con los operadores la adherencia a la ejecución del trabajo según el estándar y los parámetros del proceso; los niveles superiores aplican Confirmación de Rol en cascada.'
+        },
+        {
+          q: '¿Cuántas preguntas tiene el checklist de Confirmación de Rol y en cuántas dimensiones se agrupan?',
+          options: ['10 preguntas en 4 dimensiones', '13 preguntas en 3 dimensiones: Diseño y consistencia, Efectividad, y Calidad y liderazgo en la ejecución', '12 preguntas en 2 dimensiones: Diseño y Ejecución'],
+          correct: 1,
+          feedback: 'El checklist de Confirmación de Rol tiene 13 preguntas Sí/No, y la puntuación se calcula dividiendo las respuestas "Sí" por el total (13). El checklist de Procesos, en cambio, tiene 12 preguntas.'
+        },
+        {
+          q: 'En el método SBI para dar feedback, ¿qué corresponde a la letra "B"?',
+          options: ['Comportamiento (Behaviour): describir con precisión lo observado, sin opiniones personales', 'Beneficio: explicar qué gana la persona al cambiar', 'Brecha: la diferencia entre el desempeño actual y el esperado'],
+          correct: 0,
+          feedback: 'SBI significa Situación-Comportamiento-Impacto (Situation-Behaviour-Impact), del Modelo de Liderazgo Cobre. El Comportamiento se describe objetivamente, evitando reargumentar o defender.'
+        },
+        {
+          q: '¿Cuál es la diferencia clave entre Feedback y Coaching?',
+          options: ['El feedback es solo para gerentes y el coaching solo para supervisores', 'Son sinónimos y se aplican indistintamente en cualquier confirmación', 'El feedback hace referencia a un hecho ocurrido en el pasado y es directo; el coaching está focalizado en el desarrollo futuro y es guiado con preguntas abiertas'],
+          correct: 2,
+          feedback: 'En el feedback, quien observó explica directamente lo ocurrido y sugiere acciones. En el coaching, la persona que recibe la guía construye sus propias respuestas a partir de preguntas abiertas orientadas al futuro.'
+        }
+      ]
+    }
   },
   'alineacion-estrategica': {
     nombre: 'Alineación Estratégica', pilar: 'objetivo',

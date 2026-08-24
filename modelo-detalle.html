@@ -1062,56 +1062,961 @@ const PRACTICAS = {
   },
   'identificacion-mejoras': {
     nombre: 'Identificación de Mejoras', pilar: 'mejora',
-    definicion: 'Detección temprana de oportunidades de mejora en terreno, a partir de la observación directa, datos operativos o retroalimentación del equipo.',
+    definicion: 'Detección de oportunidades de mejora en el día a día, en las rutinas operativas y de gestión, distinguiendo lo que genera valor de lo que representa un desperdicio — para lograr procesos más seguros, eficientes y productivos.',
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=72e4b265-b430-4a93-bea3-50a2462b1ed5&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
-    materiales: [{n:'Guía de identificación de oportunidades de mejora', t:'PDF · 0.8 MB'}],
+    materiales: [{n:'Metodología LEM — Práctica 4: Identificación de mejoras', t:'PDF · 0.4 MB'}],
     plantilla: 'Plantilla de registro de oportunidad de mejora (Excel)',
     historial: [
       {fecha:'11 ago 2026', resp:'Camila Torres', desc:'Identificación de mejora en flujo de despacho de camiones.', estado:'pending'},
-    ]
+    ],
+    interactive: {
+      tabs: [
+        {
+          id: 'que-es', label: '¿Qué es una mejora?', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="ishape ishape-hex ishape-2 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Objetivo e importancia</div>
+              <div class="islide-headline ianim">Diferenciar lo que genera <em style="--hl:#9FE1CB;">valor</em> de lo que es <em style="--hl:#9FE1CB;">desperdicio</em></div>
+              <div class="iquote-grid ianim">
+                <div class="iquote"><div class="iquote-label">Qué se busca lograr</div><div class="iquote-text">Fomentar la identificación de oportunidades en las rutinas operativas y de gestión, para procesos más seguros, eficientes y productivos.</div></div>
+                <div class="iquote"><div class="iquote-label">Cómo se identifica</div><div class="iquote-text">Conociendo y diferenciando aquello que genera valor de aquello que representa un desperdicio.</div></div>
+              </div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Parte de la rutina diaria</div><div class="icheck-sub">Se identifican oportunidades en las rutinas operativas y de gestión</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Promueve la generación de valor</div><div class="icheck-sub">Foco en lo que el cliente interno o externo realmente necesita</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Desarrolla sentido de urgencia</div><div class="icheck-sub">Para actuar frente a desviaciones, no postergarlas</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Fortalece la cultura de excelencia</div><div class="icheck-sub">La mejora se vuelve un hábito, no una excepción</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'conceptos', label: '3 conceptos clave', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Antes de identificar la mejora</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Tres preguntas que hay que saber <em style="--hl:#F5C4B3;">responder</em></div>
+              <div class="idef-rows ianim">
+                <div class="idef-row"><div class="idef-word">Problema</div><div class="idef-desc">Situación, barrera o desafío que impide el logro de un objetivo, generando una brecha entre el estado actual y el ideal. Ej: el camión demora en salir de Truckshop tras el mantenimiento por falta de coordinación.</div></div>
+                <div class="idef-row"><div class="idef-word">Valor</div><div class="idef-desc">Se agrega transformando procesos para satisfacer al cliente interno o externo y eliminando actividades innecesarias. Ej: implementar 5S en el taller para reducir la espera de herramientas.</div></div>
+                <div class="idef-row"><div class="idef-word">Incidental</div><div class="idef-desc">Actividad que no genera valor directo, pero es esencial para que el proceso ocurra de forma segura y coordinada. Ej: coordinar en conjunto la pauta de mantenimiento.</div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'muda-muri-mura', label: 'Muda, Muri y Mura', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Los 3 enemigos del proceso</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Desperdicio, sobrecarga y <em style="--hl:#9FE1CB;">variabilidad</em></div>
+              <div class="idim-scheme ianim">
+                <div class="idim-badge idim-1">
+                  <div class="idim-num">1</div>
+                  <h4>Muda</h4>
+                  <ul><li>Consume tiempo, dinero o materiales sin agregar valor</li><li>Ej: ánodos con orejas deformadas (defecto)</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-2">
+                  <div class="idim-num">2</div>
+                  <h4>Muri</h4>
+                  <ul><li>Sobrecarga que excede la capacidad de personas o equipos</li><li>Ej: sobrecargar un camión más allá de su capacidad</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-3">
+                  <div class="idim-num">3</div>
+                  <h4>Mura</h4>
+                  <ul><li>Variabilidad o inconsistencia en el flujo de trabajo</li><li>Ej: tiempo de cola irregular al llegar a la pala</li></ul>
+                </div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'ocho-mudas', label: 'Los 8 tipos de muda', theme: 3,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Los 8 desperdicios</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Ocho formas en que un proceso <em style="--hl:#9FE1CB;">pierde valor</em></div>
+              <div class="itool-grid ianim">
+                <div class="itool-card"><div class="itool-title">Inventario</div><div class="itool-sub">Muda 1</div><p>Altos niveles de stock. Ej: exceso de WIP acumulado.</p></div>
+                <div class="itool-card"><div class="itool-title">Defectos</div><div class="itool-sub">Muda 2</div><p>Productos que no cumplen el estándar. Ej: porosidad en el ánodo.</p></div>
+                <div class="itool-card"><div class="itool-title">Movimientos</div><div class="itool-sub">Muda 3</div><p>Desplazamientos innecesarios. Ej: buscar herramientas durante mantenimiento.</p></div>
+                <div class="itool-card"><div class="itool-title">Talento</div><div class="itool-sub">Muda 4 · Desaprovechado</div><p>No usar el conocimiento del equipo. Ej: operadores sobrecalificados para la tarea.</p></div>
+                <div class="itool-card"><div class="itool-title">Transporte</div><div class="itool-sub">Muda 5</div><p>Movilización innecesaria de materiales. Ej: desvíos por mal estado de vías.</p></div>
+                <div class="itool-card"><div class="itool-title">Espera</div><div class="itool-sub">Muda 6</div><p>Tiempos muertos de personas o equipos. Ej: pala que espera por falta de camiones.</p></div>
+                <div class="itool-card"><div class="itool-title">Sobre-proceso</div><div class="itool-sub">Muda 7</div><p>Más pasos de los necesarios. Ej: aumentar el muestreo sin mejorar el resultado.</p></div>
+                <div class="itool-card"><div class="itool-title">Sobre-producción</div><div class="itool-sub">Muda 8</div><p>Producir más de lo necesario. Ej: material acarreado sin capacidad de descarga.</p></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'donde', label: '¿Dónde se identifican?', theme: 4,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Espacios y rutinas</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Preguntándose siempre: <em style="--hl:#FAEEDA;">¿esto podría hacerse mejor?</em></div>
+              <div class="idef-rows ianim">
+                <div class="idef-row"><div class="idef-word">Rutinas</div><div class="idef-desc">Diálogos de desempeño y QQC: revisión estructurada de KPIs entre niveles. Ej: una tendencia negativa dispara la pregunta ¿qué tenemos que hacer diferente?</div></div>
+                <div class="idef-row"><div class="idef-word">Terreno</div><div class="idef-desc">Visitas e inspecciones alineadas a estándares establecidos (confirmación de procesos). Ej: se detecta sobrecarga de material que demora el transporte.</div></div>
+                <div class="idef-row"><div class="idef-word">Ideas</div><div class="idef-desc">Programas que incentivan al equipo a proponer mejoras. Ej: fallas recurrentes en un equipo activan la pregunta ¿qué podríamos hacer mejor?</div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'lideres', label: 'Comportamientos del líder', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Comportamientos clave de los líderes</div>
+              <div class="islide-headline ianim" style="font-size:18px;">El líder no busca mejoras solo: las <em style="--hl:#9FE1CB;">facilita en equipo</em></div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Guía y facilita</div><div class="icheck-sub">Enfoque colaborativo en el análisis de datos y procesos</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Inspira mejora continua</div><div class="icheck-sub">Alinea la búsqueda de oportunidades con los objetivos</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Fomenta la reflexión colectiva</div><div class="icheck-sub">Discusiones abiertas para priorizar iniciativas de alto impacto</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Define acciones claras</div><div class="icheck-sub">Asigna responsables que implementen soluciones efectivas</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">5</div><div><div class="icheck-title">Acompaña y da seguimiento</div><div class="icheck-sub">Retroalimentación constante para que la mejora sea sostenible</div></div></div>
+              </div>
+            </div>`
+        }
+      ],
+      quiz: [
+        {
+          q: '¿Qué es un "problema", según esta práctica?',
+          options: ['Una situación, barrera o desafío que genera una brecha entre el estado actual y el estado ideal', 'Cualquier actividad que consume tiempo sin agregar valor', 'Una tarea asignada por el jefe de turno'],
+          correct: 0,
+          feedback: 'Un problema es la brecha entre el estado actual y el estado ideal que impide o dificulta el logro de un objetivo.'
+        },
+        {
+          q: '¿Cuál de estas es un ejemplo de MURI?',
+          options: ['Sobrecargar un camión excediendo su capacidad operativa', 'Tiempo de cola irregular en la llegada a la pala', 'Ánodos con orejas deformadas'],
+          correct: 0,
+          feedback: 'Muri es la sobrecarga que excede la capacidad de personas o equipos — como sobrecargar un camión más allá de lo que puede transportar.'
+        },
+        {
+          q: '¿Cuántos tipos de MUDA (desperdicio) existen según el modelo?',
+          options: ['3', '5', '8'],
+          correct: 2,
+          feedback: 'Existen 8 tipos de muda: inventario, defectos, movimientos, talento desaprovechado, transporte, espera, sobre-procesamiento y sobre-producción.'
+        },
+        {
+          q: '¿Qué diferencia a una "actividad incidental" de un desperdicio (muda)?',
+          options: ['La incidental no genera valor directo, pero es esencial para que el proceso ocurra de forma segura y coordinada', 'La incidental siempre debe eliminarse por completo', 'No hay diferencia, son sinónimos'],
+          correct: 0,
+          feedback: 'A diferencia de la muda, la actividad incidental no se puede eliminar del todo: es necesaria para que el proceso funcione con seguridad y coordinación.'
+        },
+        {
+          q: '¿Cuál de estas NO es una fuente habitual para identificar oportunidades de mejora?',
+          options: ['Rutinas de gestión del progreso y programas de ideas', 'Inspecciones o visitas en terreno', 'Evaluaciones de desempeño individuales, una vez al año'],
+          correct: 2,
+          feedback: 'Las mejoras se identifican en el día a día — en rutinas de gestión, inspecciones en terreno y programas de ideas — no en instancias aisladas y anuales.'
+        }
+      ]
+    }
   },
   'resolucion-problemas': {
     nombre: 'Resolución de Problemas', pilar: 'mejora',
-    definicion: 'Metodología estructurada para identificar la causa raíz de un problema recurrente y aplicar una solución sostenible, en vez de corregir únicamente el síntoma. Su propósito es evitar que un mismo problema vuelva a ocurrir, fortaleciendo la capacidad del equipo de resolver desviaciones de forma autónoma y basada en datos.',
+    definicion: 'Identificación de las causas raíces de los problemas y generación de un plan de acción para erradicarlas, a través de un estándar definido. Asegura la solución oportuna y eficaz de los problemas, mediante análisis de causa raíz y planes de acción de rápida ejecución y alto impacto.',
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=788403a9-ff3d-4e9b-abc7-326bbafb4723&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
-    materiales: [{n:'Guía metodológica: 5 Porqués y Espina de Pescado', t:'PDF · 1.2 MB'}, {n:'Presentación de capacitación completa', t:'PPTX · 4.8 MB'}],
-    plantilla: 'Plantilla de Resolución de Problemas (Excel)',
+    materiales: [{n:'Metodología LEM — Práctica 5: Resolución de problemas', t:'PDF · 0.7 MB'}, {n:'Capacitación: Resolución de Problemas (CMLB)', t:'PPTX · 5.4 MB'}],
+    plantilla: 'Formato Resolución de Problemas (RdP) — 3C, 5 Por qué, 4 y 8 pasos',
     historial: [
       {fecha:'14 ago 2026', resp:'Ana Rojas', desc:'Se resolvió recurrencia de detención en chancado primario.', estado:'approved'},
       {fecha:'08 ago 2026', resp:'Pedro Salas', desc:'Análisis de causa raíz para fallas en bomba de proceso.', estado:'pending'},
       {fecha:'02 ago 2026', resp:'Marcela Díaz', desc:'Reincidencia de desviación en calidad de mineral.', estado:'rejected'},
-    ]
+    ],
+    interactive: {
+      tabs: [
+        {
+          id: 'que-es', label: '¿Qué es y por qué importa?', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="ishape ishape-hex ishape-2 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Objetivo e importancia</div>
+              <div class="islide-headline ianim">De la causa raíz a un <em style="--hl:#9FE1CB;">plan de acción</em> sostenible</div>
+              <div class="iquote-grid ianim">
+                <div class="iquote"><div class="iquote-label">Qué se busca lograr</div><div class="iquote-text">Asegurar la solución oportuna y eficaz de los problemas, a través del análisis de causa raíz y planes de acción de rápida ejecución y alto impacto.</div></div>
+                <div class="iquote"><div class="iquote-label">Cómo se logra</div><div class="iquote-text">Aplicando una metodología estructurada y herramientas de análisis, no corrigiendo solo el síntoma.</div></div>
+              </div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Refuerza la dinámica de equipo</div><div class="icheck-sub">Y la conexión con el propósito</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Foco en agregar valor</div><div class="icheck-sub">Eliminando o mitigando las causas raíz</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Optimiza recursos y tareas</div><div class="icheck-sub">Para alcanzar las metas grupales e individuales</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Acciones oportunas</div><div class="icheck-sub">Con responsables claros frente a cada desviación</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'problema-oportunidad', label: 'Problema vs. oportunidad', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Antes de partir</div>
+              <div class="islide-headline ianim" style="font-size:17px;">No es lo mismo <em style="--hl:#F5C4B3;">restituir</em> que <em style="--hl:#F5C4B3;">superar</em></div>
+              <div class="idef-rows ianim">
+                <div class="idef-row"><div class="idef-word">Problema</div><div class="idef-desc">Restituir una situación al objetivo que ya se había logrado en el pasado: uno o más KPI cayeron bajo el estándar. Se activa cuando la desviación supera el "umbral" definido por el asset.</div></div>
+                <div class="idef-row"><div class="idef-word">Oportunidad</div><div class="idef-desc">Alcanzar una meta nueva, por encima de lo logrado en el pasado — el "tamaño de la oportunidad" que conecta con Full Potential, no con Resolución de Problemas.</div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'que-herramienta', label: '¿Qué herramienta usar?', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Matriz de impacto y complejidad</div>
+              <div class="islide-headline ianim" style="font-size:17px;">La herramienta se elige por <em style="--hl:#9FE1CB;">impacto y complejidad</em></div>
+              <div class="itool-grid ianim">
+                <div class="itool-card"><div class="itool-title">3C</div><div class="itool-sub">Baja complejidad</div><p>Causas raíz usualmente conocidas y soluciones simples. Equipo pequeño, pocas variables, baja repetitividad. La aplica el operador o mantenedor en terreno.</p></div>
+                <div class="itool-card"><div class="itool-title">5 Por qué</div><div class="itool-sub">Complejidad media</div><p>Hipótesis de causa raíz no comprobadas. Equipo pequeño, variables significativas, alta repetitividad del problema.</p></div>
+                <div class="itool-card"><div class="itool-title">RdP 4 u 8 pasos</div><div class="itool-sub">Alta complejidad o alto impacto</div><p>Causas raíz desconocidas. Equipo multidisciplinario. 8 pasos (formato A3) si el impacto es alto; 4 pasos si es medio.</p></div>
+              </div>
+              <div class="iquestions ianim" style="margin-top:14px;">
+                <div class="iquestion-chip"><span class="iquestion-num">B</span>Impacto bajo → lidera Jefe o Supervisor</div>
+                <div class="iquestion-chip"><span class="iquestion-num">M</span>Impacto medio → lidera el Superintendente</div>
+                <div class="iquestion-chip"><span class="iquestion-num">A</span>Impacto alto → lidera el Gerente</div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'flujo', label: 'De la desviación a la acción', theme: 3,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Gestión de Desviaciones</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Un flujo claro, desde la <em style="--hl:#9FE1CB;">desviación</em> hasta el <em style="--hl:#9FE1CB;">estándar</em></div>
+              <div class="iprogress-steps ianim">
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Desviación</div><div class="iprogress-sub">Se ejecutan acciones de contención (3W)</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">¿Supera el umbral?</div><div class="iprogress-sub">Si no, se sigue monitoreando</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">¿Causa raíz conocida?</div><div class="iprogress-sub">Sí → 3C · No → Resolución de Problemas</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Ejecutar plan</div><div class="iprogress-sub">Con responsable y fecha definidos</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Estandarizar</div><div class="iprogress-sub">Cuando ya no se requieren más acciones</div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'ocho-pasos', label: 'RdP de 8 pasos', theme: 4,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Metodología A3</div>
+              <div class="islide-headline ianim" style="font-size:17px;">8 pasos, basados en el ciclo <em style="--hl:#FAEEDA;">PDCA</em></div>
+              <div class="itool-grid ianim">
+                <div class="itool-card"><div class="itool-title">1</div><div class="itool-sub">Definir el problema</div><p>Exponerlo claramente, con detalles concretos y contexto.</p></div>
+                <div class="itool-card"><div class="itool-title">2</div><div class="itool-sub">Desglosar el problema</div><p>Detallar con datos, tendencias y observaciones pertinentes.</p></div>
+                <div class="itool-card"><div class="itool-title">3</div><div class="itool-sub">Definir el objetivo</div><p>SMART: específico, medible, alcanzable, relevante, acotado en tiempo.</p></div>
+                <div class="itool-card"><div class="itool-title">4</div><div class="itool-sub">Identificar causas raíces</div><p>Árbol de fallas, Ishikawa, 5 Por qué u otras herramientas.</p></div>
+                <div class="itool-card"><div class="itool-title">5</div><div class="itool-sub">Priorizar contramedidas</div><p>Evaluar y priorizar según esfuerzo e impacto.</p></div>
+                <div class="itool-card"><div class="itool-title">6</div><div class="itool-sub">Definir plan de acción</div><p>Con responsables, plazos y recursos necesarios.</p></div>
+                <div class="itool-card"><div class="itool-title">7</div><div class="itool-sub">Revisar impacto</div><p>Monitorear la efectividad en el tiempo, previniendo la recurrencia.</p></div>
+                <div class="itool-card"><div class="itool-title">8</div><div class="itool-sub">Estandarizar y mantener</div><p>Nuevos procedimientos o actualizar los existentes.</p></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'antes-durante-despues', label: 'Antes, durante y después', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Recomendaciones · Buena sesión de RdP</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Lo que ocurre <em style="--hl:#9FE1CB;">antes y después</em> define el resultado</div>
+              <div class="idim-scheme ianim">
+                <div class="idim-badge idim-1">
+                  <div class="idim-num">1</div>
+                  <h4>Antes</h4>
+                  <ul><li>Reunir información de apoyo: KPI, entrevistas, inspección del evento</li><li>Invitar a los participantes clave</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-2">
+                  <div class="idim-num">2</div>
+                  <h4>Durante</h4>
+                  <ul><li>Definir el problema con soporte del equipo</li><li>Priorizar causas inmediatas antes de la causa raíz</li><li>Cada causa raíz con responsable y fecha</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-3">
+                  <div class="idim-num">3</div>
+                  <h4>Después</h4>
+                  <ul><li>Enviar el plan de acción a todos, incluido el contraturno</li><li>Monitorear en sesiones de seguimiento</li><li>Validar efectividad revisando el KPI principal</li></ul>
+                </div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'lideres', label: 'Comportamientos del líder', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Comportamientos clave de los líderes</div>
+              <div class="islide-headline ianim" style="font-size:18px;">El líder sostiene la <em style="--hl:#F5C4B3;">disciplina</em> del método</div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Actúa con oportunidad</div><div class="icheck-sub">Asigna responsables y asegura ejecución efectiva</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Aplica metodología estructurada</div><div class="icheck-sub">Ishikawa, árbol de fallas o lluvia de ideas</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Da seguimiento riguroso</div><div class="icheck-sub">Revisa avances e impactos en los KPI del plan</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Estandariza y verifica</div><div class="icheck-sub">Mide la sostenibilidad del KPI para evitar recurrencia</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">5</div><div><div class="icheck-title">Fomenta la colaboración</div><div class="icheck-sub">Equipos multidisciplinarios y decisiones basadas en datos</div></div></div>
+              </div>
+            </div>`
+        }
+      ],
+      quiz: [
+        {
+          q: '¿Qué diferencia a un "problema" de una "oportunidad de mejora"?',
+          options: ['El problema busca restituir un objetivo ya logrado en el pasado; la oportunidad busca superar una meta nueva', 'Son sinónimos y se abordan con la misma herramienta', 'El problema se resuelve siempre con RdP de 8 pasos y la oportunidad con 3C'],
+          correct: 0,
+          feedback: 'El problema implica restituir una situación al objetivo estándar ya logrado; la oportunidad de mejora implica alcanzar una meta nueva por encima de lo anterior.'
+        },
+        {
+          q: 'Según la matriz de clasificación, ¿qué herramienta corresponde a un problema de baja complejidad de resolución?',
+          options: ['3C', 'RdP de 8 pasos', '5 Por qué'],
+          correct: 0,
+          feedback: 'Para baja complejidad —causas raíz usualmente conocidas y soluciones simples— se usa 3C, sin importar el nivel de impacto.'
+        },
+        {
+          q: '¿Qué significa que el objetivo de una RdP sea "SMART"?',
+          options: ['Específico, Medible, Alcanzable, Relevante y Acotado en Tiempo', 'Simple, Manejable, Ágil, Rápido y Transparente', 'Estandarizado, Medido, Aprobado, Registrado y Trazable'],
+          correct: 0,
+          feedback: 'SMART resume los criterios de un buen objetivo de RdP: Específico, Medible, Alcanzable, Relevante y Acotado en Tiempo.'
+        },
+        {
+          q: 'En el flujo de Gestión de Desviaciones, si la desviación supera el umbral pero la causa raíz NO es conocida, ¿qué corresponde hacer?',
+          options: ['Realizar una Resolución de Problemas (RdP)', 'Usar la herramienta 3C directamente', 'Esperar al comité mensual para revisarlo'],
+          correct: 0,
+          feedback: 'Si la causa raíz no es conocida, corresponde una Resolución de Problemas — 3C se reserva para cuando la causa ya se conoce.'
+        },
+        {
+          q: '¿Cuál de estas acciones corresponde a la etapa "antes de la sesión" de una buena RdP?',
+          options: ['Reunir la información de apoyo (KPI, entrevistas, inspección) e invitar a los participantes clave', 'Enviar el plan de acción definido a todo el equipo', 'Validar la efectividad revisando el KPI principal'],
+          correct: 0,
+          feedback: 'Antes de la sesión se prepara la información de apoyo y se invita a los participantes clave; enviar el plan y validar el KPI ocurren después de la sesión.'
+        }
+      ]
+    }
   },
   'gestion-iniciativas': {
     nombre: 'Gestión de Iniciativas', pilar: 'mejora',
-    definicion: 'Seguimiento de iniciativas de mejora desde su origen hasta su cierre, asegurando responsables, plazos y verificación de resultados.',
+    definicion: 'Proceso que permite monitorear la implementación de iniciativas a nivel de sitio o región y asegurar su captura de valor alineado al marco estratégico, a través de rutinas formales y estructuradas entre líderes y equipos.',
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=b7a6b206-ca9b-4399-9772-d79804c14fe5&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
-    materiales: [{n:'Guía de gestión de iniciativas', t:'PDF · 1.0 MB'}],
-    plantilla: 'Plantilla de seguimiento de iniciativas (Excel)',
+    materiales: [{n:'Metodología LEM — Práctica 6: Gestión de Iniciativas', t:'PDF · 0.8 MB'}, {n:'Capacitación: Gestión de Programas/Iniciativas (CMLB)', t:'PPTX · 3.2 MB'}],
+    plantilla: 'Tablero de gestión de iniciativas + Tablero de compromisos (Sistema WiredUp)',
     historial: [
       {fecha:'09 ago 2026', resp:'Luis Fernández', desc:'Cierre de iniciativa de reducción de tiempos de detención no programada.', estado:'approved'},
-    ]
+    ],
+    interactive: {
+      tabs: [
+        {
+          id: 'que-es', label: '¿Qué es y por qué importa?', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="ishape ishape-hex ishape-2 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Objetivo e importancia</div>
+              <div class="islide-headline ianim">Del plan de trabajo a la <em style="--hl:#9FE1CB;">captura de valor</em> real</div>
+              <div class="iquote-grid ianim">
+                <div class="iquote"><div class="iquote-label">Qué se busca lograr</div><div class="iquote-text">Monitorear y asegurar las acciones para la captura de valor y la obtención de los resultados esperados.</div></div>
+                <div class="iquote"><div class="iquote-label">Cómo se logra</div><div class="iquote-text">A través de rutinas formales y estructuradas, ejecutadas de forma periódica entre los líderes y sus equipos.</div></div>
+              </div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Gestiona el cierre de brechas</div><div class="icheck-sub">De los proyectos de mejora</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Asegura el progreso y la captura de valor</div><div class="icheck-sub">De cada iniciativa en curso</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Acciona oportunamente</div><div class="icheck-sub">Ante desviaciones en los resultados esperados</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Fortalece los valores</div><div class="icheck-sub">A través de los comportamientos asociados</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'etapas', label: 'Etapas de una iniciativa', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Madurez de la iniciativa</div>
+              <div class="islide-headline ianim" style="font-size:17px;">De la idea al <em style="--hl:#F5C4B3;">beneficio sostenido</em></div>
+              <div class="iprogress-steps ianim">
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Ideation</div><div class="iprogress-sub">Ideas de sesiones de generación o programa de ideas</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Evaluating</div><div class="iprogress-sub">Se carga a WiredUp: plan, árbol de valor, riesgos</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Implementing</div><div class="iprogress-sub">Comienza la ejecución y la captura de valor</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Cash-flowing</div><div class="iprogress-sub">Entrega ≥50% del valor mensual comprometido</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Locked-in</div><div class="iprogress-sub">100% del beneficio por 3 meses seguidos</div></div>
+              </div>
+              <div class="ipyr-example ianim">Las iniciativas deben ser aprobadas, como mínimo, por el Sponsor y el Representante de Finanzas del sitio al pasar de una etapa a otra.</div>
+            </div>`
+        },
+        {
+          id: 'roles', label: 'Roles y responsabilidades', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Quién hace qué</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Cinco roles, una <em style="--hl:#9FE1CB;">cadena de responsabilidad</em></div>
+              <div class="iroles-timeline ianim">
+                <div class="irole-row">
+                  <div class="irole-dot">S</div>
+                  <div class="irole-body"><b>Sponsor · Gerente</b><span>Monitorea resultados, remueve obstáculos y rinde cuentas por la entrega de beneficios a tiempo.</span></div>
+                </div>
+                <div class="irole-row">
+                  <div class="irole-dot">L</div>
+                  <div class="irole-body"><b>Líder de iniciativa · Superintendente</b><span>Planifica y ejecuta la iniciativa, gestionando su implementación para resultados sostenibles.</span></div>
+                </div>
+                <div class="irole-row">
+                  <div class="irole-dot">F</div>
+                  <div class="irole-body"><b>Representante de finanzas · Gerente o Superintendente</b><span>Valida el cálculo y el beneficio económico de la iniciativa, al menos mensualmente.</span></div>
+                </div>
+                <div class="irole-row">
+                  <div class="irole-dot">E</div>
+                  <div class="irole-body"><b>Equipo de trabajo · Jefe de área, supervisor, ingeniero</b><span>Apoya la ejecución, escala obstáculos y da seguimiento a los KPI de la iniciativa.</span></div>
+                </div>
+                <div class="irole-row">
+                  <div class="irole-dot">C</div>
+                  <div class="irole-body"><b>Facilitador · Ingeniero Excelencia Operacional</b><span>Actualiza el progreso en WiredUp y desarrolla el empoderamiento del equipo.</span></div>
+                </div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'rutinas', label: 'Las 4 rutinas', theme: 3,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Cascada de rutinas</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Cuatro instancias, de <em style="--hl:#9FE1CB;">terreno a región</em></div>
+              <div class="itool-grid ianim">
+                <div class="itool-card"><div class="itool-title">Con el líder</div><div class="itool-sub">Semanal · 30 min</div><p>Facilitador, líder de iniciativa y equipo de trabajo.</p></div>
+                <div class="itool-card"><div class="itool-title">Con el sponsor</div><div class="itool-sub">Quincenal / mensual · 30 min</div><p>Facilitador, sponsor, líder de iniciativa y líder de OE.</p></div>
+                <div class="itool-card"><div class="itool-title">Del sitio</div><div class="itool-sub">Mensual · 1 hora</div><p>Líder de OE, Gerente General, sponsors y representante de finanzas.</p></div>
+                <div class="itool-card"><div class="itool-title">Regional</div><div class="itool-sub">Mensual · 1 hora</div><p>Gerente Regional OE, Gerentes Generales, Gerentes de Finanzas y Líderes de OE.</p></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'tableros', label: 'Los 2 tableros', theme: 4,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Los dos tableros</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Un tablero de <em style="--hl:#FAEEDA;">iniciativas</em> y uno de <em style="--hl:#FAEEDA;">compromisos</em></div>
+              <div class="itool-grid ianim">
+                <div class="itool-card"><div class="itool-title">Iniciativas</div><div class="itool-sub">KPI, valor y etapa</div><p>Código y nombre, KPI y su evolución, valor capturado (USD), avance del plan de trabajo y etapa (evaluating → implementing → cash-flowing → locked-in).</p></div>
+                <div class="itool-card"><div class="itool-title">Compromisos</div><div class="itool-sub">Acción, responsable y riesgo</div><p>Acción, responsable y fecha por cada desviación, más el seguimiento a riesgos y amenazas identificados.</p></div>
+              </div>
+              <div class="iquestions ianim" style="margin-top:16px;">
+                <div class="iquestion-chip"><span class="iquestion-num">1″</span>¿Qué KPI está desviado?</div>
+                <div class="iquestion-chip"><span class="iquestion-num">3″</span>¿Cuál es el problema?</div>
+                <div class="iquestion-chip"><span class="iquestion-num">10″</span>¿Quién toma acción y para cuándo?</div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'liderar-rutina', label: 'Cómo liderar la rutina', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Proceso de la rutina</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Seis pasos, con foco en las <em style="--hl:#9FE1CB;">brechas</em></div>
+              <div class="iprogress-steps ianim">
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Propósito y seguridad</div><div class="iprogress-sub">Reflexión de apertura</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Remediación previa</div><div class="iprogress-sub">Revisión de acciones acordadas antes</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Estado del portafolio</div><div class="iprogress-sub">Proponiendo acciones ante brechas</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Estado de iniciativas</div><div class="iprogress-sub">Usando la Regla 1-3-10</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Amenazas y riesgos</div><div class="iprogress-sub">Revisión y acciones de mitigación</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Reconocimiento</div><div class="iprogress-sub">A los méritos del equipo</div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'practicas', label: 'Buenas prácticas', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Recomendaciones</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Una rutina que <em style="--hl:#F5C4B3;">evidencia progreso</em>, no solo lo reporta</div>
+              <div class="igoodbad ianim">
+                <div class="igb-col igb-good">
+                  <div class="igb-head"><div class="igb-icon">✓</div><h4>Esto sí</h4></div>
+                  <ul>
+                    <li>Sesión productiva que evidencia la captura de valor.</li>
+                    <li>Delegar compromisos para el progreso de las iniciativas.</li>
+                    <li>Revisar los KPI impactados y definir hitos importantes.</li>
+                    <li>Mostrar avances del plan de trabajo y próximos pasos.</li>
+                  </ul>
+                </div>
+                <div class="igb-col igb-bad">
+                  <div class="igb-head"><div class="igb-icon">✕</div><h4>Esto no</h4></div>
+                  <ul>
+                    <li>Sesión sin cambios, informando los mismos avances.</li>
+                    <li>Aceptar algo porque sí, sin evidenciar progreso.</li>
+                    <li>Reportar restricciones sin proponer acción.</li>
+                    <li>Dejar sin fecha el progreso de las etapas.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'lideres', label: 'Comportamientos del líder', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Comportamientos clave de los líderes</div>
+              <div class="islide-headline ianim" style="font-size:18px;">El líder sostiene el <em style="--hl:#9FE1CB;">ritmo de captura de valor</em></div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Escucha y empatiza</div><div class="icheck-sub">Promueve un ambiente seguro física y emocionalmente</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Mantiene la disciplina operativa</div><div class="icheck-sub">Rutina estructurada, periódica y orientada a resultados</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Asegura la captura de valor</div><div class="icheck-sub">Alienta la discusión abierta de desviaciones y soluciones</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Exige rendición de cuentas</div><div class="icheck-sub">Compromisos claros con seguimiento constante</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">5</div><div><div class="icheck-title">Reconoce logros y esfuerzos</div><div class="icheck-sub">Refuerza comportamientos positivos en el equipo</div></div></div>
+              </div>
+            </div>`
+        }
+      ],
+      quiz: [
+        {
+          q: '¿Cuál es el propósito principal de la Gestión de Iniciativas?',
+          options: ['Monitorear y asegurar las acciones para la captura de valor y el logro de los resultados esperados', 'Definir el presupuesto anual del sitio', 'Reemplazar las reuniones de Resolución de Problemas'],
+          correct: 0,
+          feedback: 'La práctica busca monitorear el avance y asegurar que las iniciativas efectivamente capturen el valor comprometido.'
+        },
+        {
+          q: '¿Qué se necesita para que una iniciativa pase de una etapa a la siguiente?',
+          options: ['La aprobación, como mínimo, del Sponsor y el Representante de Finanzas', 'Solo la aprobación del líder de la iniciativa', 'No requiere aprobación, es automático al cumplir el plazo'],
+          correct: 0,
+          feedback: 'Todo cambio de etapa debe ser aprobado, como mínimo, por el Sponsor y el Representante de Finanzas del sitio.'
+        },
+        {
+          q: '¿En qué etapa una iniciativa entrega al menos el 100% del beneficio comprometido durante 3 meses seguidos?',
+          options: ['Cash-flowing', 'Locked-in', 'Evaluating'],
+          correct: 1,
+          feedback: 'Locked-in es la etapa de madurez donde el 100% del beneficio se sostiene por al menos 3 meses seguidos.'
+        },
+        {
+          q: '¿Quién es responsable de rendir cuentas por la entrega de beneficios a tiempo de una iniciativa?',
+          options: ['El Sponsor de la iniciativa', 'El Facilitador o coordinador', 'El equipo de trabajo'],
+          correct: 0,
+          feedback: 'El Sponsor —a nivel Gerente— es quien rinde cuentas por la entrega oportuna de los beneficios comprometidos.'
+        },
+        {
+          q: 'Según las recomendaciones, ¿cuál de estas es un ejemplo de "esto no" en una rutina de gestión de iniciativas?',
+          options: ['Aceptar avances porque sí, sin evidenciar progreso real', 'Definir hitos importantes para el progreso de las iniciativas', 'Revisar los KPI impactados por las iniciativas'],
+          correct: 0,
+          feedback: 'Aceptar avances sin evidenciarlos —o repetir los mismos resultados sesión tras sesión— es justamente lo que una buena rutina debe evitar.'
+        }
+      ]
+    }
   },
   'agenda': {
     nombre: 'Agenda', pilar: 'procesos',
-    definicion: 'Organización y priorización del tiempo del equipo de liderazgo, asegurando espacio dedicado a las prácticas del modelo y no solo a la contingencia diaria.',
+    definicion: 'Asignación consciente del tiempo en las actividades que agregan valor, evitando que otras actividades tomen el tiempo previamente planificado. Es el estándar de las prácticas del líder: su adherencia en la ejecución es fundamental para el éxito de la transformación.',
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=1182275f-6c31-4c3c-98f4-45ea62202b45&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
-    materiales: [{n:'Guía de construcción de agenda de liderazgo', t:'PDF · 0.7 MB'}],
-    plantilla: 'Plantilla de agenda semanal (Excel)',
+    materiales: [{n:'Metodología LEM — Práctica 8: Agenda (material de despliegue)', t:'PDF · 0.9 MB'}, {n:'Capacitación: Agenda Estandarizada (CMLB)', t:'PPTX · 2.1 MB'}],
+    plantilla: 'Plantilla de agenda semanal (Excel) + Plantilla 5Ps para reuniones',
     historial: [
       {fecha:'15 ago 2026', resp:'Jorge Muñoz', desc:'Actualización de agenda semanal del equipo de mantención.', estado:'pending'},
       {fecha:'08 ago 2026', resp:'Ana Rojas', desc:'Revisión de agenda mensual de liderazgo de planta.', estado:'approved'},
-    ]
+    ],
+    interactive: {
+      tabs: [
+        {
+          id: 'que-es', label: '¿Qué es y por qué importa?', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="ishape ishape-hex ishape-2 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Objetivo e importancia</div>
+              <div class="islide-headline ianim">El tiempo se <em style="--hl:#9FE1CB;">asigna</em>, no se rellena</div>
+              <div class="iquote-grid ianim">
+                <div class="iquote"><div class="iquote-label">Qué se busca lograr</div><div class="iquote-text">Asignar conscientemente el tiempo en las actividades que agregan valor y evitar que otras lo consuman.</div></div>
+                <div class="iquote"><div class="iquote-label">Cómo se desarrolla</div><div class="iquote-text">Estructurando y distribuyendo nuestras actividades en aquellas que agregan valor.</div></div>
+              </div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Enfoca en lo que más importa</div><div class="icheck-sub">Asegura concentrarnos en el trabajo relevante</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Rutinas transparentes</div><div class="icheck-sub">Con el equipo, desarrollando el liderazgo</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Clarifica el propósito</div><div class="icheck-sub">De cada actividad por desarrollar</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Promueve la estabilidad</div><div class="icheck-sub">El líder da el ejemplo en su cumplimiento</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'tipos-actividad', label: 'Los 3 tipos de actividad', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Paso 1: conocer el estado actual</div>
+              <div class="islide-headline ianim" style="font-size:17px;">No todo el tiempo <em style="--hl:#F5C4B3;">agrega valor</em> por igual</div>
+              <div class="idim-scheme ianim">
+                <div class="idim-badge idim-1">
+                  <div class="idim-num">✓</div>
+                  <h4>Agrega valor</h4>
+                  <ul><li>Cambia o transforma el producto o servicio</li><li>El cliente está dispuesto a pagar por ella</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-2">
+                  <div class="idim-num">~</div>
+                  <h4>Habilitador de valor</h4>
+                  <ul><li>No agrega valor directo, pero habilita a la que sí</li><li>Puede minimizarse o hacerse más eficiente</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-3">
+                  <div class="idim-num">✕</div>
+                  <h4>No agrega valor</h4>
+                  <ul><li>Consume recursos sin agregar valor</li><li>Puede eliminarse</li></ul>
+                </div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'matriz', label: 'Matriz de priorización', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Paso 2: priorizar las rutinas clave</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Importancia y urgencia <em style="--hl:#9FE1CB;">definen la estrategia</em></div>
+              <div class="imatrix ianim">
+                <div class="imatrix-yaxis"><span>Alta importancia</span><span>Baja importancia</span></div>
+                <div class="imatrix-main">
+                  <div class="imatrix-grid">
+                    <div class="imatrix-cell"><span class="imatrix-tag">Planificar</span>¿Más eficiente<br>o inteligente?</div>
+                    <div class="imatrix-cell"><span class="imatrix-tag">Hacerlo</span>¿Podemos<br>hacerlo mejor?</div>
+                    <div class="imatrix-cell"><span class="imatrix-tag">Eliminar / Declinar</span></div>
+                    <div class="imatrix-cell"><span class="imatrix-tag">Delegar / Diferir</span></div>
+                  </div>
+                  <div class="imatrix-xaxis"><span>Baja urgencia</span><span>Alta urgencia</span></div>
+                </div>
+              </div>
+              <div class="iquestions ianim" style="margin-top:14px;">
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>Eliminar: tareas que no agregan valor ni contribuyen al objetivo</div>
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>Delegar: invirtiendo en coaching para reducir la revisión</div>
+                <div class="iquestion-chip"><span class="iquestion-num">✓</span>Reducir o diferir: cambiar alcance, frecuencia o urgencia real</div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'pasos', label: 'Los 5 pasos de la agenda', theme: 3,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Guía para la agenda estándar</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Un ciclo de <em style="--hl:#9FE1CB;">5 pasos</em>, no un ejercicio único</div>
+              <div class="iprogress-steps ianim">
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Conocer el estado actual</div><div class="iprogress-sub">¿Dónde y cómo se invierte el tiempo hoy?</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Priorizar rutinas clave</div><div class="iprogress-sub">¿Qué actividades son "sagradas"?</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Desarrollar la agenda</div><div class="iprogress-sub">Planificar y agendar las rutinas clave</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Compartir con el equipo</div><div class="iprogress-sub">Visible para reportes directos y pares</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Monitorear adherencia</div><div class="iprogress-sub">¿Se cumple lo planificado?</div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'cinco-ps', label: 'Las 5Ps de una reunión', theme: 4,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Herramienta para reuniones efectivas</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Seis elementos para que <em style="--hl:#FAEEDA;">ninguna reunión</em> sea tiempo perdido</div>
+              <div class="itool-grid ianim">
+                <div class="itool-card"><div class="itool-title">Propósito</div><p>Por qué existe la rutina y qué busca lograr.</p></div>
+                <div class="itool-card"><div class="itool-title">Participantes</div><p>Quiénes deben estar presentes.</p></div>
+                <div class="itool-card"><div class="itool-title">Proceso</div><p>La agenda, con responsable y tiempo por punto.</p></div>
+                <div class="itool-card"><div class="itool-title">Lugar</div><p>Dónde se realiza: presencial, Teams, terreno.</p></div>
+                <div class="itool-card"><div class="itool-title">Preparación</div><p>Qué debe revisarse antes de la sesión.</p></div>
+                <div class="itool-card"><div class="itool-title">Producto</div><p>El resultado esperado al cerrar la reunión.</p></div>
+              </div>
+              <div class="ipyr-example ianim">Se sugiere incluir o pedir las 5Ps en la invitación a cualquier reunión clave.</div>
+            </div>`
+        },
+        {
+          id: 'cascada', label: 'Cascada y distribución', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Paso 4: compartir con el equipo y pares</div>
+              <div class="islide-headline ianim" style="font-size:17px;">La agenda se sincroniza <em style="--hl:#9FE1CB;">vertical y horizontalmente</em></div>
+              <div class="iroles-timeline ianim">
+                <div class="irole-row">
+                  <div class="irole-dot">GG</div>
+                  <div class="irole-body"><b>Gerente General</b><span>Su agenda enfocada en Objetivo Común y Desarrollo de Personas marca la cascada.</span></div>
+                </div>
+                <div class="irole-row">
+                  <div class="irole-dot">GS</div>
+                  <div class="irole-body"><b>Gerente Senior (si aplica)</b><span>Refleja los bloques horarios de las prácticas de su equipo, sin afectar su realización.</span></div>
+                </div>
+                <div class="irole-row">
+                  <div class="irole-dot">G</div>
+                  <div class="irole-body"><b>Gerente</b><span>Sincroniza su agenda horizontalmente con sus pares del mismo nivel.</span></div>
+                </div>
+                <div class="irole-row">
+                  <div class="irole-dot">S</div>
+                  <div class="irole-body"><b>Superintendente</b><span>Su agenda se inclina hacia Mejora Continua y Procesos Eficientes, más cerca del terreno.</span></div>
+                </div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'principios', label: 'Principios de diseño', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Recomendaciones · 4 principios clave</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Una buena agenda es <em style="--hl:#F5C4B3;">completa y sincronizada</em></div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Elimina lo que no agrega valor</div><div class="icheck-sub">Se delega o se retira del calendario del líder</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Sincronización vertical y horizontal</div><div class="icheck-sub">Alineada con superiores, reportes y pares</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Completitud</div><div class="icheck-sub">Incluye DdD, CdR/CdP, RdP, Gestión PIT, Coaching 1 a 1 y otros comités</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Frecuencia definida</div><div class="icheck-sub">Cada práctica tiene una cadencia estándar, ej. DdD semanal</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'lideres', label: 'Comportamientos del líder', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Comportamientos clave de los líderes</div>
+              <div class="islide-headline ianim" style="font-size:18px;">El líder <em style="--hl:#9FE1CB;">predica con su calendario</em></div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Lidera de forma estándar</div><div class="icheck-sub">Consistente y efectiva con su equipo</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Desarrolla su agenda completa</div><div class="icheck-sub">Rutinas sagradas, terreno, 1-1, desarrollo profesional</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Da visibilidad</div><div class="icheck-sub">Su equipo y pares conocen su agenda</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Usa las 5Ps</div><div class="icheck-sub">En todas las rutinas importantes de su equipo</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">5</div><div><div class="icheck-title">Revisa su propio tiempo</div><div class="icheck-sub">Periódicamente, para priorizar de forma eficiente</div></div></div>
+              </div>
+            </div>`
+        }
+      ],
+      quiz: [
+        {
+          q: '¿Qué distingue a una actividad "Habilitadora de Valor" de una que "Agrega Valor"?',
+          options: ['La habilitadora no agrega valor directo, pero permite que las actividades que sí agregan valor se realicen; puede minimizarse o hacerse más eficiente', 'Son sinónimos, ambas agregan el mismo valor al cliente', 'La habilitadora siempre debe eliminarse por completo'],
+          correct: 0,
+          feedback: 'A diferencia de la muda (que se elimina), la actividad habilitadora se mantiene pero se busca hacerla más eficiente o minimizarla.'
+        },
+        {
+          q: 'En la matriz de priorización de la agenda, ¿qué corresponde hacer con una actividad de alta importancia y baja urgencia?',
+          options: ['Planificarla: preguntarse si se puede hacer de forma más eficiente o inteligente', 'Eliminarla o declinarla de inmediato', 'Delegarla sin revisión'],
+          correct: 0,
+          feedback: 'El cuadrante "Planificar" agrupa lo importante-no urgente, donde la pregunta clave es si se puede ejecutar de forma más eficiente o inteligente.'
+        },
+        {
+          q: '¿Cuáles son los 5 pasos para construir la agenda estándar?',
+          options: ['Conocer el estado actual, priorizar rutinas clave, desarrollar la agenda, compartirla con el equipo y monitorear adherencia', 'Definir el problema, desglosarlo, definir el objetivo, priorizar y ejecutar', 'Ideación, evaluación, implementación, cash-flowing y locked-in'],
+          correct: 0,
+          feedback: 'La guía de diseño de la agenda sigue este ciclo de 5 pasos, que se revisa periódicamente, no solo una vez.'
+        },
+        {
+          q: '¿Qué significa que la agenda deba tener "sincronización vertical y horizontal"?',
+          options: ['Debe alinearse en cascada con los niveles superiores e inferiores, y también sincronizarse con los pares del mismo nivel', 'Debe imprimirse en formato vertical y horizontal para mayor visibilidad', 'Solo aplica a los niveles operativos, no a los gerenciales'],
+          correct: 0,
+          feedback: 'La sincronización vertical alinea la agenda con jefaturas y reportes; la horizontal la alinea con los pares del mismo nivel.'
+        },
+        {
+          q: 'Según la distribución sugerida por nivel, ¿en qué dimensiones debería enfocarse el tiempo de un Gerente (nivel alto)?',
+          options: ['Desarrollo de personas y Objetivo común', 'Mejora continua y Procesos eficientes', 'Solo en Procesos eficientes'],
+          correct: 0,
+          feedback: 'Los niveles altos de liderazgo concentran su tiempo en Objetivo Común y Desarrollo de Personas; el nivel operativo se inclina hacia Mejora Continua y Procesos Eficientes.'
+        }
+      ]
+    }
   },
   'procedimientos-operativos': {
     nombre: 'Procedimientos Operativos y Trabajo Estandarizado', pilar: 'procesos',
-    definicion: 'Documentación y verificación del cumplimiento de procedimientos operativos estándar, asegurando consistencia en la forma en que se ejecutan las tareas críticas del sitio.',
+    definicion: 'Documento formal que describe secuencialmente los pasos para realizar actividades rutinarias y no rutinarias en terreno, especificando riesgos y controles, para asegurar una ejecución segura y estandarizada entre turno y turno, según la mejor forma conocida de trabajar.',
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=e55e7828-7f96-4b5a-b890-88be86a69e8c&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
-    materiales: [{n:'Guía de trabajo estandarizado', t:'PDF · 1.3 MB'}, {n:'Video: cómo documentar un procedimiento', t:'Video · 7 min'}],
-    plantilla: 'Plantilla de procedimiento operativo estándar (Word)',
+    materiales: [{n:'Metodología LEM — Práctica 7: Procedimientos operativos y trabajo estandarizado', t:'PDF · 1.1 MB'}],
+    plantilla: 'Plantilla de procedimiento operativo estándar (Word) + Checklist de inspección 5S + Hoja de trabajo Wrench Time',
     historial: [
       {fecha:'07 ago 2026', resp:'Pedro Salas', desc:'Actualización de procedimiento de arranque de chancado.', estado:'approved'},
-    ]
+    ],
+    interactive: {
+      tabs: [
+        {
+          id: 'que-es', label: '¿Qué es y por qué importa?', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="ishape ishape-hex ishape-2 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Objetivo e importancia</div>
+              <div class="islide-headline ianim">Ejecutar siempre la <em style="--hl:#9FE1CB;">misma forma correcta</em> de trabajar</div>
+              <div class="iquote-grid ianim">
+                <div class="iquote"><div class="iquote-label">Qué se busca lograr</div><div class="iquote-text">Ejecutar de forma consistente las actividades rutinarias y asegurar la seguridad, calidad y eficiencia.</div></div>
+                <div class="iquote"><div class="iquote-label">Cómo se logra</div><div class="iquote-text">A través de la estandarización de los procesos y la implementación de estándares documentados.</div></div>
+              </div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Facilita la mejora continua</div><div class="icheck-sub">Identificación de mejoras y optimización de procesos</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Reduce la variabilidad</div><div class="icheck-sub">Asegura la consistencia de los resultados</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Transfiere el conocimiento</div><div class="icheck-sub">Las buenas prácticas se mantienen en el tiempo</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Acciona ante desviaciones</div><div class="icheck-sub">Con responsables asignados a los indicadores</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'que-es-procedimiento', label: '¿Qué es un procedimiento?', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Definición</div>
+              <div class="islide-headline ianim" style="font-size:17px;">La <em style="--hl:#F5C4B3;">mejor forma conocida</em> de hacer el trabajo, por escrito</div>
+              <div class="iquote-grid ianim">
+                <div class="iquote"><div class="iquote-label">Qué es</div><div class="iquote-text">Documento formal que describe secuencialmente los pasos para realizar actividades en terreno, especificando riesgos y controles.</div></div>
+                <div class="iquote"><div class="iquote-label">Para qué sirve</div><div class="iquote-text">Documentar la mejor forma de trabajar conocida a la fecha, actualizándola cada vez que se encuentra una mejora.</div></div>
+              </div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Elimina la variabilidad</div><div class="icheck-sub">En la ejecución de las actividades</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Garantiza una ejecución consistente</div><div class="icheck-sub">Entre turnos, equipos y personas</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Asegura la calidad</div><div class="icheck-sub">En cada paso de la ejecución</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Se mantiene vivo</div><div class="icheck-sub">Riesgos críticos: se actualiza al menos una vez al año</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'tipos', label: 'Los 4 tipos de procedimiento', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Diseño · Elegir el formato correcto</div>
+              <div class="islide-headline ianim" style="font-size:17px;">El tipo de tarea define el <em style="--hl:#9FE1CB;">tipo de procedimiento</em></div>
+              <div class="itool-grid ianim">
+                <div class="itool-card"><div class="itool-title">Paso a paso</div><div class="itool-sub">Pasos claramente definidos</div><p>Se puede describir visualmente. Incluye mejores prácticas y pasos de dificultad potencial.</p></div>
+                <div class="itool-card"><div class="itool-title">Checklist</div><div class="itool-sub">Verificar condiciones</div><p>Requiere consistencia y exhaustividad en la verificación de cada condición.</p></div>
+                <div class="itool-card"><div class="itool-title">Flujograma</div><div class="itool-sub">Puntos de decisión</div><p>Tiene transferencias a otros procesos y es susceptible a interrupciones y reajustes.</p></div>
+                <div class="itool-card"><div class="itool-title">Lección de un punto</div><div class="itool-sub">Un concepto, una habilidad</div><p>Capacitación rápida o recordatorio sobre una desviación específica recurrente.</p></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'diseno-ejecucion-control', label: 'Diseño, ejecución y control', theme: 3,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · El ciclo completo</div>
+              <div class="islide-headline ianim" style="font-size:18px;">Un procedimiento se <em style="--hl:#FAEEDA;">diseña, ejecuta y controla</em></div>
+              <div class="idim-scheme ianim">
+                <div class="idim-badge idim-1">
+                  <div class="idim-num">1</div>
+                  <h4>Diseño</h4>
+                  <ul><li>Alinear estándares y formatos</li><li>Incluir al personal clave: técnicos, mantenedores, operadores</li><li>Validar con supervisores y terreno de todas las guardias</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-2">
+                  <div class="idim-num">2</div>
+                  <h4>Ejecución</h4>
+                  <ul><li>Difundir el procedimiento y asegurar su disponibilidad</li><li>Verificar en terreno que el equipo lo conozca</li><li>Aplicar principios de trabajo estandarizado</li></ul>
+                </div>
+                <div class="idim-connector">→</div>
+                <div class="idim-badge idim-3">
+                  <div class="idim-num">3</div>
+                  <h4>Control</h4>
+                  <ul><li>Motivar a reportar problemas u oportunidades</li><li>Actualizar y comunicar formalmente los cambios</li><li>Revisar antes de cada uso si la frecuencia es menor a anual</li></ul>
+                </div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'inspecciones-5s', label: 'Inspecciones y las 5S', theme: 4,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Ejecución · Terreno bajo control</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Mirar el terreno con <em style="--hl:#9FE1CB;">ojos de las 5S</em></div>
+              <div class="iquote-grid ianim">
+                <div class="iquote"><div class="iquote-label">Inspecciones del lugar de trabajo</div><div class="iquote-text">Monitorean las condiciones físicas, orden y aseo de cada área, taller y bodega del sitio.</div></div>
+                <div class="iquote"><div class="iquote-label">Vigilancia operacional</div><div class="iquote-text">Revisiones para mantener la integridad y confiabilidad de áreas y equipos, con protocolos de escalación.</div></div>
+              </div>
+              <div class="iprogress-steps ianim">
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Clasificar</div><div class="iprogress-sub">Seiri · Eliminar lo que no se necesita</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Ordenar</div><div class="iprogress-sub">Seiton · Un lugar para cada cosa</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Limpiar</div><div class="iprogress-sub">Seiso · Identificar focos de suciedad</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Estandarizar</div><div class="iprogress-sub">Seiketsu · Controles visuales y checklists</div></div>
+                <div class="iprogress-step"><div class="iprogress-dot"></div><div class="iprogress-lbl">Disciplina</div><div class="iprogress-sub">Shitsuke · Sostener el sistema en el tiempo</div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'trabajo-estandarizado', label: 'Trabajo Estandarizado', theme: 0,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Recomendaciones · Mejora continua del trabajo</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Siete pasos para <em style="--hl:#9FE1CB;">eliminar el desperdicio</em> de una tarea</div>
+              <div class="itool-grid ianim">
+                <div class="itool-card"><div class="itool-title">1</div><div class="itool-sub">Identificar trabajos rutinarios</div><p>Seleccionar los trabajos a optimizar.</p></div>
+                <div class="itool-card"><div class="itool-title">2</div><div class="itool-sub">Recopilar data histórica</div><p>Priorizar por impacto potencial.</p></div>
+                <div class="itool-card"><div class="itool-title">3</div><div class="itool-sub">Identificar pérdidas en terreno</div><p>Del trabajo que se quiere mejorar.</p></div>
+                <div class="itool-card"><div class="itool-title">4</div><div class="itool-sub">Diseñar la planificación (SMED)</div><p>Paso a paso, carta Gantt y checklists.</p></div>
+                <div class="itool-card"><div class="itool-title">5</div><div class="itool-sub">Ejecutar el proceso optimizado</div><p>Poner en marcha los cambios definidos.</p></div>
+                <div class="itool-card"><div class="itool-title">6</div><div class="itool-sub">Medir el impacto y mejorar</div><p>Revisar resultados y nuevas oportunidades.</p></div>
+                <div class="itool-card"><div class="itool-title">7</div><div class="itool-sub">Desarrollar capacidades</div><p>Capacitación formal en SMED y Wrench Time.</p></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'smed-wrench', label: 'SMED y Wrench Time', theme: 1,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Recomendaciones · Dos herramientas complementarias</div>
+              <div class="islide-headline ianim" style="font-size:17px;">Medir el <em style="--hl:#F5C4B3;">desperdicio</em> para poder eliminarlo</div>
+              <div class="itool-grid ianim">
+                <div class="itool-card"><div class="itool-title">SMED</div><div class="itool-sub">Single-Minute Exchange of Die</div><p>Optimiza actividades que agregan valor y las incidentales. Objetivo típico: reducir el tiempo de la tarea entre 10% y 25%, con un equipo multidisciplinario.</p></div>
+                <div class="itool-card"><div class="itool-title">Wrench Time</div><div class="itool-sub">% de tiempo que agrega valor</div><p>Mide la productividad de una tarea. Se registra en terreno cada 3 minutos, durante al menos la mitad del turno.</p></div>
+              </div>
+              <div class="ichecklist ianim" style="margin-top:14px;">
+                <div class="icheck-row"><div class="icheck-badge">✓</div><div><div class="icheck-title">Wrench Time</div><div class="icheck-sub">Tiempo que agrega valor directo: reparar, ejecutar</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">~</div><div><div class="icheck-title">Actividad incidental</div><div class="icheck-sub">Necesaria pero sin valor directo: charlas, revisión de pautas</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">✕</div><div><div class="icheck-title">Muda o desperdicio</div><div class="icheck-sub">Re-trabajo, espera, viajes al pañol, tiempo ocioso</div></div></div>
+              </div>
+            </div>`
+        },
+        {
+          id: 'lideres', label: 'Comportamientos del líder', theme: 2,
+          html: `
+            <div class="ishape ishape-hex ishape-1 ianim"></div>
+            <div class="islide-body">
+              <div class="islide-eyebrow ianim">Comportamientos clave de los líderes</div>
+              <div class="islide-headline ianim" style="font-size:18px;">El líder <em style="--hl:#9FE1CB;">sostiene el estándar</em> en el día a día</div>
+              <div class="ichecklist ianim">
+                <div class="icheck-row"><div class="icheck-badge">1</div><div><div class="icheck-title">Ejecuta y monitorea</div><div class="icheck-sub">El cumplimiento de los procedimientos operativos</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">2</div><div><div class="icheck-title">Identifica oportunidades</div><div class="icheck-sub">Monitoreo en terreno de procedimientos e inspecciones</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">3</div><div><div class="icheck-title">Capacita al equipo</div><div class="icheck-sub">Para la correcta aplicación de procedimientos y checklists</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">4</div><div><div class="icheck-title">Elimina desperdicios</div><div class="icheck-sub">Con análisis riguroso de los procesos</div></div></div>
+                <div class="icheck-row"><div class="icheck-badge">5</div><div><div class="icheck-title">Fomenta la mejora continua</div><div class="icheck-sub">Retroalimentación e intercambio de buenas prácticas</div></div></div>
+              </div>
+            </div>`
+        }
+      ],
+      quiz: [
+        {
+          q: '¿Qué elemento distingue a un procedimiento tipo "Checklist" de uno "Paso a paso"?',
+          options: ['El checklist verifica condiciones o parámetros con consistencia y exhaustividad; el paso a paso describe una secuencia de pasos definidos', 'Son exactamente lo mismo, solo cambia el nombre', 'El checklist es solo para inspecciones de seguridad'],
+          correct: 0,
+          feedback: 'Cada tipo responde a una necesidad distinta: el checklist verifica condiciones, mientras el paso a paso documenta una secuencia clara de acciones.'
+        },
+        {
+          q: 'Según la práctica, ¿cada cuánto se debe actualizar como mínimo un procedimiento con riesgos críticos?',
+          options: ['Al menos una vez al año', 'Solo cuando ocurre un accidente', 'Nunca, una vez aprobado es definitivo'],
+          correct: 0,
+          feedback: 'Los procedimientos con riesgos críticos deben revisarse y actualizarse al menos una vez al año, además de cada vez que se encuentre una mejora.'
+        },
+        {
+          q: '¿Qué principio de las 5S corresponde a "usar controles visuales, procedimientos y checklists para mantener las áreas limpias y ordenadas"?',
+          options: ['Seiketsu (Estandarizar)', 'Seiri (Clasificar)', 'Shitsuke (Disciplina)'],
+          correct: 0,
+          feedback: 'Seiketsu (Estandarizar) es el paso donde se fijan controles visuales y checklists para sostener el orden logrado en los pasos anteriores.'
+        },
+        {
+          q: '¿Qué mide la herramienta Wrench Time?',
+          options: ['El porcentaje del tiempo invertido en el proceso que agrega valor directamente', 'El presupuesto total de un proyecto de mantenimiento', 'La cantidad de personas asignadas a una tarea'],
+          correct: 0,
+          feedback: 'Wrench Time mide qué proporción del tiempo total de una tarea se dedica activamente a actividades que agregan valor directo.'
+        },
+        {
+          q: '¿Cuál de estas es un ejemplo de "Muda o desperdicio", según la práctica?',
+          options: ['Viajes repetitivos al pañol buscando una herramienta', 'Revisar las pautas de mantenimiento antes de una tarea', 'Ejecutar el procedimiento paso a paso definido'],
+          correct: 0,
+          feedback: 'Los viajes repetitivos al pañol son un desperdicio clásico (muda): consumen tiempo sin agregar valor al proceso.'
+        }
+      ]
+    }
   },
 };
 
@@ -1119,7 +2024,6 @@ const params = new URLSearchParams(window.location.search);
 const slug = params.get('p') || 'resolucion-problemas';
 const practica = PRACTICAS[slug] || PRACTICAS['resolucion-problemas'];
 const pilar = PILARES[practica.pilar];
-
 document.getElementById('crumbActual').textContent = practica.nombre;
 document.getElementById('practiceTitle').textContent = practica.nombre;
 document.getElementById('practiceDef').textContent = practica.definicion;

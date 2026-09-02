@@ -229,17 +229,17 @@
       </div>
     </a>
 
-    <div class="tile gray" style="cursor:default;">
+    <a class="tile gray" href="documental-listado.html" id="tileDocumental">
       <div class="tile-face">
         <div class="tile-icon icon-gray"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg></div>
         <div class="tile-label">Documentación</div>
       </div>
       <div class="tile-overlay">
         <div class="ov-title">Gestión Documental</div>
-        <div class="ov-desc">Próximo proyecto a construir: control de gestión documental del sitio.</div>
-        <div class="ov-tag" style="color:var(--warm-gray-100);">En planificación</div>
+        <div class="ov-desc">Catálogo de procedimientos, instructivos y estándares — con estado de vencimiento.</div>
+        <div class="ov-tag" style="color:var(--warm-gray-100);">Consultar →</div>
       </div>
-    </div>
+    </a>
 
     <a class="tile amber" href="modelo-listado.html" id="tileModelo">
       <div class="tile-face">
@@ -281,12 +281,14 @@
   var ICONS = {
     calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
     kanban: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16M3 9h4M3 15h4M17 9h4M17 15h4"/></svg>',
-    checklist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="3" width="12" height="4" rx="1"/><path d="M6 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1"/><path d="M9 12l2 2 4-4"/></svg>'
+    checklist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="3" width="12" height="4" rx="1"/><path d="M6 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1"/><path d="M9 12l2 2 4-4"/></svg>',
+    folder: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>'
   };
   var GRADIENTS = {
     terra: 'linear-gradient(135deg, #993C1D, #D85A30)',
     teal: 'linear-gradient(135deg, #085041, #0F6E56)',
-    amber: 'linear-gradient(135deg, #854F0B, #BA7517)'
+    amber: 'linear-gradient(135deg, #854F0B, #BA7517)',
+    graphite: 'linear-gradient(135deg, #141412, #444441)'
   };
 
   function playTransition(opts){
@@ -318,6 +320,7 @@
   wireTile('tileCalendario', { href:'calendario-embed.html', color:'terra', icon:'calendar', label:'Calendario Ejecutivo de Turnos', external:false });
   wireTile('tileSteerco',    { href:'steerco-embed.html', color:'teal', icon:'kanban', label:'Steerco Projects', external:false });
   wireTile('tileModelo',     { href:'modelo-listado.html', color:'amber', icon:'checklist', label:'Modelo de Excelencia Operacional', external:false });
+  wireTile('tileDocumental', { href:'documental-listado.html', color:'graphite', icon:'folder', label:'Gestión Documental', external:false });
 })();
 </script>
 

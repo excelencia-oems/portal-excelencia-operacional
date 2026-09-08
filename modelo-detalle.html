@@ -48,6 +48,15 @@
   .panel{background:#fff; border:1px solid var(--warm-gray-100); border-radius:14px; padding:24px; margin-bottom:22px;}
   .panel h2{font-family:var(--font-display); font-size:14.5px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:8px;}
   .panel h2 svg{width:17px; height:17px; color:var(--oems-teal);}
+  .panel-head-row{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;}
+  .panel-head-row h2{margin-bottom:0;}
+  .hist-toggle{display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none;}
+  .hist-toggle input{position:absolute; opacity:0; width:0; height:0;}
+  .hist-toggle-track{width:34px; height:19px; border-radius:100px; background:var(--warm-gray-300); position:relative; transition:background .15s ease; flex-shrink:0;}
+  .hist-toggle-thumb{position:absolute; top:2px; left:2px; width:15px; height:15px; border-radius:50%; background:#fff; transition:transform .15s ease; box-shadow:0 1px 2px rgba(0,0,0,.2);}
+  .hist-toggle input:checked + .hist-toggle-track{background:var(--oems-teal);}
+  .hist-toggle input:checked + .hist-toggle-track .hist-toggle-thumb{transform:translateX(15px);}
+  .hist-toggle-label{font-size:12.5px; font-weight:600; color:var(--warm-gray-500);}
   .panel p{font-size:13.5px; color:var(--gray-700);}
 
   .video-box{
@@ -422,7 +431,7 @@
       <div class="pilar-tag" id="pilarTag"><span class="dot" id="pilarDot"></span><span id="pilarNombre">Pilar</span></div>
       <h1 id="practiceTitle">Práctica</h1>
     </div>
-    <button class="btn-primary" onclick="document.getElementById('modalRegistro').classList.add('open')">+ Registrar práctica realizada</button>
+    <button class="btn-primary" id="btnRegistro" onclick="document.getElementById('modalRegistro').classList.add('open')">+ Registrar práctica realizada</button>
   </div>
 
   <div class="panel">
@@ -455,11 +464,20 @@
   </div>
 
   <div class="panel">
-    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 15l3-4 3 3 5-7"/></svg>Historial de registros</h2>
-    <div class="hist-row head">
-      <div>Fecha</div><div>Descripción</div><div>Estado</div><div>Evidencia</div>
+    <div class="panel-head-row">
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 15l3-4 3 3 5-7"/></svg>Historial de registros</h2>
+      <label class="hist-toggle">
+        <input type="checkbox" id="histToggle" checked onchange="document.getElementById('historialBody').style.display = this.checked ? '' : 'none';">
+        <span class="hist-toggle-track"><span class="hist-toggle-thumb"></span></span>
+        <span class="hist-toggle-label">Mostrar</span>
+      </label>
     </div>
-    <div id="historialList"></div>
+    <div id="historialBody">
+      <div class="hist-row head">
+        <div>Fecha</div><div>Descripción</div><div>Estado</div><div>Evidencia</div>
+      </div>
+      <div id="historialList"></div>
+    </div>
   </div>
 
 </main>
@@ -493,10 +511,7 @@ const PRACTICAS = {
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=59c61043-eaa1-4992-ac08-fdcd72a1e87e&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Metodología LEM — Práctica 10: Feedback y Coaching', t:'PDF · 0.5 MB'}, {n:'Capacitación: Coaching y Feedback (CMLB)', t:'PPTX · 3.9 MB'}],
     plantilla: 'Guía de conversación de Feedback (método SBI) + Plantilla de sesión de Coaching GROW (Excel)',
-    historial: [
-      {fecha:'12 ago 2026', resp:'Camila Torres', desc:'Sesión mensual de feedback con 4 integrantes del turno B.', estado:'approved'},
-      {fecha:'05 ago 2026', resp:'Luis Fernández', desc:'Feedback individual sobre cumplimiento de estándares de seguridad.', estado:'pending'},
-    ],
+    historial: [],
     interactive: {
       tabs: [
         {
@@ -705,9 +720,7 @@ const PRACTICAS = {
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=1eb4f639-0a3f-4821-8763-c3b8af675521&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Metodología LEM — Práctica 9: Confirmación de Rol y Procesos', t:'PDF · 0.5 MB'}, {n:'Capacitación: Confirmación de Rol (CMLB)', t:'PPTX · 4.9 MB'}, {n:'Capacitación: Confirmación de Estándares (CMLB)', t:'PPTX · 4.3 MB'}],
     plantilla: 'Checklist de Confirmación de Rol de Diálogo de Desempeño + Checklist de Confirmación de Procesos (Excel)',
-    historial: [
-      {fecha:'10 ago 2026', resp:'Marcela Díaz', desc:'Confirmación de rol para 2 nuevos ingresos del área de mantención.', estado:'approved'},
-    ],
+    historial: [],
     interactive: {
       tabs: [
         {
@@ -961,10 +974,7 @@ const PRACTICAS = {
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=e548cdf2-3560-4cfb-9a5f-7abb730c1cce&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Mapa de objetivos estratégicos del sitio', t:'PDF · 1.4 MB'}, {n:'Video: cómo alinear metas de equipo', t:'Video · 8 min'}],
     plantilla: 'Plantilla de despliegue de objetivos (Excel)',
-    historial: [
-      {fecha:'14 ago 2026', resp:'Ana Rojas', desc:'Taller de despliegue de objetivos trimestrales con el equipo de planta.', estado:'approved'},
-      {fecha:'01 ago 2026', resp:'Jorge Muñoz', desc:'Revisión de alineación de metas del área de mantención.', estado:'approved'},
-    ],
+    historial: [],
     interactive: {
       tabs: [
         {
@@ -1329,9 +1339,7 @@ const PRACTICAS = {
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=dc35286f-253d-4332-b2b8-414da4c4d9dc&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Capacitación: Diálogos de Desempeño (CMLB)', t:'PPTX · 8.5 MB'}, {n:'Metodología LEM — Práctica 3: Visualizar y gestionar el progreso', t:'PDF · 0.6 MB'}],
     plantilla: 'Estándar de Reunión — Diálogo de Desempeño (tablero de indicadores + tablero de compromisos)',
-    historial: [
-      {fecha:'13 ago 2026', resp:'Pedro Salas', desc:'Actualización semanal del tablero de gestión visual de chancado.', estado:'approved'},
-    ],
+    historial: [],
     interactive: {
       tabs: [
         {
@@ -1512,9 +1520,7 @@ const PRACTICAS = {
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=72e4b265-b430-4a93-bea3-50a2462b1ed5&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Metodología LEM — Práctica 4: Identificación de mejoras', t:'PDF · 0.4 MB'}],
     plantilla: 'Plantilla de registro de oportunidad de mejora (Excel)',
-    historial: [
-      {fecha:'11 ago 2026', resp:'Camila Torres', desc:'Identificación de mejora en flujo de despacho de camiones.', estado:'pending'},
-    ],
+    historial: [],
     interactive: {
       tabs: [
         {
@@ -1669,11 +1675,7 @@ const PRACTICAS = {
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=788403a9-ff3d-4e9b-abc7-326bbafb4723&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Metodología LEM — Práctica 5: Resolución de problemas', t:'PDF · 0.7 MB'}, {n:'Capacitación: Resolución de Problemas (CMLB)', t:'PPTX · 5.4 MB'}],
     plantilla: 'Formato Resolución de Problemas (RdP) — 3C, 5 Por qué, 4 y 8 pasos',
-    historial: [
-      {fecha:'14 ago 2026', resp:'Ana Rojas', desc:'Se resolvió recurrencia de detención en chancado primario.', estado:'approved'},
-      {fecha:'08 ago 2026', resp:'Pedro Salas', desc:'Análisis de causa raíz para fallas en bomba de proceso.', estado:'pending'},
-      {fecha:'02 ago 2026', resp:'Marcela Díaz', desc:'Reincidencia de desviación en calidad de mineral.', estado:'rejected'},
-    ],
+    historial: [],
     interactive: {
       tabs: [
         {
@@ -1848,9 +1850,7 @@ const PRACTICAS = {
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=b7a6b206-ca9b-4399-9772-d79804c14fe5&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Metodología LEM — Práctica 6: Gestión de Iniciativas', t:'PDF · 0.8 MB'}, {n:'Capacitación: Gestión de Programas/Iniciativas (CMLB)', t:'PPTX · 3.2 MB'}],
     plantilla: 'Tablero de gestión de iniciativas + Tablero de compromisos (Sistema WiredUp)',
-    historial: [
-      {fecha:'09 ago 2026', resp:'Luis Fernández', desc:'Cierre de iniciativa de reducción de tiempos de detención no programada.', estado:'approved'},
-    ],
+    historial: [],
     interactive: {
       tabs: [
         {
@@ -2053,14 +2053,12 @@ const PRACTICAS = {
   },
   'agenda': {
     nombre: 'Agenda', pilar: 'procesos',
+    accionBtn: 'Gestionar mi Agenda',
     definicion: 'Asignación consciente del tiempo en las actividades que agregan valor, evitando que otras actividades tomen el tiempo previamente planificado. Es el estándar de las prácticas del líder: su adherencia en la ejecución es fundamental para el éxito de la transformación.',
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=1182275f-6c31-4c3c-98f4-45ea62202b45&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
-    materiales: [{n:'Metodología LEM — Práctica 8: Agenda (material de despliegue)', t:'PDF · 0.9 MB'}, {n:'Capacitación: Agenda Estandarizada (CMLB)', t:'PPTX · 2.1 MB'}],
-    plantilla: 'Plantilla de agenda semanal (Excel) + Plantilla 5Ps para reuniones',
-    historial: [
-      {fecha:'15 ago 2026', resp:'Jorge Muñoz', desc:'Actualización de agenda semanal del equipo de mantención.', estado:'pending'},
-      {fecha:'08 ago 2026', resp:'Ana Rojas', desc:'Revisión de agenda mensual de liderazgo de planta.', estado:'approved'},
-    ],
+    materiales: [{n:'Metodología LEM — Práctica 8: Agenda (material de despliegue)', t:'PDF · 0.9 MB', url:'https://glencore.sharepoint.com/:b:/s/CLModeloEOCapacitaciones/IQDykBvngyssSaJ4DXPabu1LAesf2Mr7sTE3knylcf6pmTA?e=pnrpWh'}, {n:'Capacitación: Agenda Estandarizada (CMLB)', t:'PPTX · 2.1 MB', url:'https://glencore.sharepoint.com/:p:/s/CLModeloEOCapacitaciones/IQChS3x6wIW5SrQNNMtKW4UsAQ9cF8q1lOtYZJ9RA5QeNYo?e=St2FRf'}],
+    plantilla: null,
+    historial: [],
     interactive: {
       tabs: [
         {
@@ -2270,9 +2268,7 @@ const PRACTICAS = {
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=e55e7828-7f96-4b5a-b890-88be86a69e8c&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Metodología LEM — Práctica 7: Procedimientos operativos y trabajo estandarizado', t:'PDF · 1.1 MB'}],
     plantilla: 'Plantilla de procedimiento operativo estándar (Word) + Checklist de inspección 5S + Hoja de trabajo Wrench Time',
-    historial: [
-      {fecha:'07 ago 2026', resp:'Pedro Salas', desc:'Actualización de procedimiento de arranque de chancado.', estado:'approved'},
-    ],
+    historial: [],
     interactive: {
       tabs: [
         {
@@ -2477,6 +2473,7 @@ document.getElementById('pilarNombre').textContent = pilar.nombre;
 document.getElementById('pilarTag').style.color = pilar.color;
 document.getElementById('pilarDot').style.background = pilar.color;
 document.getElementById('modalSub').textContent = practica.nombre;
+document.getElementById('btnRegistro').textContent = practica.accionBtn || '+ Registrar práctica realizada';
 document.title = practica.nombre + ' · Modelo de Excelencia Operacional';
 
 const matEl = document.getElementById('materialesList');
@@ -2493,16 +2490,22 @@ if (practica.embedUrl) {
   </a>`;
 }
 practica.materiales.forEach(m => {
-  matEl.innerHTML += `<a class="resource" href="#" onclick="return false;">
+  const tieneLink = !!m.url;
+  matEl.innerHTML += `<a class="resource" href="${tieneLink ? m.url : '#'}" ${tieneLink ? 'target="_blank" rel="noopener"' : 'onclick="return false;"'}>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
     ${m.n}<span class="r-sub">${m.t}</span>
   </a>`;
 });
 
-document.getElementById('plantillaList').innerHTML = `<a class="resource" href="#" onclick="return false;">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15V3M6 15l6 6 6-6M4 21h16"/></svg>
-  ${practica.plantilla}<span class="r-sub">Descargar</span>
-</a>`;
+const plantillaEl = document.getElementById('plantillaList');
+if (practica.plantilla) {
+  plantillaEl.innerHTML = `<a class="resource" href="${practica.plantillaUrl || '#'}" ${practica.plantillaUrl ? 'target="_blank" rel="noopener"' : 'onclick="return false;"'}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15V3M6 15l6 6 6-6M4 21h16"/></svg>
+    ${practica.plantilla}<span class="r-sub">Descargar</span>
+  </a>`;
+} else {
+  plantillaEl.innerHTML = `<div class="hist-empty">Sin formato descargable vigente.</div>`;
+}
 
 const histEl = document.getElementById('historialList');
 const statusLabel = {approved:'Aprobado', pending:'Pendiente', rejected:'Rechazado'};

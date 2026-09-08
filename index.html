@@ -97,6 +97,9 @@
   .tile:hover .tile-overlay{transform:translateY(0);}
   .tile.terra .tile-overlay{background:var(--terra-600);}
   .tile.terra .tile-overlay .ov-tag{color:var(--terra-100);}
+  .tile.amber{background:linear-gradient(135deg, var(--amber-500) 0%, var(--amber-100) 130%); border-color:var(--amber-500); box-shadow:0 4px 14px rgba(186,117,23,0.22);}
+  .tile.amber .tile-label{color:#fff;}
+  .tile.amber .icon-amber{background:rgba(255,255,255,0.22); color:#fff;}
   .tile.amber .tile-overlay{background:var(--amber-500);}
   .tile.amber .tile-overlay .ov-tag{color:#fff;}
   .tile.gray .tile-overlay{background:var(--warm-gray-700);}
@@ -229,18 +232,6 @@
       </div>
     </a>
 
-    <a class="tile gray" href="documental-embed.html" id="tileDocumental">
-      <div class="tile-face">
-        <div class="tile-icon icon-gray"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg></div>
-        <div class="tile-label">Documentación</div>
-      </div>
-      <div class="tile-overlay">
-        <div class="ov-title">Gestión Documental</div>
-        <div class="ov-desc">Catálogo de procedimientos, instructivos y estándares — con estado de vencimiento.</div>
-        <div class="ov-tag" style="color:var(--warm-gray-100);">Consultar →</div>
-      </div>
-    </a>
-
     <a class="tile amber" href="modelo-listado.html" id="tileModelo">
       <div class="tile-face">
         <div class="tile-icon icon-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="3" width="12" height="4" rx="1"/><path d="M6 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1"/><path d="M9 12l2 2 4-4"/></svg></div>
@@ -320,7 +311,6 @@
   wireTile('tileCalendario', { href:'calendario-embed.html', color:'terra', icon:'calendar', label:'Calendario Ejecutivo de Turnos', external:false });
   wireTile('tileSteerco',    { href:'steerco-embed.html', color:'teal', icon:'kanban', label:'Steerco Projects', external:false });
   wireTile('tileModelo',     { href:'modelo-listado.html', color:'amber', icon:'checklist', label:'Modelo de Excelencia Operacional', external:false });
-  wireTile('tileDocumental', { href:'documental-embed.html', color:'graphite', icon:'folder', label:'Gestión Documental', external:false });
 })();
 </script>
 

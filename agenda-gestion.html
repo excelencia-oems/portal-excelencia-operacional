@@ -418,6 +418,7 @@ let STATE = {
   semanaOffset: 0,
   tendenciaVista: "semanal",
   tendenciaDatos: null,
+  tendenciaError: null,
 };
 
 // ---------- Carga inicial ----------
@@ -437,16 +438,19 @@ function init(){
     render();
   }, (err) => console.error("Error leyendo sesiones/actividades de Control de Asistencia:", err));
 
-  const lunesAtras = fechaISO(lunesDeSemana(-1));
+  const hoyDate = new Date();
+  const inicioMes = new Date(hoyDate.getFullYear(), hoyDate.getMonth(), 1);
+  const lunesAtrasDate = lunesDeSemana(-1);
+  const inicioConsulta = fechaISO(lunesAtrasDate < inicioMes ? lunesAtrasDate : inicioMes);
   const l = lunesDeSemana(0);
   const domingo = fechaISO(new Date(l.getFullYear(), l.getMonth(), l.getDate() + 6));
   onSnapshot(
-    query(collection(dbAsistencia, "registrosAsistencia"), where("fecha", ">=", lunesAtras), where("fecha", "<=", domingo)),
+    query(collection(dbAsistencia, "registrosAsistencia"), where("fecha", ">=", inicioConsulta), where("fecha", "<=", domingo)),
     (snap) => { STATE.registros = snap.docs.map(d => ({ id: d.id, ...d.data() })); render(); },
     (err) => console.error("Error leyendo registros de asistencia:", err)
   );
   onSnapshot(
-    query(collection(db, "completadosActividad"), where("fecha", ">=", lunesAtras), where("fecha", "<=", domingo)),
+    query(collection(db, "completadosActividad"), where("fecha", ">=", inicioConsulta), where("fecha", "<=", domingo)),
     (snap) => { STATE.completados = snap.docs.map(d => ({ id: d.id, ...d.data() })); render(); },
     (err) => console.error("Error leyendo completadosActividad:", err)
   );
@@ -736,8 +740,8 @@ function renderAgendaGrid(sesionesAsignadas, duraciones, categorias, nombrePerso
         if (s.esActividad) {
           if (clave && fechaDia <= hoy) {
             const completado = buscarCompletadoActividad(clave, s._actividadId, fechaDia);
-            check = `<span class="ab-check ${completado ? "ok" : "pend"}" onclick="event.stopPropagation(); marcarActividad('${esc(clave)}','${esc(s._actividadId)}','${fechaDia}')" title="${completado ? "Marcada por " + esc(completado.nombre) : "Marcar como realizada"}">${completado ? "✓" : "○"}</span>`;
-            asistTxt = completado ? ` · marcada por ${completado.nombre}` : " · sin marcar";
+            check = `<span class="ab-check ${completado ? "ok" : "pend"}" onclick="event.stopPropagation(); marcarActividad('${esc(clave)}','${esc(s._actividadId)}','${fechaDia}')" title="${completado ? "Marcada como realizada — clic para quitar" : "Marcar como realizada"}">${completado ? "✓" : "○"}</span>`;
+            asistTxt = completado ? " · marcada como realizada" : " · sin marcar";
           }
         } else if (nombrePersona && fechaDia <= hoy) {
           const asistio = !!buscarAsistencia(nombrePersona, s.id, fechaDia);
@@ -840,22 +844,55 @@ function calcularDistribucion(clave){
     mejora: pct(totales.mejora), personas: pct(totales.personas), libre: pct(libreMin),
   };
 }
-function calcularAdherencia(clave, nombrePersona){
+function calcularAdherencia(clave, nombrePersona, offsetSemanas){
   const { todas } = obtenerBloquesAsignados(clave);
-  const sesionesAsignadas = todas.filter(s => s.frecuencia !== "unica" && !s.esActividad);
+  const bloques = todas.filter(s => s.frecuencia !== "unica");
   const hoy = fechaISO(new Date());
-  let total = 0, asistidas = 0;
+  const claveN = claveNombreCompat(nombrePersona);
+  let total = 0, cumplidas = 0;
   DIAS.forEach(dia => {
-    const fecha = fechaDeEstaSemana(dia.v);
+    const fecha = fechaDeSemana(dia.v, offsetSemanas);
     if (fecha > hoy) return;
-    sesionesAsignadas.forEach(s => {
+    bloques.forEach(s => {
       sesionOcurrenciasEnDia(s, dia.v).forEach(() => {
         total++;
-        if (buscarAsistencia(nombrePersona, s.id, fecha)) asistidas++;
+        if (s.esActividad) {
+          if (buscarCompletadoActividad(clave, s._actividadId, fecha)) cumplidas++;
+        } else if (buscarAsistencia(nombrePersona, s.id, fecha)) {
+          cumplidas++;
+        }
       });
     });
   });
-  return total ? Math.round((asistidas / total) * 1000) / 10 : null;
+  return total ? Math.round((cumplidas / total) * 1000) / 10 : null;
+}
+function nombreDiaSemana(fecha){
+  const dias = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+  return dias[fecha.getDay()];
+}
+function calcularAdherenciaMes(clave, nombrePersona){
+  const { todas } = obtenerBloquesAsignados(clave);
+  const bloques = todas.filter(s => s.frecuencia !== "unica");
+  const claveN = claveNombreCompat(nombrePersona);
+  const hoy = new Date();
+  const cursor = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+  let total = 0, cumplidas = 0;
+  while (cursor <= hoy) {
+    const diaTxt = nombreDiaSemana(cursor);
+    const fecha = fechaISO(cursor);
+    bloques.forEach(s => {
+      sesionOcurrenciasEnDia(s, diaTxt).forEach(() => {
+        total++;
+        if (s.esActividad) {
+          if (buscarCompletadoActividad(clave, s._actividadId, fecha)) cumplidas++;
+        } else if (buscarAsistencia(nombrePersona, s.id, fecha)) {
+          cumplidas++;
+        }
+      });
+    });
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return total ? Math.round((cumplidas / total) * 1000) / 10 : null;
 }
 
 // ---------- Tendencia de adherencia (semanas anteriores) ----------
@@ -866,10 +903,10 @@ async function calcularTendencia(clave, nombrePersona, semanas){
 
   const [snapReg, snapComp] = await Promise.all([
     getDocs(query(collection(dbAsistencia, "registrosAsistencia"), where("fecha", ">=", inicioRango), where("fecha", "<=", finRango))),
-    getDocs(query(collection(db, "completadosActividad"), where("clave", "==", clave), where("fecha", ">=", inicioRango), where("fecha", "<=", finRango))),
+    getDocs(query(collection(db, "completadosActividad"), where("fecha", ">=", inicioRango), where("fecha", "<=", finRango))),
   ]);
   const registros = snapReg.docs.map(d => d.data());
-  const completados = snapComp.docs.map(d => d.data());
+  const completados = snapComp.docs.map(d => d.data()).filter(c => c.clave === clave);
   const claveN = claveNombreCompat(nombrePersona);
 
   const { todas } = obtenerBloquesAsignados(clave);
@@ -913,7 +950,7 @@ function renderModalTendencia(){
           <button type="button" class="${STATE.tendenciaVista === "semanal" ? "btn-primary" : "btn-secondary"} btn-sm" onclick="cambiarVistaTendencia('semanal')">Semanal</button>
           <button type="button" class="${STATE.tendenciaVista === "mensual" ? "btn-primary" : "btn-secondary"} btn-sm" onclick="cambiarVistaTendencia('mensual')">Mensual</button>
         </div>
-        <div id="tendenciaEstado" class="small-note">${STATE.tendenciaDatos ? "" : "Cargando datos de las últimas semanas…"}</div>
+        <div id="tendenciaEstado" class="small-note" style="${STATE.tendenciaError ? "color:var(--red-600, #993C1D);" : ""}">${STATE.tendenciaError ? "No se pudo cargar la tendencia: " + esc(STATE.tendenciaError) : (STATE.tendenciaDatos ? "" : "Cargando datos de las últimas semanas…")}</div>
         <canvas id="tendenciaCanvas" width="600" height="280" style="max-width:100%;"></canvas>
         <div class="small-note" style="margin-top:8px;">Combina asistencia real a reuniones (Control de Asistencia) y actividades marcadas como realizadas acá. Solo cuenta días ya transcurridos.</div>
       </div>
@@ -955,6 +992,7 @@ function dibujarTendencia(){
 window.abrirTendencia = async () => {
   STATE.modal = "tendencia";
   STATE.tendenciaDatos = null;
+  STATE.tendenciaError = null;
   render();
   const p = STATE.personaAbierta;
   const clave = claveDe(p.nivel, p.id);
@@ -962,6 +1000,7 @@ window.abrirTendencia = async () => {
     STATE.tendenciaDatos = await calcularTendencia(clave, p.nombre, 8);
   } catch (e) {
     console.error("Error calculando tendencia:", e);
+    STATE.tendenciaError = e.message || "Error desconocido";
   }
   render();
 };
@@ -1032,7 +1071,9 @@ function renderModalAgenda(){
   const puntuales = sesionesAsignadas.filter(s => s.frecuencia === "unica");
   const esGeneral = p.nivel === "comite-general";
   const nombrePersona = esGeneral ? null : p.nombre;
-  const adherencia = esGeneral ? null : calcularAdherencia(clave, nombrePersona);
+  const adherenciaSemana = esGeneral ? null : calcularAdherencia(clave, nombrePersona, STATE.semanaOffset);
+  const adherenciaMes = esGeneral ? null : calcularAdherenciaMes(clave, nombrePersona);
+  const colorPct = (v) => v >= 80 ? "#2F9E5B" : v >= 50 ? "#D9A62E" : "#D6553A";
 
   return `
   <div class="modal-overlay" id="ovModal">
@@ -1040,7 +1081,10 @@ function renderModalAgenda(){
       <div class="modal-head">
         <div>
           <h3>${esc(p.nombre)}</h3>
-          <div class="mh-sub">${esc(p.cargo || "—")} · Agenda semanal${adherencia !== null ? ` · Cumplimiento asistencia esta semana: <b style="color:${adherencia >= 80 ? "#2F9E5B" : adherencia >= 50 ? "#D9A62E" : "#D6553A"};">${adherencia}%</b>` : ""}</div>
+          <div class="mh-sub">${esc(p.cargo || "—")} · Agenda semanal
+            ${adherenciaSemana !== null ? ` · Cumplimiento ${STATE.semanaOffset === 0 ? "esta semana" : "semana anterior"}: <b style="color:${colorPct(adherenciaSemana)};">${adherenciaSemana}%</b>` : ""}
+            ${adherenciaMes !== null ? ` · Mes en curso: <b style="color:${colorPct(adherenciaMes)};">${adherenciaMes}%</b>` : ""}
+          </div>
         </div>
         <div style="display:flex; align-items:center; gap:8px;">
           ${esGeneral ? "" : `<button class="btn-secondary btn-sm" onclick="abrirTendencia()">📈 Ver tendencia</button>`}
@@ -1221,16 +1265,10 @@ window.marcarActividad = async (clave, actividadId, fecha) => {
   const existente = buscarCompletadoActividad(clave, actividadId, fecha);
   const idDoc = `${clave}_${actividadId}_${fecha}`.replace(/[^a-zA-Z0-9_-]/g, "_");
   if (existente) {
-    if (confirm(`Marcada como realizada por ${existente.nombre}. ¿Quitar la marca?`)) {
-      await fbDeleteDoc("completadosActividad", idDoc);
-    }
-    return;
+    await fbDeleteDoc("completadosActividad", idDoc);
+  } else {
+    await fbSetDoc("completadosActividad", idDoc, { clave, actividadId, fecha, marcadoEn: new Date().toISOString() });
   }
-  const nombre = prompt("Para dejar registro del cambio, escribe tu nombre y apellido:");
-  if (!nombre || !nombre.trim()) return;
-  await fbSetDoc("completadosActividad", idDoc, {
-    clave, actividadId, fecha, nombre: nombre.trim(), marcadoEn: new Date().toISOString(),
-  });
 };
 window.guardarTarget = async (clave) => {
   const leer = (id) => Number(document.getElementById(id).value) || 0;

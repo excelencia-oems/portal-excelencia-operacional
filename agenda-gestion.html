@@ -158,7 +158,7 @@
   .agenda-toolbar{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; flex-wrap:wrap;}
   .agenda-grid{--rowh:38px; display:grid; grid-template-columns:52px repeat(7,minmax(90px,1fr)); border:1px solid var(--warm-gray-100); border-radius:10px; overflow:hidden;}
   .ag-corner{background:var(--warm-gray-50); border-bottom:1px solid var(--warm-gray-100);}
-  .ag-head{background:var(--warm-gray-50); padding:8px 4px; text-align:center; font-size:11px; font-weight:700; border-bottom:1px solid var(--warm-gray-100); border-left:1px solid var(--warm-gray-100);}
+  .ag-head{background:var(--warm-gray-50); padding:6px 3px; text-align:center; font-size:9.5px; font-weight:700; border-bottom:1px solid var(--warm-gray-100); border-left:1px solid var(--warm-gray-100);}
   .ag-hours{display:flex; flex-direction:column;}
   .ag-hourlabel{height:var(--rowh); font-size:9.5px; color:var(--warm-gray-500); text-align:right; padding-right:6px; box-sizing:border-box; border-top:1px solid var(--warm-gray-100); display:flex; align-items:flex-start; justify-content:flex-end;}
   .ag-hourlabel:first-child{border-top:none;}
@@ -166,12 +166,15 @@
   .agenda-block{position:absolute; left:2px; right:2px; border-radius:6px; background:var(--oems-teal); color:#fff; font-size:9.5px; font-weight:700; padding:3px 5px; overflow:hidden; line-height:1.25; box-shadow:0 2px 5px rgba(0,152,153,.25); cursor:default;}
   .agenda-block .ab-nombre{display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .agenda-block.compacto{padding:1px 5px; font-size:8.5px; display:flex; align-items:center;}
+  .ab-check{position:absolute; top:1px; right:1px; width:12px; height:12px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:900; box-shadow:0 1px 3px rgba(0,0,0,.3); line-height:1;}
+  .ab-check.ok{color:#2F9E5B;}
+  .ab-check.no{color:#B4423A;}
   .agenda-block .ab-hora{font-weight:400; opacity:.85; font-size:9px;}
   .agenda-empty-msg{font-size:12.5px; color:var(--warm-gray-500); text-align:center; padding:16px;}
   .agenda-layout{display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap;}
   .agenda-main{flex:1; min-width:340px;}
-  .agenda-side{width:250px; flex-shrink:0; display:flex; flex-direction:column; gap:14px;}
-  .radar-box{background:var(--warm-gray-50); border-radius:12px; padding:14px; text-align:center;}
+  .agenda-side{width:280px; flex-shrink:0; display:flex; flex-direction:column; gap:14px;}
+  .radar-box{background:var(--warm-gray-50); border-radius:12px; padding:12px; text-align:center;}
   .radar-title{font-size:11px; font-weight:700; color:var(--gray-700); margin-bottom:8px; text-align:left;}
   .target-box{background:var(--warm-gray-50); border-radius:12px; padding:14px;}
   .target-grid{display:flex; flex-direction:column; gap:8px;}
@@ -280,7 +283,7 @@ setTimeout(function(){
 }, 550);
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 // ---- Proyecto 1: Gestionar mi Agenda (lectura/escritura, clave EO) ----
@@ -335,6 +338,26 @@ function fbListen(coleccion, cb){
 function esc(s){ return (s == null ? "" : String(s)).replace(/[&<>"']/g, m => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[m])); }
 function claveDe(nivel, id){ return `${nivel}_${id}`; }
 
+// ---------- Fechas de la semana actual (para cruzar con asistencia real) ----------
+function fechaISO(d){ return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+function lunesDeEstaSemana(){
+  const hoy = new Date();
+  const dia = hoy.getDay();
+  const diff = dia === 0 ? -6 : 1 - dia;
+  return new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + diff);
+}
+function fechaDeEstaSemana(diaValor){
+  const idx = DIAS.findIndex(d => d.v === diaValor);
+  const lunes = lunesDeEstaSemana();
+  return fechaISO(new Date(lunes.getFullYear(), lunes.getMonth(), lunes.getDate() + idx));
+}
+// Misma normalización que usa Control de Asistencia (auth.js/asistencia.js) para comparar nombres.
+function claveNombreCompat(nombre){ return (nombre || "").trim().replace(/\s+/g, " ").toLowerCase().replace(/\s+/g, ""); }
+function buscarAsistencia(nombrePersona, sesionId, fecha){
+  const clave = claveNombreCompat(nombrePersona);
+  return STATE.registros.find(r => r.sesionId === sesionId && r.fecha === fecha && claveNombreCompat(r.nombre) === clave);
+}
+
 const DIAS = [
   { v:"lunes", c:"Lun" }, { v:"martes", c:"Mar" }, { v:"miercoles", c:"Mié" }, { v:"jueves", c:"Jue" },
   { v:"viernes", c:"Vie" }, { v:"sabado", c:"Sáb" }, { v:"domingo", c:"Dom" },
@@ -366,6 +389,7 @@ let STATE = {
   personas: [],
   asignaciones: {},
   sesiones: [],
+  registros: [],
   search: "",
   personaAbierta: null,
   modal: null,
@@ -387,6 +411,15 @@ function init(){
     render();
   }, (err) => console.error("Error leyendo sesiones de Control de Asistencia:", err));
 
+  const lunes = fechaISO(lunesDeEstaSemana());
+  const l = lunesDeEstaSemana();
+  const domingo = fechaISO(new Date(l.getFullYear(), l.getMonth(), l.getDate() + 6));
+  onSnapshot(
+    query(collection(dbAsistencia, "registrosAsistencia"), where("fecha", ">=", lunes), where("fecha", "<=", domingo)),
+    (snap) => { STATE.registros = snap.docs.map(d => ({ id: d.id, ...d.data() })); render(); },
+    (err) => console.error("Error leyendo registros de asistencia:", err)
+  );
+
   fbGetDoc("config", "eo").then(async (cfg) => {
     if (!cfg) await fbSetDoc("config", "eo", { clave: CLAVE_DEFECTO });
     STATE.cargando = false;
@@ -398,8 +431,8 @@ init();
 // ---------- Render ----------
 function render(){
   const activo = document.activeElement;
-  if (activo && activo.id === "buscadorPersonas") {
-    window.__focoPendiente = { id: "buscadorPersonas", pos: activo.selectionStart };
+  if (activo && activo.id && (activo.tagName === "INPUT" || activo.tagName === "TEXTAREA" || activo.tagName === "SELECT")) {
+    window.__focoPendiente = { id: activo.id, valor: activo.value, pos: activo.selectionStart };
   }
 
   document.getElementById("edicionBadge").innerHTML = STATE.modoEdicion
@@ -638,14 +671,16 @@ function descripcionFrecuencia(s){
   if (s.frecuencia === "dias") return `${(s.dias || []).map(d => (DIAS.find(x => x.v === d) || {}).c || d).join(", ")} · ${s.horaInicio || ""}${s.horaFin ? "–" + s.horaFin : ""}`;
   return `Diaria · ${s.horaInicio || ""}${s.horaFin ? "–" + s.horaFin : ""}`;
 }
-function renderAgendaGrid(sesionesAsignadas, duraciones, categorias){
+function renderAgendaGrid(sesionesAsignadas, duraciones, categorias, nombrePersona){
   const rowh = 38;
   const horas = [];
   for (let h = HORA_INICIO; h <= HORA_FIN; h++) horas.push(h);
   const alturaTotal = (horas.length - 1) * rowh;
+  const hoy = fechaISO(new Date());
 
   const columnas = DIAS.map(dia => {
     const bloques = [];
+    const fechaDia = fechaDeEstaSemana(dia.v);
     sesionesAsignadas.forEach(s => {
       sesionOcurrenciasEnDia(s, dia.v).forEach(b => {
         const inicioMin = minutosDesde(b.horaInicio) - HORA_INICIO * 60;
@@ -659,8 +694,17 @@ function renderAgendaGrid(sesionesAsignadas, duraciones, categorias){
         const compacto = height < 24;
         const cat = CATEGORIAS[categorias[s.id]];
         const color = cat ? cat.color : COLOR_LIBRE;
-        const tooltip = `${s.nombre} — ${b.horaInicio}–${horaFinTexto} (${duracionMin} min)${cat ? " · " + cat.nombre : " · sin categorizar"}`;
+
+        let check = "";
+        let asistTxt = "";
+        if (nombrePersona && fechaDia <= hoy) {
+          const asistio = !!buscarAsistencia(nombrePersona, s.id, fechaDia);
+          check = `<span class="ab-check ${asistio ? "ok" : "no"}">${asistio ? "✓" : "✕"}</span>`;
+          asistTxt = asistio ? " · asistió esta semana" : " · no registra asistencia esta semana";
+        }
+        const tooltip = `${s.nombre} — ${b.horaInicio}–${horaFinTexto} (${duracionMin} min)${cat ? " · " + cat.nombre : " · sin categorizar"}${asistTxt}`;
         bloques.push(`<div class="agenda-block${compacto ? " compacto" : ""}" style="top:${top}px;height:${height}px;background:${color};" title="${esc(tooltip)}">
+          ${check}
           <span class="ab-nombre">${esc(s.nombre)}</span>
           ${compacto ? "" : `<div class="ab-hora">${esc(b.horaInicio)}–${esc(horaFinTexto)}</div>`}
         </div>`);
@@ -723,6 +767,23 @@ function calcularDistribucion(clave){
     mejora: pct(totales.mejora), personas: pct(totales.personas), libre: pct(libreMin),
   };
 }
+function calcularAdherencia(clave, nombrePersona){
+  const asignacion = STATE.asignaciones[clave] || { sesionIds: [] };
+  const sesionesAsignadas = STATE.sesiones.filter(s => asignacion.sesionIds.includes(s.id) && s.frecuencia !== "unica");
+  const hoy = fechaISO(new Date());
+  let total = 0, asistidas = 0;
+  DIAS.forEach(dia => {
+    const fecha = fechaDeEstaSemana(dia.v);
+    if (fecha > hoy) return;
+    sesionesAsignadas.forEach(s => {
+      sesionOcurrenciasEnDia(s, dia.v).forEach(() => {
+        total++;
+        if (buscarAsistencia(nombrePersona, s.id, fecha)) asistidas++;
+      });
+    });
+  });
+  return total ? Math.round((asistidas / total) * 1000) / 10 : null;
+}
 function dibujarRadar(clave){
   const canvas = document.getElementById("radarCanvas");
   if (!canvas || !window.Chart) return;
@@ -730,7 +791,7 @@ function dibujarRadar(clave){
   const asignacion = STATE.asignaciones[clave] || {};
   const target = asignacion.target;
 
-  const labels = ["Objetivo Común", "Procesos Eficientes", "Mejora Continua", "Desarrollo de Personas", "Libre"];
+  const labels = [["Objetivo", "Común"], ["Procesos", "Eficientes"], ["Mejora", "Continua"], ["Desarrollo", "de Personas"], ["Libre"]];
   const coloresEje = [CATEGORIAS.objetivo.color, CATEGORIAS.procesos.color, CATEGORIAS.mejora.color, CATEGORIAS.personas.color, COLOR_LIBRE];
   const datasets = [{
     label: "Real",
@@ -761,6 +822,7 @@ function dibujarRadar(clave){
     options: {
       responsive: false,
       maintainAspectRatio: false,
+      layout: { padding: 14 },
       scales: {
         r: {
           min: 0, max: 100,
@@ -785,28 +847,35 @@ function renderModalAgenda(){
   const sesionesAsignadas = STATE.sesiones.filter(s => asignadosIds.includes(s.id));
   const recurrentes = sesionesAsignadas.filter(s => s.frecuencia !== "unica");
   const puntuales = sesionesAsignadas.filter(s => s.frecuencia === "unica");
+  const esGeneral = p.nivel === "comite-general";
+  const nombrePersona = esGeneral ? null : p.nombre;
+  const adherencia = esGeneral ? null : calcularAdherencia(clave, nombrePersona);
 
   return `
   <div class="modal-overlay" id="ovModal">
     <div class="modal wide">
       <div class="modal-head">
-        <div><h3>${esc(p.nombre)}</h3><div class="mh-sub">${esc(p.cargo || "—")} · Agenda semanal</div></div>
+        <div>
+          <h3>${esc(p.nombre)}</h3>
+          <div class="mh-sub">${esc(p.cargo || "—")} · Agenda semanal${adherencia !== null ? ` · Cumplimiento asistencia esta semana: <b style="color:${adherencia >= 80 ? "#2F9E5B" : adherencia >= 50 ? "#D9A62E" : "#D6553A"};">${adherencia}%</b>` : ""}</div>
+        </div>
         <button class="modal-close" data-action="cerrar-modal">✕</button>
       </div>
       <div class="modal-body">
         <div class="agenda-layout">
           <div class="agenda-main">
-            ${recurrentes.length ? renderAgendaGrid(recurrentes, duraciones, categorias) : `<div class="agenda-empty-msg">Sin reuniones recurrentes asignadas todavía.</div>`}
+            ${recurrentes.length ? renderAgendaGrid(recurrentes, duraciones, categorias, nombrePersona) : `<div class="agenda-empty-msg">Sin reuniones recurrentes asignadas todavía.</div>`}
             ${puntuales.length ? `
             <div class="puntual-list">
               <b style="color:var(--gray-900);">Reuniones puntuales asignadas:</b>
               ${puntuales.map(s => `<div class="puntual-item"><span>${esc(s.nombre)}</span><span>${esc(s.fechaUnica || "—")} · ${esc(s.horaInicio || "")}</span></div>`).join("")}
             </div>` : ""}
           </div>
+          ${esGeneral ? "" : `
           <div class="agenda-side">
             <div class="radar-box">
               <div class="radar-title">Distribución del tiempo (recurrente semanal)</div>
-              <canvas id="radarCanvas" width="220" height="200"></canvas>
+              <canvas id="radarCanvas" width="240" height="230"></canvas>
               <div class="small-note" style="margin-top:6px;">Base: Lun-Mié 07:30-19:30 y Jue 07:30-15:00 (43,5 h/semana). No incluye Vie/Sáb/Dom.</div>
             </div>
             ${STATE.modoEdicion ? `
@@ -823,13 +892,16 @@ function renderModalAgenda(){
               </div>
               <button class="btn-secondary btn-sm" style="width:100%; margin-top:8px;" onclick="guardarTarget('${esc(clave)}')">Guardar meta</button>
             </div>` : ""}
-          </div>
+          </div>`}
         </div>
 
         ${STATE.modoEdicion ? `
         <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--warm-gray-100);">
-          <h2 style="margin-bottom:10px;">Asignar reuniones (desde Control de Asistencia)</h2>
-          <div class="small-note" style="margin-top:-6px;margin-bottom:10px;">Si una reunión no tiene hora de término cargada en Control de Asistencia, se usa 60 min por defecto — puedes ajustarlo aquí. La categoría determina el color en la agenda y en el gráfico de distribución.</div>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+            <h2 style="margin-bottom:0;">Asignar reuniones (desde Control de Asistencia)</h2>
+            <button class="btn-secondary btn-sm" onclick="recargarSesiones(this)">🔄 Actualizar catálogo de reuniones</button>
+          </div>
+          <div class="small-note" style="margin-top:6px;margin-bottom:10px;">Si una reunión no tiene hora de término cargada en Control de Asistencia, se usa 60 min por defecto — puedes ajustarlo aquí. La categoría determina el color en la agenda y en el gráfico de distribución.</div>
           <div class="asignar-list">
             ${STATE.sesiones.length ? STATE.sesiones.map(s => {
               const marcada = asignadosIds.includes(s.id);
@@ -891,6 +963,17 @@ window.guardarTarget = async (clave) => {
   await fbSetDoc("asignaciones", clave, { target });
 };
 window.actualizarBusqueda = (valor) => { STATE.search = valor; render(); };
+window.recargarSesiones = async (btn) => {
+  if (btn) { btn.disabled = true; btn.textContent = "Actualizando…"; }
+  try {
+    const snap = await getDocs(collection(dbAsistencia, "sesionesAsistencia"));
+    STATE.sesiones = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(s => s.activa !== false);
+    render();
+  } catch (e) {
+    alert("No se pudo actualizar el catálogo de reuniones: " + e.message);
+  }
+  if (btn) { btn.disabled = false; btn.textContent = "🔄 Actualizar catálogo de reuniones"; }
+};
 
 async function agregarOrg(){
   const id = "org_" + Date.now();
@@ -992,7 +1075,11 @@ function attachHandlers(){
 
   if (window.__focoPendiente) {
     const el = document.getElementById(window.__focoPendiente.id);
-    if (el) { el.focus(); if (el.setSelectionRange) el.setSelectionRange(window.__focoPendiente.pos, window.__focoPendiente.pos); }
+    if (el) {
+      if (el.value !== window.__focoPendiente.valor) el.value = window.__focoPendiente.valor;
+      el.focus();
+      if (el.setSelectionRange && el.type !== "number") { try { el.setSelectionRange(window.__focoPendiente.pos, window.__focoPendiente.pos); } catch (e) {} }
+    }
     window.__focoPendiente = null;
   }
 

@@ -169,8 +169,12 @@
   .ab-check{position:absolute; top:1px; right:1px; width:12px; height:12px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:900; box-shadow:0 1px 3px rgba(0,0,0,.3); line-height:1;}
   .ab-check.ok{color:#2F9E5B;}
   .ab-check.no{color:#B4423A;}
+  .ab-check.pend{color:var(--warm-gray-500); cursor:pointer;}
+  .ab-check.pend:hover{color:var(--oems-teal); transform:scale(1.15);}
   .agenda-block .ab-hora{font-weight:400; opacity:.85; font-size:9px;}
   .agenda-empty-msg{font-size:12.5px; color:var(--warm-gray-500); text-align:center; padding:16px;}
+  .week-nav{display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:10px;}
+  .week-nav-label{font-size:12px; font-weight:700; color:var(--gray-700); min-width:200px; text-align:center;}
   .agenda-layout{display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap;}
   .agenda-main{flex:1; min-width:340px;}
   .agenda-side{width:280px; flex-shrink:0; display:flex; flex-direction:column; gap:14px;}
@@ -340,16 +344,26 @@ function claveDe(nivel, id){ return `${nivel}_${id}`; }
 
 // ---------- Fechas de la semana actual (para cruzar con asistencia real) ----------
 function fechaISO(d){ return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
-function lunesDeEstaSemana(){
+function lunesDeSemana(offsetSemanas){
+  offsetSemanas = offsetSemanas || 0;
   const hoy = new Date();
   const dia = hoy.getDay();
-  const diff = dia === 0 ? -6 : 1 - dia;
+  const diff = (dia === 0 ? -6 : 1 - dia) + offsetSemanas * 7;
   return new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + diff);
 }
-function fechaDeEstaSemana(diaValor){
+function lunesDeEstaSemana(){ return lunesDeSemana(0); }
+function fechaDeSemana(diaValor, offsetSemanas){
   const idx = DIAS.findIndex(d => d.v === diaValor);
-  const lunes = lunesDeEstaSemana();
+  const lunes = lunesDeSemana(offsetSemanas);
   return fechaISO(new Date(lunes.getFullYear(), lunes.getMonth(), lunes.getDate() + idx));
+}
+function fechaDeEstaSemana(diaValor){ return fechaDeSemana(diaValor, 0); }
+function etiquetaSemana(offsetSemanas){
+  const lunes = lunesDeSemana(offsetSemanas);
+  const domingo = new Date(lunes.getFullYear(), lunes.getMonth(), lunes.getDate() + 6);
+  const fmt = (d) => `${String(d.getDate()).padStart(2, "0")} ${MESES_CORTOS_ES[d.getMonth()]}`;
+  const etiqueta = offsetSemanas === 0 ? "Semana actual" : "Semana anterior";
+  return `${etiqueta} (${fmt(lunes)}–${fmt(domingo)})`;
 }
 // Misma normalización que usa Control de Asistencia (auth.js/asistencia.js) para comparar nombres.
 function claveNombreCompat(nombre){ return (nombre || "").trim().replace(/\s+/g, " ").toLowerCase().replace(/\s+/g, ""); }
@@ -357,7 +371,11 @@ function buscarAsistencia(nombrePersona, sesionId, fecha){
   const clave = claveNombreCompat(nombrePersona);
   return STATE.registros.find(r => r.sesionId === sesionId && r.fecha === fecha && claveNombreCompat(r.nombre) === clave);
 }
+function buscarCompletadoActividad(clave, actividadId, fecha){
+  return STATE.completados.find(c => c.clave === clave && c.actividadId === actividadId && c.fecha === fecha);
+}
 
+const MESES_CORTOS_ES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 const DIAS = [
   { v:"lunes", c:"Lun" }, { v:"martes", c:"Mar" }, { v:"miercoles", c:"Mié" }, { v:"jueves", c:"Jue" },
   { v:"viernes", c:"Vie" }, { v:"sabado", c:"Sáb" }, { v:"domingo", c:"Dom" },
@@ -391,11 +409,15 @@ let STATE = {
   sesiones: [],
   actividadesCatalogo: [],
   registros: [],
+  completados: [],
   search: "",
   personaAbierta: null,
   modal: null,
   modalNivel: null,
   actividadEditando: null,
+  semanaOffset: 0,
+  tendenciaVista: "semanal",
+  tendenciaDatos: null,
 };
 
 // ---------- Carga inicial ----------
@@ -415,13 +437,18 @@ function init(){
     render();
   }, (err) => console.error("Error leyendo sesiones/actividades de Control de Asistencia:", err));
 
-  const lunes = fechaISO(lunesDeEstaSemana());
-  const l = lunesDeEstaSemana();
+  const lunesAtras = fechaISO(lunesDeSemana(-1));
+  const l = lunesDeSemana(0);
   const domingo = fechaISO(new Date(l.getFullYear(), l.getMonth(), l.getDate() + 6));
   onSnapshot(
-    query(collection(dbAsistencia, "registrosAsistencia"), where("fecha", ">=", lunes), where("fecha", "<=", domingo)),
+    query(collection(dbAsistencia, "registrosAsistencia"), where("fecha", ">=", lunesAtras), where("fecha", "<=", domingo)),
     (snap) => { STATE.registros = snap.docs.map(d => ({ id: d.id, ...d.data() })); render(); },
     (err) => console.error("Error leyendo registros de asistencia:", err)
+  );
+  onSnapshot(
+    query(collection(db, "completadosActividad"), where("fecha", ">=", lunesAtras), where("fecha", "<=", domingo)),
+    (snap) => { STATE.completados = snap.docs.map(d => ({ id: d.id, ...d.data() })); render(); },
+    (err) => console.error("Error leyendo completadosActividad:", err)
   );
 
   fbGetDoc("config", "eo").then(async (cfg) => {
@@ -556,6 +583,7 @@ function renderModal(){
   if (STATE.modal === "clave") return renderModalClave();
   if (STATE.modal === "editar-organigrama") return renderModalEditarOrganigrama();
   if (STATE.modal === "editar-lista") return renderModalEditarLista();
+  if (STATE.modal === "tendencia" && STATE.personaAbierta) return renderModalTendencia();
   if (STATE.personaAbierta) return renderModalAgenda();
   return "";
 }
@@ -679,7 +707,7 @@ function descripcionFrecuencia(s){
   if (s.frecuencia === "dias") return `${(s.dias || []).map(d => (DIAS.find(x => x.v === d) || {}).c || d).join(", ")} · ${s.horaInicio || ""}${s.horaFin ? "–" + s.horaFin : ""}`;
   return `Diaria · ${s.horaInicio || ""}${s.horaFin ? "–" + s.horaFin : ""}`;
 }
-function renderAgendaGrid(sesionesAsignadas, duraciones, categorias, nombrePersona){
+function renderAgendaGrid(sesionesAsignadas, duraciones, categorias, nombrePersona, clave){
   const rowh = 38;
   const horas = [];
   for (let h = HORA_INICIO; h <= HORA_FIN; h++) horas.push(h);
@@ -688,7 +716,7 @@ function renderAgendaGrid(sesionesAsignadas, duraciones, categorias, nombrePerso
 
   const columnas = DIAS.map(dia => {
     const bloques = [];
-    const fechaDia = fechaDeEstaSemana(dia.v);
+    const fechaDia = fechaDeSemana(dia.v, STATE.semanaOffset);
     sesionesAsignadas.forEach(s => {
       sesionOcurrenciasEnDia(s, dia.v).forEach(b => {
         const inicioMin = minutosDesde(b.horaInicio) - HORA_INICIO * 60;
@@ -705,7 +733,13 @@ function renderAgendaGrid(sesionesAsignadas, duraciones, categorias, nombrePerso
 
         let check = "";
         let asistTxt = "";
-        if (nombrePersona && fechaDia <= hoy && !s.esActividad) {
+        if (s.esActividad) {
+          if (clave && fechaDia <= hoy) {
+            const completado = buscarCompletadoActividad(clave, s._actividadId, fechaDia);
+            check = `<span class="ab-check ${completado ? "ok" : "pend"}" onclick="event.stopPropagation(); marcarActividad('${esc(clave)}','${esc(s._actividadId)}','${fechaDia}')" title="${completado ? "Marcada por " + esc(completado.nombre) : "Marcar como realizada"}">${completado ? "✓" : "○"}</span>`;
+            asistTxt = completado ? ` · marcada por ${completado.nombre}` : " · sin marcar";
+          }
+        } else if (nombrePersona && fechaDia <= hoy) {
           const asistio = !!buscarAsistencia(nombrePersona, s.id, fechaDia);
           check = `<span class="ab-check ${asistio ? "ok" : "no"}">${asistio ? "✓" : "✕"}</span>`;
           asistTxt = asistio ? " · asistió esta semana" : " · no registra asistencia esta semana";
@@ -722,6 +756,11 @@ function renderAgendaGrid(sesionesAsignadas, duraciones, categorias, nombrePerso
   });
 
   return `
+  <div class="week-nav">
+    <button class="btn-secondary btn-sm" ${STATE.semanaOffset <= -1 ? "disabled" : ""} onclick="cambiarSemana(-1)">← Semana anterior</button>
+    <span class="week-nav-label">${etiquetaSemana(STATE.semanaOffset)}</span>
+    <button class="btn-secondary btn-sm" ${STATE.semanaOffset >= 0 ? "disabled" : ""} onclick="cambiarSemana(1)">Semana actual →</button>
+  </div>
   <div class="agenda-grid" style="--rowh:${rowh}px;">
     <div class="ag-corner"></div>
     ${DIAS.map(d => `<div class="ag-head">${d.c}</div>`).join("")}
@@ -818,6 +857,117 @@ function calcularAdherencia(clave, nombrePersona){
   });
   return total ? Math.round((asistidas / total) * 1000) / 10 : null;
 }
+
+// ---------- Tendencia de adherencia (semanas anteriores) ----------
+async function calcularTendencia(clave, nombrePersona, semanas){
+  const l0 = lunesDeSemana(0);
+  const inicioRango = fechaISO(lunesDeSemana(-(semanas - 1)));
+  const finRango = fechaISO(new Date(l0.getFullYear(), l0.getMonth(), l0.getDate() + 6));
+
+  const [snapReg, snapComp] = await Promise.all([
+    getDocs(query(collection(dbAsistencia, "registrosAsistencia"), where("fecha", ">=", inicioRango), where("fecha", "<=", finRango))),
+    getDocs(query(collection(db, "completadosActividad"), where("clave", "==", clave), where("fecha", ">=", inicioRango), where("fecha", "<=", finRango))),
+  ]);
+  const registros = snapReg.docs.map(d => d.data());
+  const completados = snapComp.docs.map(d => d.data());
+  const claveN = claveNombreCompat(nombrePersona);
+
+  const { todas } = obtenerBloquesAsignados(clave);
+  const bloques = todas.filter(s => s.frecuencia !== "unica");
+  const hoy = fechaISO(new Date());
+
+  const resultado = [];
+  for (let i = semanas - 1; i >= 0; i--) {
+    const lunesSemana = lunesDeSemana(-i);
+    let total = 0, cumplidas = 0;
+    DIAS.forEach(dia => {
+      const idx = DIAS.findIndex(d => d.v === dia.v);
+      const fecha = fechaISO(new Date(lunesSemana.getFullYear(), lunesSemana.getMonth(), lunesSemana.getDate() + idx));
+      if (fecha > hoy) return;
+      bloques.forEach(s => {
+        sesionOcurrenciasEnDia(s, dia.v).forEach(() => {
+          total++;
+          if (s.esActividad) {
+            if (completados.find(c => c.actividadId === s._actividadId && c.fecha === fecha)) cumplidas++;
+          } else if (registros.find(r => r.sesionId === s.id && r.fecha === fecha && claveNombreCompat(r.nombre) === claveN)) {
+            cumplidas++;
+          }
+        });
+      });
+    });
+    resultado.push({ semana: lunesSemana, pct: total ? Math.round((cumplidas / total) * 1000) / 10 : null });
+  }
+  return resultado;
+}
+function renderModalTendencia(){
+  const p = STATE.personaAbierta;
+  return `
+  <div class="modal-overlay" id="ovModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div><h3>Tendencia de adherencia</h3><div class="mh-sub">${esc(p.nombre)}</div></div>
+        <button class="modal-close" data-action="cerrar-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modo-toggle" style="display:flex; gap:8px; margin-bottom:14px;">
+          <button type="button" class="${STATE.tendenciaVista === "semanal" ? "btn-primary" : "btn-secondary"} btn-sm" onclick="cambiarVistaTendencia('semanal')">Semanal</button>
+          <button type="button" class="${STATE.tendenciaVista === "mensual" ? "btn-primary" : "btn-secondary"} btn-sm" onclick="cambiarVistaTendencia('mensual')">Mensual</button>
+        </div>
+        <div id="tendenciaEstado" class="small-note">${STATE.tendenciaDatos ? "" : "Cargando datos de las últimas semanas…"}</div>
+        <canvas id="tendenciaCanvas" width="600" height="280" style="max-width:100%;"></canvas>
+        <div class="small-note" style="margin-top:8px;">Combina asistencia real a reuniones (Control de Asistencia) y actividades marcadas como realizadas acá. Solo cuenta días ya transcurridos.</div>
+      </div>
+      <div class="modal-foot"><button class="btn-secondary btn-sm" onclick="volverDeTendencia()">← Volver a la agenda</button></div>
+    </div>
+  </div>`;
+}
+function dibujarTendencia(){
+  const canvas = document.getElementById("tendenciaCanvas");
+  if (!canvas || !window.Chart || !STATE.tendenciaDatos) return;
+
+  let labels, valores;
+  if (STATE.tendenciaVista === "mensual") {
+    const grupos = {};
+    STATE.tendenciaDatos.forEach(d => {
+      const k = `${d.semana.getFullYear()}-${String(d.semana.getMonth() + 1).padStart(2, "0")}`;
+      if (!grupos[k]) grupos[k] = [];
+      if (d.pct != null) grupos[k].push(d.pct);
+    });
+    const claves = Object.keys(grupos).sort();
+    labels = claves.map(k => { const [y, m] = k.split("-"); return `${MESES_CORTOS_ES[Number(m) - 1]} ${y}`; });
+    valores = claves.map(k => grupos[k].length ? Math.round(grupos[k].reduce((a, b) => a + b, 0) / grupos[k].length * 10) / 10 : null);
+  } else {
+    labels = STATE.tendenciaDatos.map(d => `${String(d.semana.getDate()).padStart(2, "0")} ${MESES_CORTOS_ES[d.semana.getMonth()]}`);
+    valores = STATE.tendenciaDatos.map(d => d.pct);
+  }
+
+  if (window.__tendenciaChart) window.__tendenciaChart.destroy();
+  window.__tendenciaChart = new Chart(canvas, {
+    type: "line",
+    data: { labels, datasets: [{ label: "Adherencia %", data: valores, borderColor: "#009899", backgroundColor: "rgba(0,152,153,0.12)", fill: true, tension: 0.25, spanGaps: true, pointRadius: 3, pointBackgroundColor: "#009899" }] },
+    options: {
+      responsive: false, maintainAspectRatio: false,
+      scales: { y: { min: 0, max: 100, ticks: { callback: (v) => v + "%" } } },
+      plugins: { legend: { display: false } },
+    },
+  });
+}
+window.abrirTendencia = async () => {
+  STATE.modal = "tendencia";
+  STATE.tendenciaDatos = null;
+  render();
+  const p = STATE.personaAbierta;
+  const clave = claveDe(p.nivel, p.id);
+  try {
+    STATE.tendenciaDatos = await calcularTendencia(clave, p.nombre, 8);
+  } catch (e) {
+    console.error("Error calculando tendencia:", e);
+  }
+  render();
+};
+window.cambiarVistaTendencia = (vista) => { STATE.tendenciaVista = vista; render(); };
+window.volverDeTendencia = () => { STATE.modal = null; render(); };
+
 function dibujarRadar(clave){
   const canvas = document.getElementById("radarCanvas");
   if (!canvas || !window.Chart) return;
@@ -892,12 +1042,15 @@ function renderModalAgenda(){
           <h3>${esc(p.nombre)}</h3>
           <div class="mh-sub">${esc(p.cargo || "—")} · Agenda semanal${adherencia !== null ? ` · Cumplimiento asistencia esta semana: <b style="color:${adherencia >= 80 ? "#2F9E5B" : adherencia >= 50 ? "#D9A62E" : "#D6553A"};">${adherencia}%</b>` : ""}</div>
         </div>
-        <button class="modal-close" data-action="cerrar-modal">✕</button>
+        <div style="display:flex; align-items:center; gap:8px;">
+          ${esGeneral ? "" : `<button class="btn-secondary btn-sm" onclick="abrirTendencia()">📈 Ver tendencia</button>`}
+          <button class="modal-close" data-action="cerrar-modal">✕</button>
+        </div>
       </div>
       <div class="modal-body">
         <div class="agenda-layout">
           <div class="agenda-main">
-            ${recurrentes.length ? renderAgendaGrid(recurrentes, duraciones, categorias, nombrePersona) : `<div class="agenda-empty-msg">Sin reuniones recurrentes asignadas todavía.</div>`}
+            ${recurrentes.length ? renderAgendaGrid(recurrentes, duraciones, categorias, nombrePersona, clave) : `<div class="agenda-empty-msg">Sin reuniones recurrentes asignadas todavía.</div>`}
             ${puntuales.length ? `
             <div class="puntual-list">
               <b style="color:var(--gray-900);">Reuniones puntuales asignadas:</b>
@@ -1064,6 +1217,21 @@ window.quitarActividadAsignada = async (clave, actividadId) => {
   delete nuevasActividades[actividadId];
   await fbSetDoc("asignaciones", clave, { actividades: nuevasActividades });
 };
+window.marcarActividad = async (clave, actividadId, fecha) => {
+  const existente = buscarCompletadoActividad(clave, actividadId, fecha);
+  const idDoc = `${clave}_${actividadId}_${fecha}`.replace(/[^a-zA-Z0-9_-]/g, "_");
+  if (existente) {
+    if (confirm(`Marcada como realizada por ${existente.nombre}. ¿Quitar la marca?`)) {
+      await fbDeleteDoc("completadosActividad", idDoc);
+    }
+    return;
+  }
+  const nombre = prompt("Para dejar registro del cambio, escribe tu nombre y apellido:");
+  if (!nombre || !nombre.trim()) return;
+  await fbSetDoc("completadosActividad", idDoc, {
+    clave, actividadId, fecha, nombre: nombre.trim(), marcadoEn: new Date().toISOString(),
+  });
+};
 window.guardarTarget = async (clave) => {
   const leer = (id) => Number(document.getElementById(id).value) || 0;
   const target = {
@@ -1135,9 +1303,17 @@ function abrirAgenda(nivel, id){
     nombre = p.nombre; cargo = p.cargo;
   }
   STATE.personaAbierta = { nivel, id, nombre, cargo };
+  STATE.semanaOffset = 0;
+  STATE.tendenciaDatos = null;
   render();
 }
-function cerrarModal(){ STATE.modal = null; STATE.modalNivel = null; STATE.personaAbierta = null; render(); }
+window.cambiarSemana = (delta) => {
+  const nuevo = STATE.semanaOffset + delta;
+  if (nuevo < -1 || nuevo > 0) return;
+  STATE.semanaOffset = nuevo;
+  render();
+};
+function cerrarModal(){ STATE.modal = null; STATE.modalNivel = null; STATE.personaAbierta = null; STATE.semanaOffset = 0; STATE.tendenciaDatos = null; render(); }
 
 window.alternarModoEdicion = () => {
   if (STATE.modoEdicion) { STATE.modoEdicion = false; render(); return; }
@@ -1209,8 +1385,11 @@ function attachHandlers(){
     window.__scrollAsignarList = null;
   }
 
-  if (STATE.personaAbierta) {
+  if (STATE.personaAbierta && STATE.modal !== "tendencia") {
     dibujarRadar(claveDe(STATE.personaAbierta.nivel, STATE.personaAbierta.id));
+  }
+  if (STATE.modal === "tendencia" && STATE.tendenciaDatos) {
+    dibujarTendencia();
   }
 }
 </script>

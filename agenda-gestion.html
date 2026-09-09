@@ -389,11 +389,13 @@ let STATE = {
   personas: [],
   asignaciones: {},
   sesiones: [],
+  actividadesCatalogo: [],
   registros: [],
   search: "",
   personaAbierta: null,
   modal: null,
   modalNivel: null,
+  actividadEditando: null,
 };
 
 // ---------- Carga inicial ----------
@@ -402,14 +404,16 @@ function init(){
   fbListen("personas", (list) => { STATE.personas = list; render(); });
   fbListen("asignaciones", (list) => {
     const map = {};
-    list.forEach(a => { map[a.id] = { sesionIds: a.sesionIds || [], duraciones: a.duraciones || {}, categorias: a.categorias || {}, target: a.target || null }; });
+    list.forEach(a => { map[a.id] = { sesionIds: a.sesionIds || [], duraciones: a.duraciones || {}, categorias: a.categorias || {}, target: a.target || null, actividades: a.actividades || {} }; });
     STATE.asignaciones = map;
     render();
   });
   onSnapshot(collection(dbAsistencia, "sesionesAsistencia"), (snap) => {
-    STATE.sesiones = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(s => s.activa !== false);
+    const todas = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(s => s.activa !== false);
+    STATE.sesiones = todas.filter(s => s.tipo !== "actividad");
+    STATE.actividadesCatalogo = todas.filter(s => s.tipo === "actividad");
     render();
-  }, (err) => console.error("Error leyendo sesiones de Control de Asistencia:", err));
+  }, (err) => console.error("Error leyendo sesiones/actividades de Control de Asistencia:", err));
 
   const lunes = fechaISO(lunesDeEstaSemana());
   const l = lunesDeEstaSemana();
@@ -434,6 +438,10 @@ function render(){
   if (activo && activo.id && (activo.tagName === "INPUT" || activo.tagName === "TEXTAREA" || activo.tagName === "SELECT")) {
     window.__focoPendiente = { id: activo.id, valor: activo.value, pos: activo.selectionStart };
   }
+  const mbPrevio = document.querySelector("#ovModal .modal-body");
+  window.__scrollModalBody = mbPrevio ? mbPrevio.scrollTop : null;
+  const alPrevio = document.querySelector("#ovModal .asignar-list");
+  window.__scrollAsignarList = alPrevio ? alPrevio.scrollTop : null;
 
   document.getElementById("edicionBadge").innerHTML = STATE.modoEdicion
     ? `<span class="edicion-badge">✓ Modo edición activo</span> <button class="btn-secondary btn-sm" onclick="cambiarClave()" style="margin-left:8px;">Cambiar clave</button>` : "";
@@ -697,7 +705,7 @@ function renderAgendaGrid(sesionesAsignadas, duraciones, categorias, nombrePerso
 
         let check = "";
         let asistTxt = "";
-        if (nombrePersona && fechaDia <= hoy) {
+        if (nombrePersona && fechaDia <= hoy && !s.esActividad) {
           const asistio = !!buscarAsistencia(nombrePersona, s.id, fechaDia);
           check = `<span class="ab-check ${asistio ? "ok" : "no"}">${asistio ? "✓" : "✕"}</span>`;
           asistTxt = asistio ? " · asistió esta semana" : " · no registra asistencia esta semana";
@@ -731,10 +739,36 @@ function duracionEfectiva(sesion, duraciones){
   return 60;
 }
 
+// ---------- Unifica sesiones reales (Control de Asistencia) + actividades configuradas acá ----------
+function obtenerBloquesAsignados(clave){
+  const asignacion = STATE.asignaciones[clave] || { sesionIds: [], duraciones: {}, categorias: {}, actividades: {} };
+  const sesionesReales = STATE.sesiones.filter(s => asignacion.sesionIds.includes(s.id));
+
+  const actividadesAsignadas = Object.keys(asignacion.actividades || {}).map(actId => {
+    const act = STATE.actividadesCatalogo.find(a => a.id === actId);
+    const cfg = asignacion.actividades[actId];
+    if (!act || !cfg) return null;
+    return {
+      id: "act_" + actId, _actividadId: actId, nombre: act.nombre,
+      frecuencia: "dias", dias: cfg.dias || [], horaInicio: cfg.horaInicio || "09:00", horaFin: "",
+      esActividad: true,
+    };
+  }).filter(Boolean);
+
+  const duraciones = { ...asignacion.duraciones };
+  const categorias = { ...asignacion.categorias };
+  actividadesAsignadas.forEach(a => {
+    const cfg = asignacion.actividades[a._actividadId];
+    duraciones[a.id] = cfg.duracion || 60;
+    if (cfg.categoria) categorias[a.id] = cfg.categoria;
+  });
+
+  return { todas: [...sesionesReales, ...actividadesAsignadas], duraciones, categorias };
+}
+
 // ---------- Distribución de tiempo (gráfico araña) ----------
 function calcularDistribucion(clave){
-  const asignacion = STATE.asignaciones[clave] || { sesionIds: [], duraciones: {}, categorias: {} };
-  const sesionesAsignadas = STATE.sesiones.filter(s => asignacion.sesionIds.includes(s.id));
+  const { todas: sesionesAsignadas, duraciones, categorias } = obtenerBloquesAsignados(clave);
   const totales = { objetivo: 0, procesos: 0, mejora: 0, personas: 0 };
   let totalContableMin = 0;
 
@@ -745,11 +779,11 @@ function calcularDistribucion(clave){
     totalContableMin += (ventanaFin - ventanaInicio);
 
     sesionesAsignadas.forEach(s => {
-      const cat = asignacion.categorias[s.id];
+      const cat = categorias[s.id];
       if (!cat || !CATEGORIAS[cat]) return;
       sesionOcurrenciasEnDia(s, dia).forEach(b => {
         const inicioMin = minutosDesde(b.horaInicio);
-        const duracionOverride = asignacion.duraciones[s.id];
+        const duracionOverride = duraciones[s.id];
         const finMin = duracionOverride ? inicioMin + Number(duracionOverride)
           : (b.horaFin ? minutosDesde(b.horaFin) : inicioMin + 60);
         const inicioClip = Math.max(inicioMin, ventanaInicio);
@@ -768,8 +802,8 @@ function calcularDistribucion(clave){
   };
 }
 function calcularAdherencia(clave, nombrePersona){
-  const asignacion = STATE.asignaciones[clave] || { sesionIds: [] };
-  const sesionesAsignadas = STATE.sesiones.filter(s => asignacion.sesionIds.includes(s.id) && s.frecuencia !== "unica");
+  const { todas } = obtenerBloquesAsignados(clave);
+  const sesionesAsignadas = todas.filter(s => s.frecuencia !== "unica" && !s.esActividad);
   const hoy = fechaISO(new Date());
   let total = 0, asistidas = 0;
   DIAS.forEach(dia => {
@@ -839,12 +873,11 @@ function dibujarRadar(clave){
 function renderModalAgenda(){
   const p = STATE.personaAbierta;
   const clave = claveDe(p.nivel, p.id);
-  const asignacion = STATE.asignaciones[clave] || { sesionIds: [], duraciones: {}, categorias: {}, target: null };
+  const asignacion = STATE.asignaciones[clave] || { sesionIds: [], duraciones: {}, categorias: {}, target: null, actividades: {} };
   const asignadosIds = asignacion.sesionIds;
-  const duraciones = asignacion.duraciones;
-  const categorias = asignacion.categorias || {};
   const target = asignacion.target;
-  const sesionesAsignadas = STATE.sesiones.filter(s => asignadosIds.includes(s.id));
+  const actividadesAsignacion = asignacion.actividades || {};
+  const { todas: sesionesAsignadas, duraciones, categorias } = obtenerBloquesAsignados(clave);
   const recurrentes = sesionesAsignadas.filter(s => s.frecuencia !== "unica");
   const puntuales = sesionesAsignadas.filter(s => s.frecuencia === "unica");
   const esGeneral = p.nivel === "comite-general";
@@ -899,7 +932,7 @@ function renderModalAgenda(){
         <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--warm-gray-100);">
           <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
             <h2 style="margin-bottom:0;">Asignar reuniones (desde Control de Asistencia)</h2>
-            <button class="btn-secondary btn-sm" onclick="recargarSesiones(this)">🔄 Actualizar catálogo de reuniones</button>
+            <button class="btn-secondary btn-sm" onclick="recargarSesiones(this)">🔄 Actualizar catálogo de reuniones y actividades</button>
           </div>
           <div class="small-note" style="margin-top:6px;margin-bottom:10px;">Si una reunión no tiene hora de término cargada en Control de Asistencia, se usa 60 min por defecto — puedes ajustarlo aquí. La categoría determina el color en la agenda y en el gráfico de distribución.</div>
           <div class="asignar-list">
@@ -924,9 +957,69 @@ function renderModalAgenda(){
               </label>`;
             }).join("") : `<div class="empty-note">No hay reuniones cargadas todavía en Control de Asistencia.</div>`}
           </div>
+        </div>
+
+        <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--warm-gray-100);">
+          <h2 style="margin-bottom:0;">Actividades (desde Control de Asistencia)</h2>
+          <div class="small-note" style="margin-top:6px;margin-bottom:10px;">Las actividades no traen horario propio — tú defines día(s), hora, duración y categoría acá para cada persona.</div>
+          <div class="asignar-list">
+            ${renderActividadesSection(clave, actividadesAsignacion)}
+          </div>
         </div>` : ""}
       </div>
       <div class="modal-foot"><button class="btn-primary" data-action="cerrar-modal">Cerrar</button></div>
+    </div>
+  </div>`;
+}
+function renderActividadesSection(clave, actividadesAsignacion){
+  if (!STATE.actividadesCatalogo.length) {
+    return `<div class="empty-note">No hay actividades cargadas todavía en Control de Asistencia (o esa colección aún no existe ahí).</div>`;
+  }
+  return STATE.actividadesCatalogo.map(act => {
+    const cfg = actividadesAsignacion[act.id];
+    if (STATE.actividadEditando === act.id) return renderFormActividad(clave, act, cfg);
+    if (cfg) {
+      const diasTxt = (cfg.dias || []).map(d => (DIAS.find(x => x.v === d) || {}).c || d).join(", ");
+      const catTxt = cfg.categoria && CATEGORIAS[cfg.categoria] ? " · " + CATEGORIAS[cfg.categoria].nombre : " · sin categorizar";
+      return `
+      <div class="asignar-row">
+        <div style="flex:1;">
+          <div class="ar-nombre">${esc(act.nombre)}</div>
+          <div class="ar-detalle">${esc(diasTxt)} · ${esc(cfg.horaInicio)} · ${esc(cfg.duracion)} min${catTxt}</div>
+        </div>
+        <button class="btn-secondary btn-sm" onclick="iniciarEditActividad('${act.id}')">Editar</button>
+        <button class="btn-danger btn-sm" onclick="quitarActividadAsignada('${esc(clave)}','${act.id}')">Quitar</button>
+      </div>`;
+    }
+    return `
+    <div class="asignar-row">
+      <div style="flex:1;"><div class="ar-nombre">${esc(act.nombre)}</div></div>
+      <button class="btn-secondary btn-sm" onclick="iniciarEditActividad('${act.id}')">+ Agregar a la agenda</button>
+    </div>`;
+  }).join("");
+}
+function renderFormActividad(clave, act, cfgExistente){
+  const cfg = cfgExistente || { dias: [], horaInicio: "09:00", duracion: 60, categoria: "" };
+  return `
+  <div class="asignar-row" style="flex-direction:column; align-items:stretch; background:var(--warm-gray-50); border-radius:10px; padding:10px;">
+    <div class="ar-nombre" style="margin-bottom:8px;">${esc(act.nombre)}</div>
+    <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px;">
+      ${DIAS.map(d => `
+      <label style="display:flex; align-items:center; gap:3px; font-size:11px; background:#fff; border:1px solid var(--warm-gray-100); border-radius:6px; padding:4px 7px;">
+        <input type="checkbox" class="act-dia" value="${d.v}" ${(cfg.dias || []).includes(d.v) ? "checked" : ""} style="width:auto; margin:0;">${d.c}
+      </label>`).join("")}
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end;">
+      <label class="target-field" style="flex-direction:column; align-items:flex-start; gap:3px;"><span>Hora inicio</span><input type="time" id="act-hora-${act.id}" value="${esc(cfg.horaInicio)}" style="width:100px;"></label>
+      <label class="target-field" style="flex-direction:column; align-items:flex-start; gap:3px;"><span>Duración (min)</span><input type="number" min="15" step="5" id="act-dur-${act.id}" value="${cfg.duracion}" style="width:70px;"></label>
+      <label class="target-field" style="flex-direction:column; align-items:flex-start; gap:3px;"><span>Categoría</span>
+        <select id="act-cat-${act.id}" style="padding:6px 7px; border:1.5px solid var(--warm-gray-100); border-radius:7px; font-size:11px;">
+          <option value="">Sin categorizar</option>
+          ${Object.keys(CATEGORIAS).map(k => `<option value="${k}" ${cfg.categoria === k ? "selected" : ""}>${CATEGORIAS[k].nombre}</option>`).join("")}
+        </select>
+      </label>
+      <button class="btn-primary btn-sm" onclick="guardarActividadAsignada('${esc(clave)}','${act.id}')">Guardar</button>
+      <button class="btn-secondary btn-sm" onclick="cancelarEditActividad()">Cancelar</button>
     </div>
   </div>`;
 }
@@ -950,6 +1043,27 @@ window.actualizarCategoria = async (clave, sesionId, categoria) => {
   if (categoria) nuevasCategorias[sesionId] = categoria; else delete nuevasCategorias[sesionId];
   await fbSetDoc("asignaciones", clave, { sesionIds: actual.sesionIds, duraciones: actual.duraciones, categorias: nuevasCategorias });
 };
+window.iniciarEditActividad = (actividadId) => { STATE.actividadEditando = actividadId; render(); };
+window.cancelarEditActividad = () => { STATE.actividadEditando = null; render(); };
+window.guardarActividadAsignada = async (clave, actividadId) => {
+  const dias = Array.from(document.querySelectorAll(".act-dia:checked")).map(el => el.value);
+  if (!dias.length) { alert("Selecciona al menos un día para esta actividad."); return; }
+  const horaInicio = document.getElementById("act-hora-" + actividadId).value || "09:00";
+  const duracion = Number(document.getElementById("act-dur-" + actividadId).value) || 60;
+  const categoria = document.getElementById("act-cat-" + actividadId).value || "";
+  const actual = STATE.asignaciones[clave] || { actividades: {} };
+  const nuevasActividades = { ...(actual.actividades || {}), [actividadId]: { dias, horaInicio, duracion, categoria } };
+  await fbSetDoc("asignaciones", clave, { actividades: nuevasActividades });
+  STATE.actividadEditando = null;
+  render();
+};
+window.quitarActividadAsignada = async (clave, actividadId) => {
+  if (!confirm("¿Quitar esta actividad de la agenda de esta persona?")) return;
+  const actual = STATE.asignaciones[clave] || { actividades: {} };
+  const nuevasActividades = { ...(actual.actividades || {}) };
+  delete nuevasActividades[actividadId];
+  await fbSetDoc("asignaciones", clave, { actividades: nuevasActividades });
+};
 window.guardarTarget = async (clave) => {
   const leer = (id) => Number(document.getElementById(id).value) || 0;
   const target = {
@@ -967,12 +1081,14 @@ window.recargarSesiones = async (btn) => {
   if (btn) { btn.disabled = true; btn.textContent = "Actualizando…"; }
   try {
     const snap = await getDocs(collection(dbAsistencia, "sesionesAsistencia"));
-    STATE.sesiones = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(s => s.activa !== false);
+    const todas = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(s => s.activa !== false);
+    STATE.sesiones = todas.filter(s => s.tipo !== "actividad");
+    STATE.actividadesCatalogo = todas.filter(s => s.tipo === "actividad");
     render();
   } catch (e) {
     alert("No se pudo actualizar el catálogo de reuniones: " + e.message);
   }
-  if (btn) { btn.disabled = false; btn.textContent = "🔄 Actualizar catálogo de reuniones"; }
+  if (btn) { btn.disabled = false; btn.textContent = "🔄 Actualizar catálogo de reuniones y actividades"; }
 };
 
 async function agregarOrg(){
@@ -1081,6 +1197,16 @@ function attachHandlers(){
       if (el.setSelectionRange && el.type !== "number") { try { el.setSelectionRange(window.__focoPendiente.pos, window.__focoPendiente.pos); } catch (e) {} }
     }
     window.__focoPendiente = null;
+  }
+  if (window.__scrollModalBody != null) {
+    const mb = document.querySelector("#ovModal .modal-body");
+    if (mb) mb.scrollTop = window.__scrollModalBody;
+    window.__scrollModalBody = null;
+  }
+  if (window.__scrollAsignarList != null) {
+    const al = document.querySelector("#ovModal .asignar-list");
+    if (al) al.scrollTop = window.__scrollAsignarList;
+    window.__scrollAsignarList = null;
   }
 
   if (STATE.personaAbierta) {

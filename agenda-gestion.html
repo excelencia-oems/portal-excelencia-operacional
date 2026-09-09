@@ -695,9 +695,28 @@ function minutosAHora(totalMin){
   const h = Math.floor(totalMin / 60), m = totalMin % 60;
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 }
-function sesionOcurrenciasEnDia(sesion, diaValor){
+function nEsimoDiaSemanaDelMes(anio, mes, diaSemanaIndice, ordinal){
+  const primerDia = new Date(anio, mes, 1);
+  let offset = diaSemanaIndice - primerDia.getDay();
+  if (offset < 0) offset += 7;
+  const dia = 1 + offset + (ordinal - 1) * 7;
+  const fecha = new Date(anio, mes, dia);
+  return fecha.getMonth() === mes ? fecha : null;
+}
+const INDICE_DIA_SEMANA = { domingo:0, lunes:1, martes:2, miercoles:3, jueves:4, viernes:5, sabado:6 };
+function sesionOcurrenciasEnDia(sesion, diaValor, fechaReal){
   if (sesion.frecuencia === "unica") return [];
-  const aplica = sesion.frecuencia === "diaria" || (sesion.frecuencia === "dias" && (sesion.dias || []).includes(diaValor));
+  let aplica;
+  if (sesion.frecuencia === "mensual_dia_semana") {
+    if (!fechaReal) return []; // sin fecha concreta no podemos saber si es el N-ésimo día del mes
+    const idxObjetivo = INDICE_DIA_SEMANA[sesion.diaSemanaMensual];
+    if (idxObjetivo === undefined) return [];
+    const [y, m, d] = fechaReal.split("-").map(Number);
+    const fechaObjetivo = nEsimoDiaSemanaDelMes(y, m - 1, idxObjetivo, sesion.ordinalSemana || 1);
+    aplica = !!fechaObjetivo && fechaISO(fechaObjetivo) === fechaReal;
+  } else {
+    aplica = sesion.frecuencia === "diaria" || (sesion.frecuencia === "dias" && (sesion.dias || []).includes(diaValor));
+  }
   if (!aplica) return [];
   if (sesion.modoTurno === "ambos") return [
     { horaInicio: sesion.horaInicio || "09:00", horaFin: sesion.horaFin || "" },
@@ -706,8 +725,13 @@ function sesionOcurrenciasEnDia(sesion, diaValor){
   if (sesion.modoTurno === "B") return [{ horaInicio: sesion.horaInicioB || "09:00", horaFin: sesion.horaFinB || "" }];
   return [{ horaInicio: sesion.horaInicio || "09:00", horaFin: sesion.horaFin || "" }];
 }
+const ORDINAL_TXT = { 1:"1er", 2:"2do", 3:"3er", 4:"4to", 5:"5to" };
 function descripcionFrecuencia(s){
   if (s.frecuencia === "unica") return `Puntual · ${s.fechaUnica || "—"} · ${s.horaInicio || ""}`;
+  if (s.frecuencia === "mensual_dia_semana") {
+    const diaTxt = (DIAS.find(d => d.v === s.diaSemanaMensual) || {}).c || s.diaSemanaMensual || "";
+    return `Mensual (${ORDINAL_TXT[s.ordinalSemana] || s.ordinalSemana + "°"} ${diaTxt}) · ${s.horaInicio || ""}${s.horaFin ? "–" + s.horaFin : ""}`;
+  }
   if (s.frecuencia === "dias") return `${(s.dias || []).map(d => (DIAS.find(x => x.v === d) || {}).c || d).join(", ")} · ${s.horaInicio || ""}${s.horaFin ? "–" + s.horaFin : ""}`;
   return `Diaria · ${s.horaInicio || ""}${s.horaFin ? "–" + s.horaFin : ""}`;
 }
@@ -722,7 +746,7 @@ function renderAgendaGrid(sesionesAsignadas, duraciones, categorias, nombrePerso
     const bloques = [];
     const fechaDia = fechaDeSemana(dia.v, STATE.semanaOffset);
     sesionesAsignadas.forEach(s => {
-      sesionOcurrenciasEnDia(s, dia.v).forEach(b => {
+      sesionOcurrenciasEnDia(s, dia.v, fechaDia).forEach(b => {
         const inicioMin = minutosDesde(b.horaInicio) - HORA_INICIO * 60;
         const duracionOverride = duraciones[s.id];
         const finMin = duracionOverride ? inicioMin + Number(duracionOverride)
@@ -811,7 +835,10 @@ function obtenerBloquesAsignados(clave){
 
 // ---------- Distribución de tiempo (gráfico araña) ----------
 function calcularDistribucion(clave){
-  const { todas: sesionesAsignadas, duraciones, categorias } = obtenerBloquesAsignados(clave);
+  // Las reuniones "mensual_dia_semana" no tienen un día fijo semana a semana,
+  // así que no calzan en un gráfico de "semana típica recurrente" y se excluyen acá.
+  const { todas, duraciones, categorias } = obtenerBloquesAsignados(clave);
+  const sesionesAsignadas = todas.filter(s => s.frecuencia !== "mensual_dia_semana");
   const totales = { objetivo: 0, procesos: 0, mejora: 0, personas: 0 };
   let totalContableMin = 0;
 
@@ -854,7 +881,7 @@ function calcularAdherencia(clave, nombrePersona, offsetSemanas){
     const fecha = fechaDeSemana(dia.v, offsetSemanas);
     if (fecha > hoy) return;
     bloques.forEach(s => {
-      sesionOcurrenciasEnDia(s, dia.v).forEach(() => {
+      sesionOcurrenciasEnDia(s, dia.v, fecha).forEach(() => {
         total++;
         if (s.esActividad) {
           if (buscarCompletadoActividad(clave, s._actividadId, fecha)) cumplidas++;
@@ -881,7 +908,7 @@ function calcularAdherenciaMes(clave, nombrePersona){
     const diaTxt = nombreDiaSemana(cursor);
     const fecha = fechaISO(cursor);
     bloques.forEach(s => {
-      sesionOcurrenciasEnDia(s, diaTxt).forEach(() => {
+      sesionOcurrenciasEnDia(s, diaTxt, fecha).forEach(() => {
         total++;
         if (s.esActividad) {
           if (buscarCompletadoActividad(clave, s._actividadId, fecha)) cumplidas++;
@@ -922,7 +949,7 @@ async function calcularTendencia(clave, nombrePersona, semanas){
       const fecha = fechaISO(new Date(lunesSemana.getFullYear(), lunesSemana.getMonth(), lunesSemana.getDate() + idx));
       if (fecha > hoy) return;
       bloques.forEach(s => {
-        sesionOcurrenciasEnDia(s, dia.v).forEach(() => {
+        sesionOcurrenciasEnDia(s, dia.v, fecha).forEach(() => {
           total++;
           if (s.esActividad) {
             if (completados.find(c => c.actividadId === s._actividadId && c.fecha === fecha)) cumplidas++;

@@ -2476,7 +2476,11 @@ document.getElementById('pilarDot').style.background = pilar.color;
 document.getElementById('modalSub').textContent = practica.nombre;
 document.getElementById('btnRegistro').textContent = practica.accionBtn || '+ Registrar práctica realizada';
 document.getElementById('btnRegistro').onclick = practica.accionUrl
-  ? () => { window.location.href = practica.accionUrl; }
+  ? () => {
+      document.body.style.transition = 'opacity .15s ease';
+      document.body.style.opacity = '0';
+      setTimeout(() => { window.location.href = practica.accionUrl; }, 160);
+    }
   : () => { document.getElementById('modalRegistro').classList.add('open'); };
 document.title = practica.nombre + ' · Modelo de Excelencia Operacional';
 

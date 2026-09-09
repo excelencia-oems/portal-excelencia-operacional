@@ -2054,6 +2054,7 @@ const PRACTICAS = {
   'agenda': {
     nombre: 'Agenda', pilar: 'procesos',
     accionBtn: 'Gestionar mi Agenda',
+    accionUrl: 'agenda-gestion.html',
     definicion: 'Asignación consciente del tiempo en las actividades que agregan valor, evitando que otras actividades tomen el tiempo previamente planificado. Es el estándar de las prácticas del líder: su adherencia en la ejecución es fundamental para el éxito de la transformación.',
     embedUrl: 'https://glencore.sharepoint.com/sites/CLModeloEOCapacitaciones/_layouts/15/embed.aspx?UniqueId=1182275f-6c31-4c3c-98f4-45ea62202b45&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create',
     materiales: [{n:'Metodología LEM — Práctica 8: Agenda (material de despliegue)', t:'PDF · 0.9 MB', url:'https://glencore.sharepoint.com/:b:/s/CLModeloEOCapacitaciones/IQDykBvngyssSaJ4DXPabu1LAesf2Mr7sTE3knylcf6pmTA?e=pnrpWh'}, {n:'Capacitación: Agenda Estandarizada (CMLB)', t:'PPTX · 2.1 MB', url:'https://glencore.sharepoint.com/:p:/s/CLModeloEOCapacitaciones/IQChS3x6wIW5SrQNNMtKW4UsAQ9cF8q1lOtYZJ9RA5QeNYo?e=St2FRf'}],
@@ -2474,6 +2475,9 @@ document.getElementById('pilarTag').style.color = pilar.color;
 document.getElementById('pilarDot').style.background = pilar.color;
 document.getElementById('modalSub').textContent = practica.nombre;
 document.getElementById('btnRegistro').textContent = practica.accionBtn || '+ Registrar práctica realizada';
+document.getElementById('btnRegistro').onclick = practica.accionUrl
+  ? () => { window.location.href = practica.accionUrl; }
+  : () => { document.getElementById('modalRegistro').classList.add('open'); };
 document.title = practica.nombre + ' · Modelo de Excelencia Operacional';
 
 const matEl = document.getElementById('materialesList');

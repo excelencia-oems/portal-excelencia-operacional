@@ -41,6 +41,7 @@
   .fab-home svg{width:22px; height:22px;}
 
   main{max-width:min(1100px, 92vw); margin:0 auto; padding:clamp(20px,4vw,34px) clamp(16px,3vw,32px) 90px;}
+  .panel-full{max-width:none; width:96vw; margin-left:calc(50% - 48vw); margin-right:calc(50% - 48vw);}
 
   .practice-head{display:flex; align-items:flex-start; justify-content:space-between; gap:20px; margin-bottom:26px; flex-wrap:wrap;}
   .pilar-tag{
@@ -162,7 +163,9 @@
   .ag-hourlabel{height:var(--rowh); font-size:9.5px; color:var(--warm-gray-500); text-align:right; padding-right:6px; box-sizing:border-box; border-top:1px solid var(--warm-gray-100); display:flex; align-items:flex-start; justify-content:flex-end;}
   .ag-hourlabel:first-child{border-top:none;}
   .agenda-daycol{position:relative; border-left:1px solid var(--warm-gray-100); background-image:repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--rowh) - 1px), var(--warm-gray-100) calc(var(--rowh) - 1px), var(--warm-gray-100) var(--rowh));}
-  .agenda-block{position:absolute; left:2px; right:2px; border-radius:6px; background:var(--oems-teal); color:#fff; font-size:9.5px; font-weight:700; padding:3px 5px; overflow:hidden; line-height:1.25; box-shadow:0 2px 5px rgba(0,152,153,.25);}
+  .agenda-block{position:absolute; left:2px; right:2px; border-radius:6px; background:var(--oems-teal); color:#fff; font-size:9.5px; font-weight:700; padding:3px 5px; overflow:hidden; line-height:1.25; box-shadow:0 2px 5px rgba(0,152,153,.25); cursor:default;}
+  .agenda-block .ab-nombre{display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .agenda-block.compacto{padding:1px 5px; font-size:8.5px; display:flex; align-items:center;}
   .agenda-block .ab-hora{font-weight:400; opacity:.85; font-size:9px;}
   .agenda-empty-msg{font-size:12.5px; color:var(--warm-gray-500); text-align:center; padding:16px;}
 
@@ -412,6 +415,9 @@ function construirArbol(lista){
     if (n.parentId && porId[n.parentId]) porId[n.parentId].hijos.push(porId[n.id]);
     else raices.push(porId[n.id]);
   });
+  const porOrden = (a, b) => (a.orden || 0) - (b.orden || 0);
+  raices.sort(porOrden);
+  Object.values(porId).forEach(n => n.hijos.sort(porOrden));
   return raices;
 }
 function renderNodoOrg(nodo, profundidad){
@@ -429,7 +435,7 @@ function renderNodoOrg(nodo, profundidad){
 function renderComite(){
   const raices = construirArbol(STATE.organigrama);
   return `
-  <div class="panel">
+  <div class="panel panel-full">
     <div class="panel-head-row">
       <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2.5"/><path d="M12 7.5V12M12 12H5v3M12 12h7v3"/></svg>Comité Ejecutivo</h2>
       ${STATE.modoEdicion ? `<button class="btn-secondary btn-sm" data-action="abrir-editar-organigrama">Editar organigrama</button>` : ""}
@@ -497,11 +503,27 @@ function renderModalClave(){
   </div>`;
 }
 
+function aplanarArbol(nodos, profundidad){
+  profundidad = profundidad || 0;
+  let out = [];
+  nodos.forEach(n => {
+    out.push({ ...n, profundidad });
+    if (n.hijos && n.hijos.length) out = out.concat(aplanarArbol(n.hijos, profundidad + 1));
+  });
+  return out;
+}
 function renderModalEditarOrganigrama(){
   const lista = STATE.organigrama;
-  const filas = lista.map(n => `
+  const listaOrdenada = aplanarArbol(construirArbol(lista));
+  const filas = listaOrdenada.map(n => `
     <tr>
-      <td><input type="text" value="${esc(n.nombre)}" onchange="actualizarOrgCampo('${n.id}','nombre',this.value)"></td>
+      <td style="padding-left:${8 + n.profundidad * 16}px;">
+        <span style="display:inline-flex; gap:2px; margin-right:6px; vertical-align:middle;">
+          <button type="button" class="btn-secondary btn-sm" style="padding:3px 7px;" data-action="mover-org" data-id="${esc(n.id)}" data-dir="izq" title="Mover a la izquierda">←</button>
+          <button type="button" class="btn-secondary btn-sm" style="padding:3px 7px;" data-action="mover-org" data-id="${esc(n.id)}" data-dir="der" title="Mover a la derecha">→</button>
+        </span>
+        <input type="text" value="${esc(n.nombre)}" onchange="actualizarOrgCampo('${n.id}','nombre',this.value)" style="width:140px; display:inline-block;">
+      </td>
       <td><input type="text" value="${esc(n.cargo || "")}" onchange="actualizarOrgCampo('${n.id}','cargo',this.value)"></td>
       <td>
         <select onchange="actualizarOrgCampo('${n.id}','parentId',this.value||null)">
@@ -518,6 +540,7 @@ function renderModalEditarOrganigrama(){
       <div class="modal-head"><div><h3>Editar organigrama</h3><div class="mh-sub">Comité Ejecutivo</div></div><button class="modal-close" data-action="cerrar-modal">✕</button></div>
       <div class="modal-body">
         ${lista.length ? `
+        <div class="small-note" style="margin-top:0;">Usa ← → para cambiar el orden de un cargo entre sus pares (mismo nivel, mismo jefe).</div>
         <table class="edit-table">
           <thead><tr><th>Nombre</th><th>Cargo</th><th>Reporta a</th><th></th></tr></thead>
           <tbody>${filas}</tbody>
@@ -562,6 +585,10 @@ function minutosDesde(horaTexto){
   const [h, m] = (horaTexto || "0:0").split(":").map(Number);
   return h * 60 + (m || 0);
 }
+function minutosAHora(totalMin){
+  const h = Math.floor(totalMin / 60), m = totalMin % 60;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+}
 function sesionOcurrenciasEnDia(sesion, diaValor){
   if (sesion.frecuencia === "unica") return [];
   const aplica = sesion.frecuencia === "diaria" || (sesion.frecuencia === "dias" && (sesion.dias || []).includes(diaValor));
@@ -592,10 +619,15 @@ function renderAgendaGrid(sesionesAsignadas, duraciones){
         const duracionOverride = duraciones[s.id];
         const finMin = duracionOverride ? inicioMin + Number(duracionOverride)
           : (b.horaFin ? minutosDesde(b.horaFin) - HORA_INICIO * 60 : inicioMin + 60);
+        const duracionMin = Math.max(finMin - inicioMin, 15);
+        const horaFinTexto = minutosAHora(finMin + HORA_INICIO * 60);
         const top = Math.max(0, inicioMin) / 60 * rowh;
         const height = Math.max(finMin - inicioMin, 20) / 60 * rowh;
-        bloques.push(`<div class="agenda-block" style="top:${top}px;height:${height}px;" title="${esc(s.nombre)}">
-          ${esc(s.nombre)}<div class="ab-hora">${esc(b.horaInicio)}${b.horaFin ? "–" + esc(b.horaFin) : ""}</div>
+        const compacto = height < 24;
+        const tooltip = `${s.nombre} — ${b.horaInicio}–${horaFinTexto} (${duracionMin} min)`;
+        bloques.push(`<div class="agenda-block${compacto ? " compacto" : ""}" style="top:${top}px;height:${height}px;" title="${esc(tooltip)}">
+          <span class="ab-nombre">${esc(s.nombre)}</span>
+          ${compacto ? "" : `<div class="ab-hora">${esc(b.horaInicio)}–${esc(horaFinTexto)}</div>`}
         </div>`);
       });
     });
@@ -685,12 +717,23 @@ window.actualizarBusqueda = (valor) => { STATE.search = valor; render(); };
 
 async function agregarOrg(){
   const id = "org_" + Date.now();
-  await fbSetDoc("organigrama", id, { nombre: "Nuevo cargo", cargo: "", parentId: null });
+  await fbSetDoc("organigrama", id, { nombre: "Nuevo cargo", cargo: "", parentId: null, orden: Date.now() });
 }
 async function eliminarOrg(id){
   if (!confirm("¿Eliminar este cargo del organigrama? También se pierde su agenda asignada.")) return;
   await fbDeleteDoc("organigrama", id);
   await fbDeleteDoc("asignaciones", claveDe("comite", id));
+}
+async function moverOrg(id, direccion){
+  const nodo = STATE.organigrama.find(n => n.id === id);
+  if (!nodo) return;
+  let hermanos = STATE.organigrama.filter(n => n.parentId === nodo.parentId).slice()
+    .sort((a, b) => (a.orden || 0) - (b.orden || 0) || String(a.id).localeCompare(String(b.id)));
+  const idx = hermanos.findIndex(n => n.id === id);
+  const idxVecino = direccion === "izq" ? idx - 1 : idx + 1;
+  if (idxVecino < 0 || idxVecino >= hermanos.length) return;
+  [hermanos[idx], hermanos[idxVecino]] = [hermanos[idxVecino], hermanos[idx]];
+  await Promise.all(hermanos.map((h, i) => fbSetDoc("organigrama", h.id, { orden: i })));
 }
 async function agregarPersona(nivel){
   const id = "per_" + Date.now();
@@ -755,6 +798,7 @@ function handleAction(action, el){
     case "abrir-editar-lista": STATE.modal = "editar-lista"; STATE.modalNivel = el.dataset.nivel; render(); break;
     case "agregar-org": agregarOrg(); break;
     case "eliminar-org": eliminarOrg(el.dataset.id); break;
+    case "mover-org": moverOrg(el.dataset.id, el.dataset.dir); break;
     case "agregar-persona": agregarPersona(el.dataset.nivel); break;
     case "eliminar-persona": eliminarPersona(el.dataset.id, STATE.modalNivel); break;
     case "confirmar-clave": confirmarClave(); break;

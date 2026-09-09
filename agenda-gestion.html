@@ -168,6 +168,19 @@
   .agenda-block.compacto{padding:1px 5px; font-size:8.5px; display:flex; align-items:center;}
   .agenda-block .ab-hora{font-weight:400; opacity:.85; font-size:9px;}
   .agenda-empty-msg{font-size:12.5px; color:var(--warm-gray-500); text-align:center; padding:16px;}
+  .agenda-layout{display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap;}
+  .agenda-main{flex:1; min-width:340px;}
+  .agenda-side{width:250px; flex-shrink:0; display:flex; flex-direction:column; gap:14px;}
+  .radar-box{background:var(--warm-gray-50); border-radius:12px; padding:14px; text-align:center;}
+  .radar-title{font-size:11px; font-weight:700; color:var(--gray-700); margin-bottom:8px; text-align:left;}
+  .target-box{background:var(--warm-gray-50); border-radius:12px; padding:14px;}
+  .target-grid{display:flex; flex-direction:column; gap:8px;}
+  .target-field{display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:11px; font-weight:700;}
+  .target-field input{width:56px; padding:5px 7px; border:1.5px solid var(--warm-gray-100); border-radius:7px; font-size:12px; font-family:inherit;}
+  .cat-legend{display:flex; flex-wrap:wrap; gap:12px; margin-top:10px; padding-top:10px; border-top:1px solid var(--warm-gray-100);}
+  .cl-item{display:flex; align-items:center; gap:5px; font-size:11px; color:var(--warm-gray-500);}
+  .cl-dot{width:9px; height:9px; border-radius:100px; flex-shrink:0;}
+  @media (max-width:720px){ .agenda-side{width:100%;} }
 
   .asignar-list{display:flex; flex-direction:column; gap:2px; max-height:340px; overflow-y:auto;}
   .asignar-row{display:flex; align-items:flex-start; gap:10px; padding:9px 8px; border-radius:8px;}
@@ -207,6 +220,7 @@
   @keyframes dtPulse{ 0%,100%{ transform:scale(1); opacity:0.9; } 50%{ transform:scale(1.08); opacity:1; } }
   .dt-label{color:#fff; font-family:var(--font-display); font-weight:700; font-size:13.5px; letter-spacing:0.02em; opacity:0.9;}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <div class="digital-transition" id="arrivalOverlay">
@@ -328,6 +342,22 @@ const DIAS = [
 const HORA_INICIO = 7, HORA_FIN = 20;
 const CLAVE_DEFECTO = "Excelencia OEMS";
 
+const CATEGORIAS = {
+  objetivo: { nombre: "Objetivo Común", color: "#3B6FCB" },
+  procesos: { nombre: "Procesos Eficientes", color: "#2F9E5B" },
+  mejora:   { nombre: "Mejora Continua", color: "#D6553A" },
+  personas: { nombre: "Desarrollo de Personas", color: "#D9A62E" },
+};
+const COLOR_LIBRE = "#B4B2A9";
+
+// Ventana de contabilización de horas para el gráfico araña: Lun-Mié 07:30-19:30, Jue 07:30-15:00.
+const VENTANA_CONTABLE = {
+  lunes:     { inicio: "07:30", fin: "19:30" },
+  martes:    { inicio: "07:30", fin: "19:30" },
+  miercoles: { inicio: "07:30", fin: "19:30" },
+  jueves:    { inicio: "07:30", fin: "15:00" },
+};
+
 let STATE = {
   cargando: true,
   modoEdicion: false,
@@ -348,7 +378,7 @@ function init(){
   fbListen("personas", (list) => { STATE.personas = list; render(); });
   fbListen("asignaciones", (list) => {
     const map = {};
-    list.forEach(a => { map[a.id] = { sesionIds: a.sesionIds || [], duraciones: a.duraciones || {} }; });
+    list.forEach(a => { map[a.id] = { sesionIds: a.sesionIds || [], duraciones: a.duraciones || {}, categorias: a.categorias || {}, target: a.target || null }; });
     STATE.asignaciones = map;
     render();
   });
@@ -438,12 +468,15 @@ function renderComite(){
   <div class="panel panel-full">
     <div class="panel-head-row">
       <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2.5"/><path d="M12 7.5V12M12 12H5v3M12 12h7v3"/></svg>Comité Ejecutivo</h2>
-      ${STATE.modoEdicion ? `<button class="btn-secondary btn-sm" data-action="abrir-editar-organigrama">Editar organigrama</button>` : ""}
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn-secondary btn-sm" data-action="abrir-agenda" data-nivel="comite-general" data-id="_general">📋 Agenda del Comité Ejecutivo</button>
+        ${STATE.modoEdicion ? `<button class="btn-secondary btn-sm" data-action="abrir-editar-organigrama">Editar organigrama</button>` : ""}
+      </div>
     </div>
     ${STATE.organigrama.length === 0
       ? `<div class="empty-note">${STATE.modoEdicion ? 'Aún no hay cargos cargados. Usa "Editar organigrama" para crear el primero.' : "Aún no hay organigrama cargado para este nivel."}</div>`
       : `<div class="orgchart-wrap"><div class="orgchart"><ul>${raices.map(n => renderNodoOrg(n, 0)).join("")}</ul></div></div>`}
-    <div class="small-note">Haz clic en un cargo para ver su agenda semanal.</div>
+    <div class="small-note">Haz clic en un cargo para ver su agenda semanal. "Agenda del Comité Ejecutivo" es para sesiones generales que aplican a todo el comité, no a una persona en particular.</div>
   </div>`;
 }
 
@@ -605,7 +638,7 @@ function descripcionFrecuencia(s){
   if (s.frecuencia === "dias") return `${(s.dias || []).map(d => (DIAS.find(x => x.v === d) || {}).c || d).join(", ")} · ${s.horaInicio || ""}${s.horaFin ? "–" + s.horaFin : ""}`;
   return `Diaria · ${s.horaInicio || ""}${s.horaFin ? "–" + s.horaFin : ""}`;
 }
-function renderAgendaGrid(sesionesAsignadas, duraciones){
+function renderAgendaGrid(sesionesAsignadas, duraciones, categorias){
   const rowh = 38;
   const horas = [];
   for (let h = HORA_INICIO; h <= HORA_FIN; h++) horas.push(h);
@@ -624,8 +657,10 @@ function renderAgendaGrid(sesionesAsignadas, duraciones){
         const top = Math.max(0, inicioMin) / 60 * rowh;
         const height = Math.max(finMin - inicioMin, 20) / 60 * rowh;
         const compacto = height < 24;
-        const tooltip = `${s.nombre} — ${b.horaInicio}–${horaFinTexto} (${duracionMin} min)`;
-        bloques.push(`<div class="agenda-block${compacto ? " compacto" : ""}" style="top:${top}px;height:${height}px;" title="${esc(tooltip)}">
+        const cat = CATEGORIAS[categorias[s.id]];
+        const color = cat ? cat.color : COLOR_LIBRE;
+        const tooltip = `${s.nombre} — ${b.horaInicio}–${horaFinTexto} (${duracionMin} min)${cat ? " · " + cat.nombre : " · sin categorizar"}`;
+        bloques.push(`<div class="agenda-block${compacto ? " compacto" : ""}" style="top:${top}px;height:${height}px;background:${color};" title="${esc(tooltip)}">
           <span class="ab-nombre">${esc(s.nombre)}</span>
           ${compacto ? "" : `<div class="ab-hora">${esc(b.horaInicio)}–${esc(horaFinTexto)}</div>`}
         </div>`);
@@ -640,6 +675,10 @@ function renderAgendaGrid(sesionesAsignadas, duraciones){
     ${DIAS.map(d => `<div class="ag-head">${d.c}</div>`).join("")}
     <div class="ag-hours">${horas.map((h, i) => `<div class="ag-hourlabel" style="${i === horas.length - 1 ? "height:0;overflow:visible;border-top:none;" : ""}">${String(h).padStart(2, "0")}:00</div>`).join("")}</div>
     ${columnas.join("")}
+  </div>
+  <div class="cat-legend">
+    ${Object.keys(CATEGORIAS).map(k => `<span class="cl-item"><span class="cl-dot" style="background:${CATEGORIAS[k].color};"></span>${CATEGORIAS[k].nombre}</span>`).join("")}
+    <span class="cl-item"><span class="cl-dot" style="background:${COLOR_LIBRE};"></span>Sin categorizar</span>
   </div>`;
 }
 function duracionEfectiva(sesion, duraciones){
@@ -647,12 +686,102 @@ function duracionEfectiva(sesion, duraciones){
   if (sesion.horaInicio && sesion.horaFin) return Math.max(minutosDesde(sesion.horaFin) - minutosDesde(sesion.horaInicio), 15);
   return 60;
 }
+
+// ---------- Distribución de tiempo (gráfico araña) ----------
+function calcularDistribucion(clave){
+  const asignacion = STATE.asignaciones[clave] || { sesionIds: [], duraciones: {}, categorias: {} };
+  const sesionesAsignadas = STATE.sesiones.filter(s => asignacion.sesionIds.includes(s.id));
+  const totales = { objetivo: 0, procesos: 0, mejora: 0, personas: 0 };
+  let totalContableMin = 0;
+
+  Object.keys(VENTANA_CONTABLE).forEach(dia => {
+    const ventana = VENTANA_CONTABLE[dia];
+    const ventanaInicio = minutosDesde(ventana.inicio);
+    const ventanaFin = minutosDesde(ventana.fin);
+    totalContableMin += (ventanaFin - ventanaInicio);
+
+    sesionesAsignadas.forEach(s => {
+      const cat = asignacion.categorias[s.id];
+      if (!cat || !CATEGORIAS[cat]) return;
+      sesionOcurrenciasEnDia(s, dia).forEach(b => {
+        const inicioMin = minutosDesde(b.horaInicio);
+        const duracionOverride = asignacion.duraciones[s.id];
+        const finMin = duracionOverride ? inicioMin + Number(duracionOverride)
+          : (b.horaFin ? minutosDesde(b.horaFin) : inicioMin + 60);
+        const inicioClip = Math.max(inicioMin, ventanaInicio);
+        const finClip = Math.min(finMin, ventanaFin);
+        if (finClip > inicioClip) totales[cat] += (finClip - inicioClip);
+      });
+    });
+  });
+
+  const ocupado = totales.objetivo + totales.procesos + totales.mejora + totales.personas;
+  const libreMin = Math.max(totalContableMin - ocupado, 0);
+  const pct = (min) => totalContableMin ? Math.round((min / totalContableMin) * 1000) / 10 : 0;
+  return {
+    objetivo: pct(totales.objetivo), procesos: pct(totales.procesos),
+    mejora: pct(totales.mejora), personas: pct(totales.personas), libre: pct(libreMin),
+  };
+}
+function dibujarRadar(clave){
+  const canvas = document.getElementById("radarCanvas");
+  if (!canvas || !window.Chart) return;
+  const dist = calcularDistribucion(clave);
+  const asignacion = STATE.asignaciones[clave] || {};
+  const target = asignacion.target;
+
+  const labels = ["Objetivo Común", "Procesos Eficientes", "Mejora Continua", "Desarrollo de Personas", "Libre"];
+  const coloresEje = [CATEGORIAS.objetivo.color, CATEGORIAS.procesos.color, CATEGORIAS.mejora.color, CATEGORIAS.personas.color, COLOR_LIBRE];
+  const datasets = [{
+    label: "Real",
+    data: [dist.objetivo, dist.procesos, dist.mejora, dist.personas, dist.libre],
+    backgroundColor: "rgba(0,152,153,0.18)",
+    borderColor: "#009899",
+    borderWidth: 2,
+    pointBackgroundColor: "#009899",
+    pointRadius: 3,
+  }];
+  if (target) {
+    datasets.push({
+      label: "Meta",
+      data: [target.objetivo || 0, target.procesos || 0, target.mejora || 0, target.personas || 0, target.libre || 0],
+      backgroundColor: "rgba(44,44,42,0.04)",
+      borderColor: "#2C2C2A",
+      borderWidth: 1.5,
+      borderDash: [5, 4],
+      pointBackgroundColor: "#2C2C2A",
+      pointRadius: 2,
+    });
+  }
+
+  if (window.__radarChart) window.__radarChart.destroy();
+  window.__radarChart = new Chart(canvas, {
+    type: "radar",
+    data: { labels, datasets },
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: { display: false, stepSize: 25 },
+          pointLabels: { font: { size: 8.5 }, color: (ctx) => coloresEje[ctx.index] || "#5F5E5A" },
+          grid: { color: "#E3E1D8" },
+          angleLines: { color: "#E3E1D8" },
+        },
+      },
+      plugins: { legend: { display: !!target, position: "bottom", labels: { boxWidth: 10, font: { size: 10 } } } },
+    },
+  });
+}
 function renderModalAgenda(){
   const p = STATE.personaAbierta;
   const clave = claveDe(p.nivel, p.id);
-  const asignacion = STATE.asignaciones[clave] || { sesionIds: [], duraciones: {} };
+  const asignacion = STATE.asignaciones[clave] || { sesionIds: [], duraciones: {}, categorias: {}, target: null };
   const asignadosIds = asignacion.sesionIds;
   const duraciones = asignacion.duraciones;
+  const categorias = asignacion.categorias || {};
+  const target = asignacion.target;
   const sesionesAsignadas = STATE.sesiones.filter(s => asignadosIds.includes(s.id));
   const recurrentes = sesionesAsignadas.filter(s => s.frecuencia !== "unica");
   const puntuales = sesionesAsignadas.filter(s => s.frecuencia === "unica");
@@ -665,16 +794,42 @@ function renderModalAgenda(){
         <button class="modal-close" data-action="cerrar-modal">✕</button>
       </div>
       <div class="modal-body">
-        ${recurrentes.length ? renderAgendaGrid(recurrentes, duraciones) : `<div class="agenda-empty-msg">Sin reuniones recurrentes asignadas todavía.</div>`}
-        ${puntuales.length ? `
-        <div class="puntual-list">
-          <b style="color:var(--gray-900);">Reuniones puntuales asignadas:</b>
-          ${puntuales.map(s => `<div class="puntual-item"><span>${esc(s.nombre)}</span><span>${esc(s.fechaUnica || "—")} · ${esc(s.horaInicio || "")}</span></div>`).join("")}
-        </div>` : ""}
+        <div class="agenda-layout">
+          <div class="agenda-main">
+            ${recurrentes.length ? renderAgendaGrid(recurrentes, duraciones, categorias) : `<div class="agenda-empty-msg">Sin reuniones recurrentes asignadas todavía.</div>`}
+            ${puntuales.length ? `
+            <div class="puntual-list">
+              <b style="color:var(--gray-900);">Reuniones puntuales asignadas:</b>
+              ${puntuales.map(s => `<div class="puntual-item"><span>${esc(s.nombre)}</span><span>${esc(s.fechaUnica || "—")} · ${esc(s.horaInicio || "")}</span></div>`).join("")}
+            </div>` : ""}
+          </div>
+          <div class="agenda-side">
+            <div class="radar-box">
+              <div class="radar-title">Distribución del tiempo (recurrente semanal)</div>
+              <canvas id="radarCanvas" width="220" height="200"></canvas>
+              <div class="small-note" style="margin-top:6px;">Base: Lun-Mié 07:30-19:30 y Jue 07:30-15:00 (43,5 h/semana). No incluye Vie/Sáb/Dom.</div>
+            </div>
+            ${STATE.modoEdicion ? `
+            <div class="target-box">
+              <div class="radar-title">Meta de distribución (fija, definida por EO)</div>
+              <div class="target-grid">
+                ${Object.keys(CATEGORIAS).map(k => `
+                <label class="target-field"><span style="color:${CATEGORIAS[k].color};">${CATEGORIAS[k].nombre}</span>
+                  <input type="number" min="0" max="100" id="target-${k}" value="${target ? (target[k] || 0) : ""}">
+                </label>`).join("")}
+                <label class="target-field"><span style="color:${COLOR_LIBRE};">Libre</span>
+                  <input type="number" min="0" max="100" id="target-libre" value="${target ? (target.libre || 0) : ""}">
+                </label>
+              </div>
+              <button class="btn-secondary btn-sm" style="width:100%; margin-top:8px;" onclick="guardarTarget('${esc(clave)}')">Guardar meta</button>
+            </div>` : ""}
+          </div>
+        </div>
+
         ${STATE.modoEdicion ? `
         <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--warm-gray-100);">
           <h2 style="margin-bottom:10px;">Asignar reuniones (desde Control de Asistencia)</h2>
-          <div class="small-note" style="margin-top:-6px;margin-bottom:10px;">Si una reunión no tiene hora de término cargada en Control de Asistencia, se usa 60 min por defecto — puedes ajustarlo aquí para que la agenda se vea correcta.</div>
+          <div class="small-note" style="margin-top:-6px;margin-bottom:10px;">Si una reunión no tiene hora de término cargada en Control de Asistencia, se usa 60 min por defecto — puedes ajustarlo aquí. La categoría determina el color en la agenda y en el gráfico de distribución.</div>
           <div class="asignar-list">
             ${STATE.sesiones.length ? STATE.sesiones.map(s => {
               const marcada = asignadosIds.includes(s.id);
@@ -686,8 +841,12 @@ function renderModalAgenda(){
                   <div class="ar-detalle">${descripcionFrecuencia(s)}${s.horaFin ? "" : " · sin hora de término cargada"}</div>
                 </div>
                 ${marcada && s.frecuencia !== "unica" ? `
-                <div style="display:flex; align-items:center; gap:5px; flex-shrink:0;">
-                  <input type="number" min="15" step="5" value="${duracionEfectiva(s, duraciones)}" style="width:60px; padding:5px 7px; border:1.5px solid var(--warm-gray-100); border-radius:7px; font-size:12px;" onchange="actualizarDuracion('${esc(clave)}','${esc(s.id)}',this.value)">
+                <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+                  <select onchange="actualizarCategoria('${esc(clave)}','${esc(s.id)}',this.value)" style="padding:5px 6px; border:1.5px solid var(--warm-gray-100); border-radius:7px; font-size:11px;">
+                    <option value="">Sin categorizar</option>
+                    ${Object.keys(CATEGORIAS).map(k => `<option value="${k}" ${categorias[s.id] === k ? "selected" : ""}>${CATEGORIAS[k].nombre}</option>`).join("")}
+                  </select>
+                  <input type="number" min="15" step="5" value="${duracionEfectiva(s, duraciones)}" style="width:56px; padding:5px 7px; border:1.5px solid var(--warm-gray-100); border-radius:7px; font-size:12px;" onchange="actualizarDuracion('${esc(clave)}','${esc(s.id)}',this.value)">
                   <span style="font-size:11px; color:var(--warm-gray-500);">min</span>
                 </div>` : ""}
               </label>`;
@@ -704,14 +863,32 @@ function renderModalAgenda(){
 window.actualizarOrgCampo = async (id, campo, valor) => { await fbSetDoc("organigrama", id, { [campo]: valor }); };
 window.actualizarPersonaCampo = async (id, campo, valor) => { await fbSetDoc("personas", id, { [campo]: valor }); };
 window.alternarAsignacion = async (clave, sesionId, marcado) => {
-  const actual = STATE.asignaciones[clave] || { sesionIds: [], duraciones: {} };
+  const actual = STATE.asignaciones[clave] || { sesionIds: [], duraciones: {}, categorias: {} };
   const nuevas = marcado ? [...new Set([...actual.sesionIds, sesionId])] : actual.sesionIds.filter(x => x !== sesionId);
-  await fbSetDoc("asignaciones", clave, { sesionIds: nuevas, duraciones: actual.duraciones });
+  await fbSetDoc("asignaciones", clave, { sesionIds: nuevas, duraciones: actual.duraciones, categorias: actual.categorias });
 };
 window.actualizarDuracion = async (clave, sesionId, minutos) => {
-  const actual = STATE.asignaciones[clave] || { sesionIds: [], duraciones: {} };
+  const actual = STATE.asignaciones[clave] || { sesionIds: [], duraciones: {}, categorias: {} };
   const nuevasDuraciones = { ...actual.duraciones, [sesionId]: Number(minutos) };
-  await fbSetDoc("asignaciones", clave, { sesionIds: actual.sesionIds, duraciones: nuevasDuraciones });
+  await fbSetDoc("asignaciones", clave, { sesionIds: actual.sesionIds, duraciones: nuevasDuraciones, categorias: actual.categorias });
+};
+window.actualizarCategoria = async (clave, sesionId, categoria) => {
+  const actual = STATE.asignaciones[clave] || { sesionIds: [], duraciones: {}, categorias: {} };
+  const nuevasCategorias = { ...actual.categorias };
+  if (categoria) nuevasCategorias[sesionId] = categoria; else delete nuevasCategorias[sesionId];
+  await fbSetDoc("asignaciones", clave, { sesionIds: actual.sesionIds, duraciones: actual.duraciones, categorias: nuevasCategorias });
+};
+window.guardarTarget = async (clave) => {
+  const leer = (id) => Number(document.getElementById(id).value) || 0;
+  const target = {
+    objetivo: leer("target-objetivo"), procesos: leer("target-procesos"),
+    mejora: leer("target-mejora"), personas: leer("target-personas"), libre: leer("target-libre"),
+  };
+  const suma = target.objetivo + target.procesos + target.mejora + target.personas + target.libre;
+  if (Math.abs(suma - 100) > 0.5) {
+    if (!confirm(`Los porcentajes suman ${suma}%, no 100%. ¿Guardar igual?`)) return;
+  }
+  await fbSetDoc("asignaciones", clave, { target });
 };
 window.actualizarBusqueda = (valor) => { STATE.search = valor; render(); };
 
@@ -747,7 +924,9 @@ async function eliminarPersona(id, nivel){
 
 function abrirAgenda(nivel, id){
   let nombre, cargo;
-  if (nivel === "comite") {
+  if (nivel === "comite-general") {
+    nombre = "Comité Ejecutivo"; cargo = "Sesiones generales";
+  } else if (nivel === "comite") {
     const n = STATE.organigrama.find(x => x.id === id);
     if (!n) return;
     nombre = n.nombre; cargo = n.cargo;
@@ -815,6 +994,10 @@ function attachHandlers(){
     const el = document.getElementById(window.__focoPendiente.id);
     if (el) { el.focus(); if (el.setSelectionRange) el.setSelectionRange(window.__focoPendiente.pos, window.__focoPendiente.pos); }
     window.__focoPendiente = null;
+  }
+
+  if (STATE.personaAbierta) {
+    dibujarRadar(claveDe(STATE.personaAbierta.nivel, STATE.personaAbierta.id));
   }
 }
 </script>

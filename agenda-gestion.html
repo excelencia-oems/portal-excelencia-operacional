@@ -384,10 +384,10 @@ const HORA_INICIO = 7, HORA_FIN = 20;
 const CLAVE_DEFECTO = "Excelencia OEMS";
 
 const CATEGORIAS = {
-  objetivo: { nombre: "Objetivo Común", color: "#D1BF99" },
-  procesos: { nombre: "Procesos Eficientes", color: "#444441" },
-  mejora:   { nombre: "Mejora Continua", color: "#C04F15" },
   personas: { nombre: "Desarrollo de Personas", color: "#009899" },
+  objetivo: { nombre: "Objetivo Común", color: "#D1BF99" },
+  mejora:   { nombre: "Mejora Continua", color: "#C04F15" },
+  procesos: { nombre: "Procesos Eficientes", color: "#444441" },
 };
 const COLOR_LIBRE = "#B4B2A9";
 
@@ -1041,11 +1041,11 @@ function dibujarRadar(clave){
   const asignacion = STATE.asignaciones[clave] || {};
   const target = asignacion.target;
 
-  const labels = [["Objetivo", "Común"], ["Procesos", "Eficientes"], ["Mejora", "Continua"], ["Desarrollo", "de Personas"], ["Libre"]];
-  const coloresEje = [CATEGORIAS.objetivo.color, CATEGORIAS.procesos.color, CATEGORIAS.mejora.color, CATEGORIAS.personas.color, COLOR_LIBRE];
+  const labels = [["Desarrollo", "de Personas"], ["Objetivo", "Común"], ["Mejora", "Continua"], ["Procesos", "Eficientes"], ["Libre"]];
+  const coloresEje = [CATEGORIAS.personas.color, CATEGORIAS.objetivo.color, CATEGORIAS.mejora.color, CATEGORIAS.procesos.color, COLOR_LIBRE];
   const datasets = [{
     label: "Real",
-    data: [dist.objetivo, dist.procesos, dist.mejora, dist.personas, dist.libre],
+    data: [dist.personas, dist.objetivo, dist.mejora, dist.procesos, dist.libre],
     backgroundColor: "rgba(0,152,153,0.18)",
     borderColor: "#009899",
     borderWidth: 2,
@@ -1055,7 +1055,7 @@ function dibujarRadar(clave){
   if (target) {
     datasets.push({
       label: "Meta",
-      data: [target.objetivo || 0, target.procesos || 0, target.mejora || 0, target.personas || 0, target.libre || 0],
+      data: [target.personas || 0, target.objetivo || 0, target.mejora || 0, target.procesos || 0, target.libre || 0],
       backgroundColor: "rgba(44,44,42,0.04)",
       borderColor: "#2C2C2A",
       borderWidth: 1.5,

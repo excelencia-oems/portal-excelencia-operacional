@@ -294,7 +294,7 @@ function render(){
   document.getElementById("botonAgregarEst").innerHTML = STATE.modoEdicion
     ? `<div style="display:flex; gap:8px; margin-bottom:14px;">
         <button class="btn-primary btn-sm" style="flex:1;" onclick="abrirFormEstandar()">+ Agregar estándar</button>
-        <button class="btn-secondary btn-sm" onclick="STATE.modal='gerencias'; render();">Gerencias / Áreas</button>
+        <button class="btn-secondary btn-sm" onclick="abrirGerencias()">Gerencias / Áreas</button>
       </div>` : "";
 
   const q = STATE.search.trim().toLowerCase();
@@ -366,6 +366,8 @@ function renderModalEst(){
       <div class="modal" style="max-width:600px;">
         <div class="modal-head"><div><h3>Gerencias y Áreas</h3><div class="small-note" style="margin-top:2px;">Estas son las opciones disponibles al crear o editar un estándar.</div></div><button class="modal-close" data-close-est>✕</button></div>
         <div class="modal-body">
+          <button class="btn-secondary btn-sm" style="width:100%; margin-bottom:14px;" onclick="sincronizarGerenciasDesdeEstandares()">🔄 Sincronizar desde estándares cargados</button>
+          <div class="small-note" style="margin-top:-8px; margin-bottom:14px;">Revisa los estándares ya cargados y agrega automáticamente cualquier gerencia/área que hayas escrito ahí pero que todavía no esté en esta lista. No borra nada de lo que ya tengas acá.</div>
           ${STATE.gerenciasEst.length === 0 ? `<div class="empty-note">Aún no hay gerencias cargadas.</div>` : ""}
           ${[...STATE.gerenciasEst].sort((a, b) => a.nombre.localeCompare(b.nombre)).map(g => `
           <div class="gerencia-block">
@@ -466,6 +468,32 @@ window.cambiarClaveEst = async () => {
   alert("Clave actualizada correctamente.");
 };
 
+window.abrirGerencias = () => { STATE.modal = "gerencias"; render(); };
+window.sincronizarGerenciasDesdeEstandares = async () => {
+  const mapa = {};
+  STATE.gerenciasEst.forEach(g => { mapa[g.nombre] = new Set(g.areas || []); });
+  STATE.estandares.forEach(e => {
+    const g = (e.gerencia || "").trim();
+    if (!g) return;
+    if (!mapa[g]) mapa[g] = new Set();
+    const a = (e.area || "").trim();
+    if (a) mapa[g].add(a);
+  });
+  let cambios = 0;
+  await Promise.all(Object.keys(mapa).map(async (nombre) => {
+    const nuevasAreas = [...mapa[nombre]].sort();
+    const existente = STATE.gerenciasEst.find(g => g.nombre === nombre);
+    if (existente) {
+      const antes = (existente.areas || []).length;
+      if (nuevasAreas.length !== antes || nuevasAreas.some(a => !(existente.areas || []).includes(a))) cambios++;
+      await fbSetDoc("gerenciasEst", existente.id, { areas: nuevasAreas });
+    } else {
+      cambios++;
+      await fbSetDoc("gerenciasEst", "ger_sync_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6), { nombre, areas: nuevasAreas });
+    }
+  }));
+  alert(cambios ? `Listo — se actualizaron ${cambios} gerencia(s).` : "Ya estaba todo al día, no había nada nuevo que agregar.");
+};
 window.abrirFormEstandar = (id) => { STATE.modal = "form-estandar"; STATE.editando = id || null; render(); };
 window.guardarEstandar = async (id) => {
   const codigo = document.getElementById("est-codigo").value.trim();

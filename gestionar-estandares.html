@@ -86,8 +86,15 @@
   .visor-vacio{display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:420px; color:var(--warm-gray-500); text-align:center; gap:10px;}
   .visor-vacio svg{width:52px; height:52px; color:var(--warm-gray-300);}
   .visor-doc{display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:420px; text-align:center; padding:20px;}
-  .visor-embed-wrap{width:100%; aspect-ratio:16/10; border-radius:12px; overflow:hidden; border:1px solid var(--warm-gray-100); margin-bottom:10px; background:var(--warm-gray-50);}
-  .visor-embed-wrap iframe{width:100%; height:100%; border:none; display:block;}
+  .resumen-interactivo{width:100%; max-width:480px; margin-bottom:20px;}
+  .resumen-nav{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px;}
+  .resumen-slide-card{background:var(--warm-gray-50); border:1px solid var(--warm-gray-100); border-radius:14px; padding:22px 20px; min-height:140px; text-align:left; display:flex; flex-direction:column; justify-content:center; gap:8px;}
+  .resumen-slide-card p{font-size:13.5px; line-height:1.5; color:var(--gray-900);}
+  .resumen-slide-card p:first-child{font-family:var(--font-display); font-weight:700; font-size:15px;}
+  .resumen-dots{display:flex; gap:5px; justify-content:center; margin-top:12px; flex-wrap:wrap;}
+  .resumen-dot{width:7px; height:7px; border-radius:100px; background:var(--warm-gray-100); cursor:pointer; transition:.15s;}
+  .resumen-dot.activo{background:var(--oems-teal); width:18px;}
+  .resumen-dot:hover{background:var(--oems-teal-dark);}
   .visor-icon-grande{width:120px; height:120px; border-radius:24px; display:flex; align-items:center; justify-content:center; margin-bottom:22px; box-shadow:0 12px 30px rgba(0,0,0,.12); animation:visorPop .35s ease;}
   .visor-icon-grande svg{width:56px; height:56px; color:#fff;}
   @keyframes visorPop{ from{ transform:scale(.85); opacity:0; } to{ transform:scale(1); opacity:1; } }
@@ -112,6 +119,7 @@
   .field input{padding:9px 11px; border:1.5px solid var(--warm-gray-100); border-radius:9px; font-size:13px; font-family:inherit; width:100%;}
   .field input:focus{outline:none; border-color:var(--oems-teal);}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 </head>
 <body>
 <header class="topbanner">
@@ -243,6 +251,7 @@ let STATE = {
   gerenciaFiltro: "",
   areaFiltro: "",
   seleccionado: null,
+  slideActual: 0,
   modal: null,
   editando: null,
 };
@@ -292,7 +301,7 @@ function render(){
     <div class="estandar-row ${STATE.seleccionado === e.id ? "activo" : ""}" onclick="seleccionarEstandar('${e.id}')">
       <div class="er-icon" style="background:${tipo.color};">${tipo.nombre.slice(0, 1)}</div>
       <div>
-        <div class="er-nombre">${e.codigo ? `<span style="color:var(--oems-teal-dark); font-family:var(--font-display);">${esc(e.codigo)}</span> · ` : ""}${esc(e.nombre)}</div>
+        <div class="er-nombre">${e.codigo ? `<span style="color:var(--oems-teal-dark); font-family:var(--font-display);">${esc(e.codigo)}</span> · ` : ""}${esc(e.nombre)}${Array.isArray(e.resumenSlides) && e.resumenSlides.length ? ' <span title="Tiene resumen interactivo" style="font-size:10px;">▶️</span>' : ""}</div>
         <div class="er-cat">${[e.gerencia, e.area].filter(Boolean).join(" · ") || "Sin gerencia/área"}</div>
       </div>
       ${STATE.modoEdicion ? `
@@ -319,37 +328,45 @@ function renderVisor(){
   const e = STATE.estandares.find(x => x.id === STATE.seleccionado);
   if (!e) return `<div class="visor-vacio">Este estándar ya no existe.</div>`;
   const tipo = detectarTipo(e.url);
-
-  // Intento de vista embebida real (Office Online Viewer) para PPTX/DOCX/XLSX.
-  // Solo funciona si SharePoint permite que un visor externo acceda al documento —
-  // con "Personas de Glencore" restringido, es probable que no cargue. Si no carga,
-  // igual queda la tarjeta con el botón "Abrir documento" más abajo, así que no se pierde nada.
-  const puedeIntentarEmbed = ["presentacion", "doc", "hoja"].includes(tipo.icono);
-  const embedUrl = puedeIntentarEmbed ? `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(e.url)}` : null;
+  const tieneResumen = Array.isArray(e.resumenSlides) && e.resumenSlides.length > 0;
 
   return `
   <div class="visor-doc">
-    ${embedUrl ? `
-    <div class="visor-embed-wrap">
-      <iframe src="${esc(embedUrl)}" title="Vista previa" loading="lazy"></iframe>
-    </div>
-    <div class="small-note" style="margin-bottom:18px;">¿No ves nada arriba? SharePoint bloqueó la vista embebida para este documento — usa el botón de abajo.</div>
-    ` : ""}
     <div class="visor-icon-grande" style="background:${tipo.color};">${iconoSvg(tipo.icono)}</div>
     ${e.codigo ? `<div class="small-note" style="font-family:var(--font-display); font-weight:700; color:var(--oems-teal-dark); margin-bottom:2px;">${esc(e.codigo)}</div>` : ""}
     <div class="visor-nombre">${esc(e.nombre)}</div>
-    <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:22px;">
+    <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:${tieneResumen ? "18" : "22"}px;">
       ${e.gerencia ? `<span class="visor-cat-badge">${esc(e.gerencia)}</span>` : ""}
       ${e.area ? `<span class="visor-cat-badge">${esc(e.area)}</span>` : ""}
       <span class="visor-cat-badge">${tipo.nombre}</span>
     </div>
+    ${tieneResumen ? renderResumenInteractivo(e) : ""}
     <div>
       <a class="visor-abrir" href="${esc(e.url)}" target="_blank" rel="noopener">
-        Abrir documento
+        Abrir documento original
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg>
       </a>
     </div>
     <div class="visor-nota">Se abre en una pestaña nueva, en SharePoint.</div>
+  </div>`;
+}
+function renderResumenInteractivo(e){
+  const slides = e.resumenSlides;
+  const idx = Math.min(Math.max(STATE.slideActual, 0), slides.length - 1);
+  const slide = slides[idx];
+  return `
+  <div class="resumen-interactivo">
+    <div class="resumen-nav">
+      <button class="btn-secondary btn-sm" ${idx <= 0 ? "disabled" : ""} onclick="cambiarSlideResumen(-1)">← Anterior</button>
+      <span class="small-note">Diapositiva ${idx + 1} de ${slides.length}</span>
+      <button class="btn-secondary btn-sm" ${idx >= slides.length - 1 ? "disabled" : ""} onclick="cambiarSlideResumen(1)">Siguiente →</button>
+    </div>
+    <div class="resumen-slide-card">
+      ${slide.textos.length ? slide.textos.map(t => `<p>${esc(t)}</p>`).join("") : `<p class="small-note">(Esta diapositiva no tiene texto extraíble — probablemente es una imagen)</p>`}
+    </div>
+    <div class="resumen-dots">
+      ${slides.map((s, i) => `<span class="resumen-dot ${i === idx ? "activo" : ""}" onclick="irASlideResumen(${i})"></span>`).join("")}
+    </div>
   </div>`;
 }
 
@@ -383,6 +400,11 @@ function renderModalEst(){
         <div class="field"><label>Gerencia</label><input type="text" id="est-gerencia" value="${existente ? esc(existente.gerencia || "") : ""}" placeholder="Ej: Gerencia Mantenimiento"></div>
         <div class="field"><label>Área</label><input type="text" id="est-area" value="${existente ? esc(existente.area || "") : ""}" placeholder="Ej: Confiabilidad"></div>
         <div class="field"><label>Enlace en SharePoint</label><input type="text" id="est-url" value="${existente ? esc(existente.url) : ""}" placeholder="https://glencore.sharepoint.com/..."></div>
+        <div class="field">
+          <label>Adjuntar PPTX para resumen interactivo (opcional)</label>
+          <input type="file" id="est-pptx" accept=".pptx">
+          <div class="small-note" id="est-pptx-status">${existente && Array.isArray(existente.resumenSlides) && existente.resumenSlides.length ? `Ya tiene un resumen de ${existente.resumenSlides.length} diapositiva(s) — sube un archivo solo si quieres reemplazarlo.` : "El documento en sí se sigue abriendo en SharePoint; esto es solo para el resumen navegable."}</div>
+        </div>
       </div>
       <div class="modal-foot">
         <button class="btn-secondary btn-sm" data-close-est>Cancelar</button>
@@ -411,7 +433,9 @@ function attachHandlersEst(){
 window.actualizarBusquedaEst = (valor) => { STATE.search = valor; render(); };
 window.actualizarFiltroGerencia = (valor) => { STATE.gerenciaFiltro = valor; render(); };
 window.actualizarFiltroArea = (valor) => { STATE.areaFiltro = valor; render(); };
-window.seleccionarEstandar = (id) => { STATE.seleccionado = id; render(); };
+window.seleccionarEstandar = (id) => { STATE.seleccionado = id; STATE.slideActual = 0; render(); };
+window.cambiarSlideResumen = (delta) => { STATE.slideActual = Math.max(0, STATE.slideActual + delta); render(); };
+window.irASlideResumen = (i) => { STATE.slideActual = i; render(); };
 
 window.alternarModoEdicion = () => {
   if (STATE.modoEdicion) { STATE.modoEdicion = false; render(); return; }
@@ -440,6 +464,25 @@ window.cambiarClaveEst = async () => {
   alert("Clave actualizada correctamente.");
 };
 
+async function extraerResumenPPTX(archivo){
+  const zip = await window.JSZip.loadAsync(archivo);
+  const nombresSlides = Object.keys(zip.files)
+    .filter(n => /^ppt\/slides\/slide\d+\.xml$/.test(n))
+    .sort((a, b) => {
+      const na = parseInt(a.match(/slide(\d+)\.xml/)[1], 10);
+      const nb = parseInt(b.match(/slide(\d+)\.xml/)[1], 10);
+      return na - nb;
+    });
+  if (!nombresSlides.length) throw new Error("No se encontraron diapositivas dentro del archivo (¿es realmente un .pptx?)");
+  const slides = [];
+  for (const nombre of nombresSlides) {
+    const xml = await zip.files[nombre].async("string");
+    const textos = [...xml.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(m => m[1]).filter(t => t.trim());
+    slides.push({ numero: slides.length + 1, textos });
+  }
+  return slides;
+}
+
 window.abrirFormEstandar = (id) => { STATE.modal = "form-estandar"; STATE.editando = id || null; render(); };
 window.guardarEstandar = async (id) => {
   const codigo = document.getElementById("est-codigo").value.trim();
@@ -448,8 +491,23 @@ window.guardarEstandar = async (id) => {
   const area = document.getElementById("est-area").value.trim();
   const url = document.getElementById("est-url").value.trim();
   if (!nombre || !url) { alert("Completa al menos el nombre y el enlace."); return; }
+
+  const payload = { codigo, nombre, gerencia, area, url };
+  const archivoInput = document.getElementById("est-pptx");
+  const statusEl = document.getElementById("est-pptx-status");
+  if (archivoInput.files[0]) {
+    if (statusEl) statusEl.textContent = "Leyendo el PPTX y armando el resumen…";
+    try {
+      payload.resumenSlides = await extraerResumenPPTX(archivoInput.files[0]);
+    } catch (e) {
+      if (statusEl) statusEl.textContent = "";
+      alert("No se pudo leer el PPTX: " + e.message);
+      return;
+    }
+  }
+
   const docId = id || ("est_" + Date.now());
-  await fbSetDoc("estandares", docId, { codigo, nombre, gerencia, area, url });
+  await fbSetDoc("estandares", docId, payload);
   STATE.modal = null;
   STATE.editando = null;
   render();

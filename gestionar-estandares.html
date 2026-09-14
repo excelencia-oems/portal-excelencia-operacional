@@ -98,7 +98,19 @@
   .field{display:flex; flex-direction:column; gap:5px; margin-bottom:12px;}
   .field label{font-size:12px; font-weight:700; color:var(--gray-700);}
   .field input{padding:9px 11px; border:1.5px solid var(--warm-gray-100); border-radius:9px; font-size:13px; font-family:inherit; width:100%;}
+  .field select{padding:9px 11px; border:1.5px solid var(--warm-gray-100); border-radius:9px; font-size:13px; font-family:inherit; width:100%; background:#fff;}
+  .field select:focus{outline:none; border-color:var(--oems-teal);}
   .field input:focus{outline:none; border-color:var(--oems-teal);}
+
+  .gerencia-block{background:var(--warm-gray-50); border-radius:12px; padding:14px; margin-bottom:12px;}
+  .gerencia-block-head{display:flex; align-items:center; gap:8px; margin-bottom:10px;}
+  .gerencia-block-head input{flex:1; font-weight:700; font-size:13.5px; border:1.5px solid transparent; background:transparent; padding:6px 8px; border-radius:7px; font-family:inherit;}
+  .gerencia-block-head input:focus{outline:none; border-color:var(--oems-teal); background:#fff;}
+  .areas-chips{display:flex; flex-wrap:wrap; gap:6px;}
+  .area-chip{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; background:#fff; border:1px solid var(--warm-gray-100); color:var(--gray-700); padding:4px 6px 4px 10px; border-radius:100px;}
+  .area-chip button{background:none; border:none; cursor:pointer; color:var(--warm-gray-500); font-size:11px; padding:2px;}
+  .area-chip button:hover{color:var(--red-600);}
+  .gerencia-block input[id^="nueva-area-"]{padding:6px 9px; border:1.5px solid var(--warm-gray-100); border-radius:7px; font-size:12px; font-family:inherit;}
 </style>
 </head>
 <body>
@@ -160,7 +172,7 @@
 </main>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 // Mismo proyecto Firebase que "Gestionar mi Agenda" — comparten la clave de
@@ -212,11 +224,17 @@ function detectarTipo(url){
   const m = (url || "").match(/\/:([bpxw]):\//);
   return m ? TIPO_ARCHIVO[m[1]] : { nombre: "Documento", color: "#5F5E5A", icono: "doc" };
 }
+function renderOpcionesArea(nombreGerencia, areaSeleccionada){
+  const g = STATE.gerenciasEst.find(x => x.nombre === nombreGerencia);
+  const areas = g ? [...(g.areas || [])].sort() : [];
+  return `<option value="">— Sin área —</option>` + areas.map(a => `<option value="${esc(a)}" ${areaSeleccionada === a ? "selected" : ""}>${esc(a)}</option>`).join("");
+}
 
 let STATE = {
   cargando: true,
   modoEdicion: false,
   estandares: [],
+  gerenciasEst: [],
   search: "",
   gerenciaFiltro: "",
   areaFiltro: "",
@@ -224,8 +242,30 @@ let STATE = {
   editando: null,
 };
 
+async function seedGerenciasSiVacio(){
+  const snap = await getDocs(collection(db, "gerenciasEst"));
+  if (snap.docs.length > 0) return;
+  const snapEst = await getDocs(collection(db, "estandares"));
+  const mapa = {};
+  snapEst.docs.forEach(d => {
+    const e = d.data();
+    const g = (e.gerencia || "").trim();
+    if (!g) return;
+    if (!mapa[g]) mapa[g] = new Set();
+    const a = (e.area || "").trim();
+    if (a) mapa[g].add(a);
+  });
+  const nombres = Object.keys(mapa);
+  if (!nombres.length) return;
+  await Promise.all(nombres.map((nombre, i) =>
+    fbSetDoc("gerenciasEst", "ger_seed_" + i + "_" + Date.now(), { nombre, areas: [...mapa[nombre]].sort() })
+  ));
+}
+
 function init(){
   fbListen("estandares", (list) => { STATE.estandares = list; render(); });
+  fbListen("gerenciasEst", (list) => { STATE.gerenciasEst = list; render(); });
+  seedGerenciasSiVacio();
   fbGetDoc("config", "eo").then(async (cfg) => {
     if (!cfg) await fbSetDoc("config", "eo", { clave: CLAVE_DEFECTO });
     STATE.cargando = false;
@@ -252,7 +292,10 @@ function render(){
     `<option value="">Todas las áreas</option>` + areas.map(a => `<option value="${esc(a)}" ${STATE.areaFiltro === a ? "selected" : ""}>${esc(a)}</option>`).join("");
 
   document.getElementById("botonAgregarEst").innerHTML = STATE.modoEdicion
-    ? `<button class="btn-primary btn-sm" style="width:100%; margin-bottom:14px;" onclick="abrirFormEstandar()">+ Agregar estándar</button>` : "";
+    ? `<div style="display:flex; gap:8px; margin-bottom:14px;">
+        <button class="btn-primary btn-sm" style="flex:1;" onclick="abrirFormEstandar()">+ Agregar estándar</button>
+        <button class="btn-secondary btn-sm" onclick="STATE.modal='gerencias'; render();">Gerencias / Áreas</button>
+      </div>` : "";
 
   const q = STATE.search.trim().toLowerCase();
   let filtrados = STATE.estandares.filter(e =>
@@ -300,7 +343,7 @@ function renderFilaEstandar(e){
 }
 
 function renderModalEst(){
-  if (STATE.modal !== "clave" && STATE.modal !== "form-estandar") return "";
+  if (STATE.modal !== "clave" && STATE.modal !== "form-estandar" && STATE.modal !== "gerencias") return "";
   if (STATE.modal === "clave") {
     return `
     <div class="modal-overlay" id="ovModalEst">
@@ -317,6 +360,36 @@ function renderModalEst(){
       </div>
     </div>`;
   }
+  if (STATE.modal === "gerencias") {
+    return `
+    <div class="modal-overlay" id="ovModalEst">
+      <div class="modal" style="max-width:600px;">
+        <div class="modal-head"><div><h3>Gerencias y Áreas</h3><div class="small-note" style="margin-top:2px;">Estas son las opciones disponibles al crear o editar un estándar.</div></div><button class="modal-close" data-close-est>✕</button></div>
+        <div class="modal-body">
+          ${STATE.gerenciasEst.length === 0 ? `<div class="empty-note">Aún no hay gerencias cargadas.</div>` : ""}
+          ${[...STATE.gerenciasEst].sort((a, b) => a.nombre.localeCompare(b.nombre)).map(g => `
+          <div class="gerencia-block">
+            <div class="gerencia-block-head">
+              <input type="text" value="${esc(g.nombre)}" onchange="renombrarGerencia('${g.id}', this.value)">
+              <button class="btn-danger btn-sm" onclick="eliminarGerencia('${g.id}')">Eliminar</button>
+            </div>
+            <div class="areas-chips">
+              ${(g.areas || []).map(a => `<span class="area-chip">${esc(a)}<button class="quitar-area-btn" data-gid="${g.id}" data-area="${esc(a)}">✕</button></span>`).join("") || `<span class="small-note">Sin áreas todavía.</span>`}
+            </div>
+            <div style="display:flex; gap:6px; margin-top:8px;">
+              <input type="text" id="nueva-area-${g.id}" placeholder="Nueva área...">
+              <button class="btn-secondary btn-sm" onclick="agregarArea('${g.id}')">+ Área</button>
+            </div>
+          </div>`).join("")}
+          <div style="display:flex; gap:8px; margin-top:16px; padding-top:16px; border-top:1px solid var(--warm-gray-100);">
+            <input type="text" id="nueva-gerencia-nombre" placeholder="Nombre de la nueva gerencia" style="flex:1; padding:9px 11px; border:1.5px solid var(--warm-gray-100); border-radius:9px; font-size:13px; font-family:inherit;">
+            <button class="btn-primary btn-sm" onclick="agregarGerencia()">+ Agregar gerencia</button>
+          </div>
+        </div>
+        <div class="modal-foot"><button class="btn-secondary btn-sm" data-close-est>Cerrar</button></div>
+      </div>
+    </div>`;
+  }
   const editId = STATE.editando;
   const existente = editId ? STATE.estandares.find(e => e.id === editId) : null;
   return `
@@ -326,8 +399,15 @@ function renderModalEst(){
       <div class="modal-body">
         <div class="field"><label>Código Estándar</label><input type="text" id="est-codigo" value="${existente ? esc(existente.codigo || "") : ""}" placeholder="Ej: PE-OP-001"></div>
         <div class="field"><label>Nombre del documento</label><input type="text" id="est-nombre" value="${existente ? esc(existente.nombre) : ""}" placeholder="Ej: Procedimiento operación de chancado"></div>
-        <div class="field"><label>Gerencia</label><input type="text" id="est-gerencia" value="${existente ? esc(existente.gerencia || "") : ""}" placeholder="Ej: Gerencia Mantenimiento"></div>
-        <div class="field"><label>Área</label><input type="text" id="est-area" value="${existente ? esc(existente.area || "") : ""}" placeholder="Ej: Confiabilidad"></div>
+        <div class="field"><label>Gerencia</label>
+          <select id="est-gerencia" onchange="actualizarAreaSelectForm(this.value)">
+            <option value="">— Sin gerencia —</option>
+            ${[...STATE.gerenciasEst].sort((a, b) => a.nombre.localeCompare(b.nombre)).map(g => `<option value="${esc(g.nombre)}" ${existente && existente.gerencia === g.nombre ? "selected" : ""}>${esc(g.nombre)}</option>`).join("")}
+          </select>
+        </div>
+        <div class="field"><label>Área</label>
+          <select id="est-area">${renderOpcionesArea(existente ? existente.gerencia : "", existente ? existente.area : "")}</select>
+        </div>
         <div class="field"><label>Enlace en SharePoint</label><input type="text" id="est-url" value="${existente ? esc(existente.url) : ""}" placeholder="https://glencore.sharepoint.com/..."></div>
       </div>
       <div class="modal-foot">
@@ -342,6 +422,7 @@ function attachHandlersEst(){
   document.querySelectorAll("[data-close-est]").forEach(el => { el.onclick = () => { STATE.modal = null; STATE.editando = null; render(); }; });
   const ov = document.getElementById("ovModalEst");
   if (ov) ov.addEventListener("click", (e) => { if (e.target === ov) { STATE.modal = null; STATE.editando = null; render(); } });
+  document.querySelectorAll(".quitar-area-btn").forEach(btn => { btn.onclick = () => quitarArea(btn.dataset.gid, btn.dataset.area); });
 
   if (window.__focoPendiente) {
     const el = document.getElementById(window.__focoPendiente.id);
@@ -403,6 +484,41 @@ window.guardarEstandar = async (id) => {
 window.eliminarEstandar = async (id) => {
   if (!confirm("¿Eliminar este estándar del catálogo?")) return;
   await fbDeleteDoc("estandares", id);
+};
+
+window.actualizarAreaSelectForm = (nombreGerencia) => {
+  document.getElementById("est-area").innerHTML = renderOpcionesArea(nombreGerencia, "");
+};
+window.agregarGerencia = async () => {
+  const input = document.getElementById("nueva-gerencia-nombre");
+  const nombre = input.value.trim();
+  if (!nombre) return;
+  if (STATE.gerenciasEst.some(g => g.nombre.toLowerCase() === nombre.toLowerCase())) { alert("Ya existe una gerencia con ese nombre."); return; }
+  await fbSetDoc("gerenciasEst", "ger_" + Date.now(), { nombre, areas: [] });
+  input.value = "";
+};
+window.renombrarGerencia = async (id, nombre) => {
+  nombre = nombre.trim();
+  if (!nombre) return;
+  await fbSetDoc("gerenciasEst", id, { nombre });
+};
+window.eliminarGerencia = async (id) => {
+  if (!confirm("¿Eliminar esta gerencia y sus áreas? Los estándares que ya la tengan asignada conservan el texto, pero dejará de aparecer como opción para elegir.")) return;
+  await fbDeleteDoc("gerenciasEst", id);
+};
+window.agregarArea = async (gid) => {
+  const input = document.getElementById("nueva-area-" + gid);
+  const area = input.value.trim();
+  if (!area) return;
+  const g = STATE.gerenciasEst.find(x => x.id === gid);
+  if (!g) return;
+  if ((g.areas || []).some(a => a.toLowerCase() === area.toLowerCase())) { alert("Ya existe esa área en esta gerencia."); return; }
+  await fbSetDoc("gerenciasEst", gid, { areas: [...(g.areas || []), area] });
+};
+window.quitarArea = async (gid, area) => {
+  const g = STATE.gerenciasEst.find(x => x.id === gid);
+  if (!g) return;
+  await fbSetDoc("gerenciasEst", gid, { areas: (g.areas || []).filter(a => a !== area) });
 };
 </script>
 </body>

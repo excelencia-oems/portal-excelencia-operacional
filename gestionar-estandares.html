@@ -156,9 +156,10 @@
       </div>
       <div class="search-box">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input type="text" id="buscadorEstandares" placeholder="Buscar por nombre..." oninput="actualizarBusquedaEst(this.value)">
+        <input type="text" id="buscadorEstandares" placeholder="Buscar por código o nombre..." oninput="actualizarBusquedaEst(this.value)">
       </div>
-      <select class="filtro-cat" id="filtroCategoria" onchange="actualizarFiltroCat(this.value)"></select>
+      <select class="filtro-cat" id="filtroGerencia" onchange="actualizarFiltroGerencia(this.value)"></select>
+      <select class="filtro-cat" id="filtroArea" onchange="actualizarFiltroArea(this.value)"></select>
       <div id="botonAgregarEst"></div>
       <div class="lista-estandares" id="listaEstandares"></div>
     </div>
@@ -237,7 +238,8 @@ let STATE = {
   modoEdicion: false,
   estandares: [],
   search: "",
-  categoriaFiltro: "",
+  gerenciaFiltro: "",
+  areaFiltro: "",
   seleccionado: null,
   modal: null,
   editando: null,
@@ -263,17 +265,21 @@ function render(){
     ? `<span class="edicion-badge">✓ Modo edición activo</span> <button class="btn-secondary btn-sm" onclick="cambiarClaveEst()" style="margin-left:8px;">Cambiar clave</button>` : "";
   document.getElementById("btnClave").textContent = STATE.modoEdicion ? "🔓 Salir de modo edición" : "🔒 Modo edición (Excelencia)";
 
-  const categorias = [...new Set(STATE.estandares.map(e => e.categoria).filter(Boolean))].sort();
-  document.getElementById("filtroCategoria").innerHTML =
-    `<option value="">Todas las categorías</option>` + categorias.map(c => `<option value="${esc(c)}" ${STATE.categoriaFiltro === c ? "selected" : ""}>${esc(c)}</option>`).join("");
+  const gerencias = [...new Set(STATE.estandares.map(e => e.gerencia).filter(Boolean))].sort();
+  document.getElementById("filtroGerencia").innerHTML =
+    `<option value="">Todas las gerencias</option>` + gerencias.map(g => `<option value="${esc(g)}" ${STATE.gerenciaFiltro === g ? "selected" : ""}>${esc(g)}</option>`).join("");
+  const areas = [...new Set(STATE.estandares.map(e => e.area).filter(Boolean))].sort();
+  document.getElementById("filtroArea").innerHTML =
+    `<option value="">Todas las áreas</option>` + areas.map(a => `<option value="${esc(a)}" ${STATE.areaFiltro === a ? "selected" : ""}>${esc(a)}</option>`).join("");
 
   document.getElementById("botonAgregarEst").innerHTML = STATE.modoEdicion
     ? `<button class="btn-primary btn-sm" style="width:100%; margin-bottom:14px;" onclick="abrirFormEstandar()">+ Agregar estándar</button>` : "";
 
   const q = STATE.search.trim().toLowerCase();
   let filtrados = STATE.estandares.filter(e =>
-    (!q || e.nombre.toLowerCase().includes(q)) &&
-    (!STATE.categoriaFiltro || e.categoria === STATE.categoriaFiltro)
+    (!q || e.nombre.toLowerCase().includes(q) || (e.codigo || "").toLowerCase().includes(q)) &&
+    (!STATE.gerenciaFiltro || e.gerencia === STATE.gerenciaFiltro) &&
+    (!STATE.areaFiltro || e.area === STATE.areaFiltro)
   );
   filtrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
   document.getElementById("contadorEstandares").textContent = `${filtrados.length} de ${STATE.estandares.length}`;
@@ -284,8 +290,8 @@ function render(){
     <div class="estandar-row ${STATE.seleccionado === e.id ? "activo" : ""}" onclick="seleccionarEstandar('${e.id}')">
       <div class="er-icon" style="background:${tipo.color};">${tipo.nombre.slice(0, 1)}</div>
       <div>
-        <div class="er-nombre">${esc(e.nombre)}</div>
-        <div class="er-cat">${esc(e.categoria || "Sin categoría")}</div>
+        <div class="er-nombre">${e.codigo ? `<span style="color:var(--oems-teal-dark); font-family:var(--font-display);">${esc(e.codigo)}</span> · ` : ""}${esc(e.nombre)}</div>
+        <div class="er-cat">${[e.gerencia, e.area].filter(Boolean).join(" · ") || "Sin gerencia/área"}</div>
       </div>
       ${STATE.modoEdicion ? `
       <div class="er-acciones">
@@ -314,8 +320,13 @@ function renderVisor(){
   return `
   <div class="visor-doc">
     <div class="visor-icon-grande" style="background:${tipo.color};">${iconoSvg(tipo.icono)}</div>
+    ${e.codigo ? `<div class="small-note" style="font-family:var(--font-display); font-weight:700; color:var(--oems-teal-dark); margin-bottom:2px;">${esc(e.codigo)}</div>` : ""}
     <div class="visor-nombre">${esc(e.nombre)}</div>
-    <span class="visor-cat-badge">${esc(e.categoria || "Sin categoría")} · ${tipo.nombre}</span>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:22px;">
+      ${e.gerencia ? `<span class="visor-cat-badge">${esc(e.gerencia)}</span>` : ""}
+      ${e.area ? `<span class="visor-cat-badge">${esc(e.area)}</span>` : ""}
+      <span class="visor-cat-badge">${tipo.nombre}</span>
+    </div>
     <div>
       <a class="visor-abrir" href="${esc(e.url)}" target="_blank" rel="noopener">
         Abrir documento
@@ -351,8 +362,10 @@ function renderModalEst(){
     <div class="modal">
       <div class="modal-head"><h3>${existente ? "Editar estándar" : "Nuevo estándar"}</h3><button class="modal-close" data-close-est>✕</button></div>
       <div class="modal-body">
+        <div class="field"><label>Código Estándar</label><input type="text" id="est-codigo" value="${existente ? esc(existente.codigo || "") : ""}" placeholder="Ej: PE-OP-001"></div>
         <div class="field"><label>Nombre del documento</label><input type="text" id="est-nombre" value="${existente ? esc(existente.nombre) : ""}" placeholder="Ej: Procedimiento operación de chancado"></div>
-        <div class="field"><label>Categoría</label><input type="text" id="est-categoria" value="${existente ? esc(existente.categoria || "") : ""}" placeholder="Ej: Mantenimiento, Operaciones..."></div>
+        <div class="field"><label>Gerencia</label><input type="text" id="est-gerencia" value="${existente ? esc(existente.gerencia || "") : ""}" placeholder="Ej: Gerencia Mantenimiento"></div>
+        <div class="field"><label>Área</label><input type="text" id="est-area" value="${existente ? esc(existente.area || "") : ""}" placeholder="Ej: Confiabilidad"></div>
         <div class="field"><label>Enlace en SharePoint</label><input type="text" id="est-url" value="${existente ? esc(existente.url) : ""}" placeholder="https://glencore.sharepoint.com/..."></div>
       </div>
       <div class="modal-foot">
@@ -380,7 +393,8 @@ function attachHandlersEst(){
 }
 
 window.actualizarBusquedaEst = (valor) => { STATE.search = valor; render(); };
-window.actualizarFiltroCat = (valor) => { STATE.categoriaFiltro = valor; render(); };
+window.actualizarFiltroGerencia = (valor) => { STATE.gerenciaFiltro = valor; render(); };
+window.actualizarFiltroArea = (valor) => { STATE.areaFiltro = valor; render(); };
 window.seleccionarEstandar = (id) => { STATE.seleccionado = id; render(); };
 
 window.alternarModoEdicion = () => {
@@ -412,12 +426,14 @@ window.cambiarClaveEst = async () => {
 
 window.abrirFormEstandar = (id) => { STATE.modal = "form-estandar"; STATE.editando = id || null; render(); };
 window.guardarEstandar = async (id) => {
+  const codigo = document.getElementById("est-codigo").value.trim();
   const nombre = document.getElementById("est-nombre").value.trim();
-  const categoria = document.getElementById("est-categoria").value.trim();
+  const gerencia = document.getElementById("est-gerencia").value.trim();
+  const area = document.getElementById("est-area").value.trim();
   const url = document.getElementById("est-url").value.trim();
   if (!nombre || !url) { alert("Completa al menos el nombre y el enlace."); return; }
   const docId = id || ("est_" + Date.now());
-  await fbSetDoc("estandares", docId, { nombre, categoria, url });
+  await fbSetDoc("estandares", docId, { codigo, nombre, gerencia, area, url });
   STATE.modal = null;
   STATE.editando = null;
   render();
